@@ -1,0 +1,28 @@
+{
+  "name": "github-custom-global-naviation",
+  "version": "1.0.0",
+  "description": "Userscript for customizing GitHub's global navigation",
+  "main": "src/github-custom-global-navigation.user.js",
+  "scripts": {
+    "lint": "eslint src/github-custom-global-navigation.user.js",
+    "clean": "eslint --fix src/github-custom-global-navigation.user.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blakegearin/github-custom-global-naviation.git"
+  },
+  "keywords": [
+    "userscript",
+    "github",
+    "global-navigation"
+  ],
+  "author": "Blake Gearin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blakegearin/github-custom-global-naviation/issues"
+  },
+  "homepage": "https://github.com/blakegearin/github-custom-global-naviation#readme",
+  "devDependencies": {
+    "eslint": "^8.52.0"
+  }
+}
