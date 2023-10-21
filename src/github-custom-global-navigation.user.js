@@ -30,6 +30,7 @@
       remove: false,
     },
     search: {
+      backgroundColor: '',
       magnifyingGlassIcon: {
         remove: false,
       },
@@ -175,6 +176,7 @@
         remove: true,
       },
       search: {
+        backgroundColor: '#0E1217',
         magnifyingGlassIcon: {
           remove: true,
         },
@@ -509,6 +511,15 @@
     if (!searchButton) {
       console.error(`Selector ${SELECTORS.search.button} not found`);
       return;
+    }
+
+    if (elementConfig.backgroundColor !== '') {
+      CUSTOM_STYLE.textContent += `
+        ${SELECTORS.search.button}
+        {
+          background-color: ${elementConfig.backgroundColor} !important;
+        }
+      `;
     }
 
     if (elementConfig.magnifyingGlassIcon.remove) {
