@@ -27,14 +27,16 @@ There are two (2) default configurations that are actively maintained and suppor
 
    - This is the out-of-the-box experience
    - It previews some the best features and aims to deliver a "[happy medium](https://dictionary.cambridge.org/dictionary/english/happy-medium)" between the old and new styles without compromising on accessibility
+   - It relies more on CSS variables to adapt to GitHub changes
 
 1. Old style
 
    - This is a single flag opt-in that overrides the true defaults
    - It aims to deliver an experience as close to the old style as reasonably possible without compromising on accessibility
    - It may not match the old mobile experience, as the details surrounding this are more difficult to find online
+   - Where applicable, it uses hardcoded values instead of CSS variables to prevent side effects from GitHub changes
 
-Accessibility is important, and GitHub [agrees](https://accessibility.github.com).
+Accessibility is important, and GitHub [agrees](https://accessibility.github.com). However, this userscript doesn't go out of its way to improve accessability when it comes to HTML tags. For example, there are several `a` tags presenting as buttons, which is not ideal. In some cases, elements added by the userscript take a similar approach for consistency.
 
 ### Responsive Design
 
