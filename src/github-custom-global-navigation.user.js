@@ -147,6 +147,10 @@
       import: true,
       backgroundColor: '#02040A',
       horizontalPadding: '',
+      avatar: {
+        remove: false,
+        customSvg: '',
+      },
       link: {
         color: '#6AAFF9',
         hover: {
@@ -159,8 +163,8 @@
   };
 
   if (OLD_STYLE) {
-    const color = '#f0f6fc';
-    const hoverColor = '#ffffffb3';
+    const color = '#F0F6FC';
+    const hoverColor = '#FFFFFFB3';
     const hoverBackgroundColor = 'transparent';
 
     CONFIG = {
@@ -277,7 +281,7 @@
         tooltip: false,
       },
       globalBar: {
-        boxShadowColor: 'var(--color-border-muted)',
+        boxShadowColor: '#21262D',
       },
       localBar: {
         backgroundColor: '#0D1116',
@@ -293,11 +297,15 @@
         import: true,
         backgroundColor: '#0D1116',
         horizontalPadding: '250px',
+        avatar: {
+          remove: false,
+          customSvg: '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo mr-1 color-fg-muted"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path></svg>',
+        },
         link: {
-          color: '#6AAFF9',
+          color: '#58A6FF',
           hover: {
             backgroundColor: 'transparent',
-            color: 'var(--color-accent-fg)',
+            color: '#2F81F7',
             textDecoration: 'underline',
           },
         },
@@ -493,6 +501,9 @@
     }
 
     if (elementConfig.text.content !== '') {
+      // Without this, the placeholder text is overwritten by the shadow DOM
+      // You may see the following error in the console:
+      // qbsearch-input-element.ts:421 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'innerHTML')
       placeholderSpan.setAttribute('data-target', 'avoidShadowDOM');
       placeholderSpan.innerText = elementConfig.text.content;
     }
@@ -1080,9 +1091,14 @@
 
     pageTitle.querySelectorAll('svg').forEach(svg => svg.remove());
 
-    elementToInsertAfter = HEADER.querySelector(SELECTORS.repositoryHeader.ownerImg);
+    const ownerImg = HEADER.querySelector(SELECTORS.repositoryHeader.ownerImg);
 
-    elementToInsertAfter.parentNode.insertBefore(pageTitle, elementToInsertAfter.nextSibling);
+    if (!ownerImg) {
+      console.error(`${SELECTORS.repositoryHeader.ownerImg} avatar not found`);
+      return;
+    }
+
+    ownerImg.parentNode.insertBefore(pageTitle, ownerImg.nextSibling);
 
     HEADER.querySelector(SELECTORS.repositoryHeader.bottomBorder).remove();
 
@@ -1109,6 +1125,22 @@
           padding-right: 0px !important;
         }
       `;
+    }
+
+    if (elementConfig.avatar.remove) {
+      ownerImg.remove();
+    } else if (elementConfig.avatar.customSvg !== '') {
+      if (isValidURL(elementConfig.avatar.customSvg)) {
+        ownerImg.src = elementConfig.avatar.customSvg;
+      } else {
+        const divElement = document.createElement('div');
+        divElement.style.setProperty('display', 'flex');
+        divElement.style.setProperty('align-items', 'center');
+
+        divElement.innerHTML = elementConfig.avatar.customSvg;
+
+        ownerImg.parentNode.replaceChild(divElement, ownerImg);
+      }
     }
 
     let linkColor, linkHoverColor, linkHoverBackgroundColor, linkHoverTextDecoration;
