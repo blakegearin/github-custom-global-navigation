@@ -10,6 +10,13 @@
 
 # GitHub Custom Global Navigation
 
+## Usage
+
+1. Install a userscript manager like [Tampermonkey](https://www.tampermonkey.net), [Violentmonkey](https://violentmonkey.github.io), or [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
+1. Go to this userscript's [GreasyFork page](https://greasyfork.org/en/scripts/477926-github-custom-global-navigation)
+1. Click "Install this script"
+1. The userscript will open in your userscript manager where you can install it
+
 ## Background
 
 In April 2023, GitHub released a public beta for a redesigned global navigation and asked for [feedback](https://github.com/orgs/community/discussions/52083).
@@ -18,10 +25,16 @@ In October 2023, GitHub initiated a [public rollout](https://github.blog/changel
 
 ## Credit
 
+- Colors, icons, and element properties were collected from a variety of sources
+  - [Internet Archive](https://archive.org) ([donate](https://archive.org/donate))
+  - [GitHub](https://github.com/)
+  - [Gist](https://gist.github.com/)
+  - [YouTube](https://www.youtube.com) <sup><a href="https://www.youtube.com/watch?v=ULsLaA__Xe8">[1]</a></sup><sup><a href="https://www.youtube.com/watch?v=v_1iqtOnUMg">[2]</a></sup><sup><a href="https://youtu.be/jG4Vs81kMlc">[3]</a></sup>
+
 - Logo
 
-  - Silhouette based on SVG from [Mohamed Hassan](https://pixabay.com/vectors/silhouette-octopus-vector-graphic-3313481/)
+  - Silhouette: [Mohamed Hassan](https://pixabay.com/vectors/silhouette-octopus-vector-graphic-3313481/)
 
-  - Optimized with [SVGOMG](https://svgomg.net)
+  - Optimization: [SVGOMG](https://svgomg.net)
 
 Not affiliated with Microsoft Corporation, GitHub, Inc., or any of their affiliations.
