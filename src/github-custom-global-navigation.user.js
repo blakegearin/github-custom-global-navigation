@@ -138,7 +138,7 @@
       boxShadow: {
         remove: true,
       },
-      horizontalPadding: '',
+      centered: false,
     },
     sidebars: {
       backdropColor: 'transparent',
@@ -146,7 +146,7 @@
     repositoryHeader: {
       import: true,
       backgroundColor: '#02040A',
-      horizontalPadding: '',
+      centered: false,
       avatar: {
         remove: false,
         customSvg: '',
@@ -288,7 +288,7 @@
         boxShadow: {
           remove: true,
         },
-        horizontalPadding: '250px',
+        centered: true,
       },
       sidebars: {
         backdropColor: hoverBackgroundColor,
@@ -296,7 +296,7 @@
       repositoryHeader: {
         import: true,
         backgroundColor: '#0D1116',
-        horizontalPadding: '250px',
+        centered: true,
         avatar: {
           remove: false,
           customSvg: '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo mr-1 color-fg-muted"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path></svg>',
@@ -967,12 +967,29 @@
       `;
     }
 
-    if (elementConfig.horizontalPadding !== '') {
+    if (elementConfig.centered) {
       CUSTOM_STYLE.textContent += `
-        ${SELECTORS.header.localBar}
+        ${SELECTORS.header.localBar} nav
         {
-          padding-left: ${elementConfig.horizontalPadding} !important;
-          padding-right: ${elementConfig.horizontalPadding} !important;
+          max-width: 1280px;
+          margin-right: auto;
+          margin-left: auto;
+        }
+
+        @media (min-width: 768px) {
+          ${SELECTORS.header.localBar} nav
+          {
+            padding-right: var(--base-size-24, 24px) !important;
+            padding-left: var(--base-size-24, 24px) !important;
+          }
+        }
+
+        @media (min-width: 1012px) {
+          ${SELECTORS.header.localBar} nav
+          {
+            padding-right: var(--base-size-32, 32px) !important;
+            padding-left: var(--base-size-32, 32px) !important;
+          }
         }
       `;
     }
@@ -1074,6 +1091,12 @@
     const divElement = document.createElement('div');
     divElement.classList.add('AppHeader-globalBar');
     divElement.style.setProperty('padding', '0px', 'important');
+    divElement.style.setProperty('box-shadow', 'none', 'important');
+
+    if (elementConfig.backgroundColor !== '') {
+      divElement.style.setProperty('background-color', elementConfig.backgroundColor);
+    }
+
     divElement.appendChild(repositoryHeader);
 
     let elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
@@ -1111,18 +1134,35 @@
       `;
     }
 
-    if (elementConfig.horizontalPadding !== '') {
+    if (elementConfig.centered) {
       CUSTOM_STYLE.textContent += `
         ${SELECTORS.repositoryHeader.id}
         {
-          padding-left: ${elementConfig.horizontalPadding} !important;
-          padding-right: ${elementConfig.horizontalPadding} !important;
+          max-width: 1280px;
+          margin-right: auto;
+          margin-left: auto;
         }
 
         ${SELECTORS.repositoryHeader.id} > div
         {
           padding-left: 0px !important;
           padding-right: 0px !important;
+        }
+
+        @media (min-width: 768px) {
+          ${SELECTORS.repositoryHeader.id}
+          {
+            padding-right: var(--base-size-24, 24px) !important;
+            padding-left: var(--base-size-24, 24px) !important;
+          }
+        }
+
+        @media (min-width: 1012px) {
+          ${SELECTORS.repositoryHeader.id}
+          {
+            padding-right: var(--base-size-32, 32px) !important;
+            padding-left: var(--base-size-32, 32px) !important;
+          }
         }
       `;
     }
