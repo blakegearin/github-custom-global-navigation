@@ -17,6 +17,37 @@
 1. Click "Install this script"
 1. The userscript will open in your userscript manager where you can install it
 
+## Documentation
+
+### Defaults
+
+There are two (2) default configurations that are actively maintained and supported.
+
+1. True default
+
+   - This is the out-of-the-box experience
+   - It previews some the best features and aims to deliver a "[happy medium](https://dictionary.cambridge.org/dictionary/english/happy-medium)" between the old and new styles without compromising on accessibility
+
+1. Old style
+
+   - This is a single flag opt-in that overrides the true defaults
+   - It aims to deliver an experience as close to the old style as reasonably possible without compromising on accessibility
+   - It may not match the old mobile experience, as the details surrounding this are more difficult to find online
+
+Accessibility is important, and GitHub [agrees](https://accessibility.github.com).
+
+### Responsive Design
+
+GitHub's new design is responsive, hiding and condensing more elements as screen width decreases. There are breakpoints at `1011px` and `768px`.
+
+Because this userscript is highly customizable, it's complex to make every possible variant similarly responsive. Userscripts are also not particularly run in mobile browsers. However, the default configurations can be regularly tested during development.
+
+With these considerations in mind, this is the support priority order of screen widths:
+
+1. `1011px` - `1920px` (e.g. laptops)
+1. `1920px` and up (e.g. external monitors)
+1. `1011px` and below (e.g. tablets, phones)
+
 ## Background
 
 In April 2023, GitHub released a public beta for a redesigned global navigation and asked for [feedback](https://github.com/orgs/community/discussions/52083).
