@@ -159,8 +159,8 @@
   };
 
   if (OLD_STYLE) {
-    const color = '#F0F4FA';
-    const hoverColor = '#BBBBBB';
+    const color = '#f0f6fc';
+    const hoverColor = '#ffffffb3';
     const hoverBackgroundColor = 'transparent';
 
     CONFIG = {
