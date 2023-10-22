@@ -336,9 +336,8 @@
     if (CONFIG.hamburgerButton.remove) removeHamburgerButton();
     updateLogo();
 
-    let pageTitleMoved = false;
-    if (CONFIG.repositoryHeader.import) pageTitleMoved = importRepositoryHeader();
-    if (CONFIG.pageTitle.remove && !pageTitleMoved) removePageTitle();
+    if (CONFIG.repositoryHeader.import) importRepositoryHeader();
+    if (CONFIG.pageTitle.remove) removePageTitle();
 
     updateSearch();
 
@@ -402,7 +401,7 @@
       return;
     }
 
-    pageTitle.remove();
+    pageTitle.style.setProperty('display', 'none', 'important');
 
     if (!QUIET) console.log('Page title removed');
   }
@@ -1074,19 +1073,23 @@
   function importRepositoryHeader() {
     const elementConfig = CONFIG.repositoryHeader;
 
-    const name = document.querySelector(SELECTORS.repositoryHeader.name);
-
-    if (!name) {
-      // When not in a repo, this is expected
-      if (!QUIET) console.log(`${SELECTORS.repositoryHeader.name} link not found`);
-      return;
-    } else {
-      name.remove();
-    }
-
     const repositoryHeader = document.querySelector(SELECTORS.repositoryHeader.id);
 
-    repositoryHeader.parentNode.removeChild(repositoryHeader);
+    if (!repositoryHeader) {
+      console.error(`${SELECTORS.repositoryHeader.id} not found`);
+      return;
+    } else if (repositoryHeader.hidden) {
+      if (!QUIET) console.log(`${SELECTORS.repositoryHeader.id} is hiddne`);
+      return;
+    }
+
+    const clonedRepositoryHeader = repositoryHeader.cloneNode(true);
+
+    // This is needed to prevent pop-in via Turbo when navigating between tabs on a repo
+    repositoryHeader.removeAttribute('data-turbo-replace');
+    clonedRepositoryHeader.removeAttribute('data-turbo-replace');
+
+    repositoryHeader.style.setProperty('display', 'none', 'important');
 
     const divElement = document.createElement('div');
     divElement.classList.add('AppHeader-globalBar');
@@ -1097,33 +1100,15 @@
       divElement.style.setProperty('background-color', elementConfig.backgroundColor);
     }
 
-    divElement.appendChild(repositoryHeader);
+    divElement.appendChild(clonedRepositoryHeader);
 
     let elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
 
     elementToInsertAfter.parentNode.insertBefore(divElement, elementToInsertAfter.nextSibling);
 
-    repositoryHeader.firstElementChild.classList.remove('container-xl', 'px-lg-5');
+    clonedRepositoryHeader.firstElementChild.classList.remove('container-xl', 'px-lg-5');
 
-    const pageTitle = HEADER.querySelector(SELECTORS.title);
-
-    if (!pageTitle) {
-      console.error(`${SELECTORS.title} div not found`);
-      return;
-    }
-
-    pageTitle.querySelectorAll('svg').forEach(svg => svg.remove());
-
-    const ownerImg = HEADER.querySelector(SELECTORS.repositoryHeader.ownerImg);
-
-    if (!ownerImg) {
-      console.error(`${SELECTORS.repositoryHeader.ownerImg} avatar not found`);
-      return;
-    }
-
-    ownerImg.parentNode.insertBefore(pageTitle, ownerImg.nextSibling);
-
-    HEADER.querySelector(SELECTORS.repositoryHeader.bottomBorder).remove();
+    updateRepositoryHeaderName();
 
     if (elementConfig.backgroundColor !== '') {
       CUSTOM_STYLE.textContent += `
@@ -1165,22 +1150,6 @@
           }
         }
       `;
-    }
-
-    if (elementConfig.avatar.remove) {
-      ownerImg.remove();
-    } else if (elementConfig.avatar.customSvg !== '') {
-      if (isValidURL(elementConfig.avatar.customSvg)) {
-        ownerImg.src = elementConfig.avatar.customSvg;
-      } else {
-        const divElement = document.createElement('div');
-        divElement.style.setProperty('display', 'flex');
-        divElement.style.setProperty('align-items', 'center');
-
-        divElement.innerHTML = elementConfig.avatar.customSvg;
-
-        ownerImg.parentNode.replaceChild(divElement, ownerImg);
-      }
     }
 
     let linkColor, linkHoverColor, linkHoverBackgroundColor, linkHoverTextDecoration;
@@ -1262,17 +1231,73 @@
     return true;
   }
 
+  function updateRepositoryHeaderName() {
+    const elementConfig = CONFIG.repositoryHeader;
+
+    const name = document.querySelector(SELECTORS.repositoryHeader.name);
+
+    if (!name) {
+      // When not in a repo, this is expected
+      if (!QUIET) console.log(`${SELECTORS.repositoryHeader.name} link not found`);
+      return;
+    }
+
+    name.style.setProperty('display', 'none', 'important');
+
+    const pageTitle = HEADER.querySelector(SELECTORS.title);
+
+    if (!pageTitle) {
+      console.error(`${SELECTORS.title} div not found`);
+      return;
+    }
+
+    const ownerImg = document.querySelector(SELECTORS.repositoryHeader.ownerImg);
+
+    if (!ownerImg) {
+      console.error(`${SELECTORS.repositoryHeader.ownerImg} avatar not found`);
+      return;
+    }
+
+    const clonedPageTitle = pageTitle.cloneNode(true);
+    clonedPageTitle.style.display = '';
+
+    clonedPageTitle.querySelectorAll('svg').forEach(svg => svg.remove());
+
+    ownerImg.parentNode.insertBefore(clonedPageTitle, ownerImg.nextSibling);
+
+    if (elementConfig.avatar.remove) {
+      ownerImg.remove();
+    } else if (elementConfig.avatar.customSvg !== '') {
+      if (isValidURL(elementConfig.avatar.customSvg)) {
+        ownerImg.src = elementConfig.avatar.customSvg;
+      } else {
+        const divElement = document.createElement('div');
+        divElement.style.setProperty('display', 'flex');
+        divElement.style.setProperty('align-items', 'center');
+
+        divElement.innerHTML = elementConfig.avatar.customSvg;
+
+        ownerImg.parentNode.replaceChild(divElement, ownerImg);
+      }
+    }
+
+    document.querySelector(SELECTORS.repositoryHeader.bottomBorder).remove();
+  }
+
   function isValidURL(string) {
     const urlPattern = /^(https?:\/\/)?([\w.]+)\.([a-z]{2,6}\.?)(\/[\w.]*)*\/?$/i;
     return urlPattern.test(string);
   }
 
   function observeAndModify(mutationsList) {
-    const successFlag = 'customizedHeader';
+    const headerSuccessFlag = 'customizedHeader';
+
+    const repositoryHeaderId = '#repository-container-header';
+    const repositoryHeaderSuccessFlag = 'customizedRepositoryHeader';
 
     for (const mutation of mutationsList) {
       // Use header id to determine if updates have already been applied
-      if (mutation.type === 'childList' && !document.getElementById(successFlag)) {
+      if (mutation.type === 'childList' && !document.getElementById(headerSuccessFlag)) {
         const headerSelector = 'header.AppHeader';
         HEADER = document.querySelector(headerSelector);
 
@@ -1329,18 +1354,44 @@
             dot: '.AppHeader-button.AppHeader-button--hasIndicator::before',
           },
           repositoryHeader: {
-            id: '#repository-container-header',
-            ownerImg: '#repository-container-header img',
-            name: '#repository-container-header strong',
-            links: '#repository-container-header nav[role="navigation"] a',
+            id: repositoryHeaderId,
+            ownerImg: `${repositoryHeaderId} img`,
+            name: `${repositoryHeaderId} strong`,
+            links: `${repositoryHeaderId} nav[role="navigation"] a`,
             details: '#repository-details-container',
-            bottomBorder: '#repository-container-header .border-bottom.mx-xl-5',
+            bottomBorder: `${repositoryHeaderId} .border-bottom.mx-xl-5`,
           },
         };
         CUSTOM_STYLE = document.createElement('style');
 
         updateHeader();
-        HEADER.setAttribute('id', successFlag);
+        HEADER.setAttribute('id', headerSuccessFlag);
+
+        HEADER.querySelector(repositoryHeaderId)?.classList.add(repositoryHeaderSuccessFlag);
+
+        if (!SILENT) console.log('GitHub Custom Global Navigation complete!');
+
+        break;
+      } else if (
+        mutation.type === 'childList' &&
+        (
+          !document.querySelector(repositoryHeaderId)?.hidden &&
+          !document.querySelector(`.${repositoryHeaderSuccessFlag}`)
+        ) &&
+        CONFIG.repositoryHeader.import
+      ) {
+        // When starting in a repository tab like Issues, then navigating to the Code tab
+        // the repository header will first not be present then inserted.
+
+        // This is a known cosmetic issue, but matches the default GitHub behavior, as the
+        // Unwatch, Star, and Fork buttons are only present on the Code tab.
+
+        // Note that if you start on the Code tab and navigate to another (except Actions which
+        // refreshes the page) the repository header will stay displayed, unlike the default
+        // GitHub behavior.
+        importRepositoryHeader();
+
+        HEADER.querySelector(repositoryHeaderId)?.classList.add(repositoryHeaderSuccessFlag);
 
         if (!SILENT) console.log('GitHub Custom Global Navigation complete!');
 
