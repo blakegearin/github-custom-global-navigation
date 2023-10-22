@@ -28,7 +28,7 @@ There are two (2) default configurations that are actively maintained and suppor
 #### True Default
 
    - This is the out-of-the-box experience
-   - It previews some the best features and aims to deliver a "[happy medium](https://dictionary.cambridge.org/dictionary/english/happy-medium)" between the old and new styles without compromising on accessibility
+   - It previews some the best features and aims to deliver a [happy medium](https://dictionary.cambridge.org/dictionary/english/happy-medium) between the old and new styles without compromising on accessibility
    - It relies more on CSS variables to adapt to GitHub changes
 
 #### Old School
@@ -58,6 +58,10 @@ With these considerations in mind, this is the support priority order of screen 
 As of the time of writing, GitHub supports four (4) light and an equal number of dark themes.
 
 This userscript does not have first-class support for sub-themes, but can tell light or dark preference either from GitHub (`data-color-mode`) or falling back to browser-level (`data-color-mode`), which typically matches the OS-level.
+
+### Archiving
+
+Part of the challenge of maintaining the Old School configuration is finding enough archival resources to make it accurate. To help maintain this project and in the spirit of aiding future developers, the HTML of the main `header` tag and `repository-container-header` will be archived as breaking changes occur.
 
 ## Background
 
