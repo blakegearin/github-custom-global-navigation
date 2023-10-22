@@ -32,5 +32,5 @@ If you find a bug or have a feature request, search on the [Issues page](https:/
    - Auto-fix: `npm run clean`
 
 1. Push your changes to your forked repository
-1. Rebase as needed to ensure your changes are in one (1) commit
+1. Rebase as needed to ensure your changes are in one (1) commit written in present, imperative tense
 1. Open a pull request to this original repository
