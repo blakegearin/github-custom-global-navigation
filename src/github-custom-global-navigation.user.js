@@ -12,25 +12,34 @@
 (function () {
   'use strict';
 
-  const OLD_STYLE = true;
+  const OLD_SCHOOL = true;
 
   const SILENT = false;
   const QUIET = true;
 
-  let CONFIG = {
+  let DARK_CONFIG = {
     backgroundColor: '',
     hamburgerButton: {
       remove: false,
     },
     logo: {
       remove: true,
+      color: '',
       customSvg: '',
     },
     pageTitle: {
       remove: false,
+      hover: {
+        backgroundColor: '',
+        color: '',
+      },
     },
     search: {
       backgroundColor: '',
+      borderColor: '',
+      boxShadow: '',
+      width: 'auto',
+      marginRight: '',
       magnifyingGlassIcon: {
         remove: false,
       },
@@ -38,11 +47,9 @@
         content: '',
         color: '',
       },
-      width: 'auto',
       commandPalette: {
         remove: false,
       },
-      marginRight: '',
       modal: {
         width: '',
       },
@@ -123,6 +130,7 @@
       },
       dot: {
         remove: false,
+        boxShadowColor: '',
         color: '',
         displayOverIcon: true,
       },
@@ -139,6 +147,9 @@
         consistentColor: true,
       },
       centered: false,
+      links: {
+        color: '',
+      },
     },
     sidebars: {
       backdropColor: 'transparent',
@@ -162,25 +173,194 @@
     },
   };
 
-  if (OLD_STYLE) {
+  let LIGHT_CONFIG = {
+    backgroundColor: '',
+    hamburgerButton: {
+      remove: false,
+    },
+    logo: {
+      remove: true,
+      color: '',
+      customSvg: '',
+    },
+    pageTitle: {
+      remove: false,
+      color: '',
+      hover: {
+        backgroundColor: '',
+        color: '',
+      },
+    },
+    search: {
+      backgroundColor: '',
+      borderColor: '',
+      boxShadow: '',
+      width: 'auto',
+      marginRight: '',
+      magnifyingGlassIcon: {
+        remove: false,
+      },
+      text: {
+        content: '',
+        color: '',
+      },
+      commandPalette: {
+        remove: false,
+      },
+      modal: {
+        width: '',
+      },
+    },
+    divider: {
+      remove: true,
+    },
+    create: {
+      remove: false,
+      plusIcon: {
+        remove: false,
+        color: '',
+        hover: {
+          color: '',
+        }
+      },
+      text: {
+        content: 'Create',
+        color: '',
+      },
+      dropdownIcon: {
+        remove: false,
+        color: '',
+        hover: {
+          color: '',
+        },
+      },
+      hoverBackgroundColor: '',
+      border: true,
+      tooltip: false,
+    },
+    issues: {
+      remove: false,
+      icon: {
+        remove: false,
+        color: '',
+      },
+      text: {
+        content: 'Issues',
+        color: '',
+      },
+      hover: {
+        backgroundColor: '',
+        color: '',
+      },
+      border: true,
+      tooltip: false,
+    },
+    pullRequests: {
+      remove: false,
+      icon: {
+        remove: false,
+        color: '',
+      },
+      text: {
+        content: 'Pull requests',
+        color: '',
+      },
+      hover: {
+        backgroundColor: '',
+        color: '',
+      },
+      border: true,
+      tooltip: false,
+    },
+    notifications: {
+      remove: false,
+      icon: {
+        symbol: 'bell', // Accepts 'inbox', 'bell', or ''
+        color: '',
+        hover: {
+          color: '',
+        }
+      },
+      text: {
+        content: 'Inbox',
+        color: '',
+      },
+      dot: {
+        remove: false,
+        boxShadowColor: '',
+        color: '',
+        displayOverIcon: true,
+      },
+      hoverBackgroundColor: '',
+      border: true,
+      tooltip: false,
+    },
+    globalBar: {
+      boxShadowColor: '',
+    },
+    localBar: {
+      backgroundColor: '#02040A',
+      boxShadow: {
+        consistentColor: true,
+      },
+      centered: false,
+      links: {
+        color: '',
+      },
+    },
+    sidebars: {
+      backdropColor: 'transparent',
+    },
+    repositoryHeader: {
+      import: true,
+      backgroundColor: '#02040A',
+      centered: false,
+      avatar: {
+        remove: false,
+        customSvg: '',
+      },
+      link: {
+        color: '#6AAFF9',
+        hover: {
+          backgroundColor: 'transparent',
+          color: 'var(--color-accent-fg)',
+          textDecoration: 'underline',
+        },
+      },
+    },
+  };
+
+  let CONFIG;
+
+  if (OLD_SCHOOL) {
     const color = '#F0F6FC';
     const hoverColor = '#FFFFFFB3';
     const hoverBackgroundColor = 'transparent';
 
-    CONFIG = {
+    DARK_CONFIG = {
       backgroundColor: '#161C20',
       hamburgerButton: {
         remove: true,
       },
       logo: {
         remove: false,
+        color: '#e6edf3',
         customSvg: '',
       },
       pageTitle: {
         remove: true,
+        color: color,
+        hover: {
+          backgroundColor: hoverBackgroundColor,
+          color: hoverColor,
+        },
       },
       search: {
         backgroundColor: '#0E1217',
+        borderColor: '#30363d',
+        boxShadow: 'none',
+        width: 'calc(var(--feed-sidebar) - 75px)',
+        marginRight: '8px',
         magnifyingGlassIcon: {
           remove: true,
         },
@@ -188,11 +368,9 @@
           content: 'Search or jump to...',
           color: '#B3B3B5',
         },
-        width: 'calc(var(--feed-sidebar) - 75px)',
         commandPalette: {
           remove: true,
         },
-        marginRight: '8px',
         modal: {
           width: '450px',
         },
@@ -273,6 +451,7 @@
         },
         dot: {
           remove: false,
+          boxShadowColor: '#161C20',
           color: '',
           displayOverIcon: true,
         },
@@ -289,6 +468,9 @@
           consistentColor: true,
         },
         centered: true,
+        links: {
+          color: '#e6edf3',
+        },
       },
       sidebars: {
         backdropColor: hoverBackgroundColor,
@@ -311,9 +493,187 @@
         },
       },
     };
+
+    LIGHT_CONFIG = {
+      backgroundColor: '#161C20',
+      hamburgerButton: {
+        remove: true,
+      },
+      logo: {
+        remove: false,
+        color: '#e6edf3',
+        customSvg: '',
+      },
+      pageTitle: {
+        remove: true,
+        color: color,
+        hover: {
+          backgroundColor: hoverBackgroundColor,
+          color: hoverColor,
+        },
+      },
+      search: {
+        backgroundColor: '#494D54',
+        borderColor: '#30363d',
+        boxShadow: 'none',
+        width: 'calc(var(--feed-sidebar) - 75px)',
+        marginRight: '8px',
+        magnifyingGlassIcon: {
+          remove: true,
+        },
+        text: {
+          content: 'Search or jump to...',
+          color: '#B3B3B5',
+        },
+        commandPalette: {
+          remove: true,
+        },
+        modal: {
+          width: '450px',
+        },
+      },
+      divider: {
+        remove: true,
+      },
+      create: {
+        remove: false,
+        plusIcon: {
+          remove: false,
+          color: color,
+          hover: {
+            color: hoverColor,
+          },
+        },
+        text: {
+          content: '',
+          color: '',
+        },
+        dropdownIcon: {
+          remove: false,
+          color: color,
+          hover: {
+            color: hoverColor,
+          },
+        },
+        hoverBackgroundColor: hoverBackgroundColor,
+        border: false,
+        tooltip: false,
+      },
+      issues: {
+        remove: false,
+        icon: {
+          remove: true,
+          color: '',
+        },
+        text: {
+          content: 'Issues',
+          color: color,
+        },
+        hover: {
+          backgroundColor: hoverBackgroundColor,
+          color: hoverColor,
+        },
+        border: false,
+        tooltip: false,
+      },
+      pullRequests: {
+        remove: false,
+        icon: {
+          remove: true,
+          color: '',
+        },
+        text: {
+          content: 'Pull requests',
+          color: color,
+        },
+        hover: {
+          backgroundColor: hoverBackgroundColor,
+          color: hoverColor,
+        },
+        border: false,
+        tooltip: false,
+      },
+      notifications: {
+        remove: false,
+        icon: {
+          symbol: 'bell',
+          color: color,
+          hover: {
+            color: hoverColor,
+          }
+        },
+        text: {
+          content: '',
+          color: '',
+        },
+        dot: {
+          remove: false,
+          boxShadowColor: '#161C20',
+          color: '',
+          displayOverIcon: true,
+        },
+        hoverBackgroundColor: hoverBackgroundColor,
+        border: false,
+        tooltip: false,
+      },
+      globalBar: {
+        boxShadowColor: '#21262D',
+      },
+      localBar: {
+        backgroundColor: '#FAFBFD',
+        boxShadow: {
+          consistentColor: true,
+        },
+        centered: true,
+        links: {
+          color: '',
+        },
+      },
+      sidebars: {
+        backdropColor: hoverBackgroundColor,
+      },
+      repositoryHeader: {
+        import: true,
+        backgroundColor: '#FAFBFD',
+        centered: true,
+        avatar: {
+          remove: false,
+          customSvg: '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo mr-1 color-fg-muted"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path></svg>',
+        },
+        link: {
+          color: '#2F81F7',
+          hover: {
+            backgroundColor: 'transparent',
+            color: '#0969da',
+            textDecoration: 'underline',
+          },
+        },
+      },
+    };
+  }
+
+  const dataColorMode = document.querySelector('html').getAttribute('data-color-mode');
+  if (dataColorMode === 'auto') {
+    // User preference is set to automatic, use matchMedia to determine system preference
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (prefersDarkMode) {
+      CONFIG = DARK_CONFIG;
+    } else {
+      CONFIG = LIGHT_CONFIG;
+    }
+  } else if (dataColorMode === 'light') {
+    CONFIG = LIGHT_CONFIG;
+  } else if (dataColorMode === 'dark') {
+    CONFIG = DARK_CONFIG;
+  } else {
+    console.error('Unknown color mode');
   }
 
   const UNICODE_NON_BREAKING_SPACE = '\u00A0';
+  const REPOSITORY_HEADER_SUCCESS_FLAG = 'permCustomizedRepositoryHeader';
+  const TEMP_REPOSITORY_HEADER_FLAG = 'tempCustomizedRepositoryHeader';
+  const REPOSITORY_HEADER_CLASS = 'customizedRepositoryHeader';
 
   let HEADER;
   let SELECTORS;
@@ -337,8 +697,8 @@
     updateLogo();
 
     if (CONFIG.repositoryHeader.import) importRepositoryHeader();
-    if (CONFIG.pageTitle.remove) removePageTitle();
 
+    updatePageTitle();
     updateSearch();
 
     if (CONFIG.divider.remove) removeDivider();
@@ -351,7 +711,7 @@
     updateLocalBar();
 
     if (CONFIG.sidebars.backdropColor !== '') updateSidebarBackdropColor();
-    if (OLD_STYLE) addOldStyleCSS();
+    if (OLD_SCHOOL) addOldStyleCSS();
 
     HEADER.appendChild(CUSTOM_STYLE);
   }
@@ -375,8 +735,14 @@
       HEADER.querySelector(SELECTORS.logo.topDiv).remove();
     }
 
+    const logo = HEADER.querySelector(SELECTORS.logo.svg);
+
+    if (elementConfig.color !== '') {
+      logo.style.setProperty('fill', elementConfig.color, 'important');
+    }
+
     if (elementConfig.customSvg !== '') {
-      const oldSvg = HEADER.querySelector(SELECTORS.logo.svg);
+      const oldSvg = logo;
 
       let newSvg;
 
@@ -393,17 +759,48 @@
     }
   }
 
-  function removePageTitle() {
-    const pageTitle = HEADER.querySelector(SELECTORS.title);
+  function updatePageTitle() {
+    const elementConfig = CONFIG.pageTitle;
+
+    const pageTitle = HEADER.querySelector(SELECTORS.pageTitle.topDiv);
 
     if (!pageTitle) {
-      console.error(`${SELECTORS.title} div not found`);
+      console.error(`${SELECTORS.pageTitle.topDiv} div not found`);
       return;
     }
 
-    pageTitle.style.setProperty('display', 'none', 'important');
+    if (elementConfig.remove) {
+      pageTitle.style.setProperty('display', 'none', 'important');
 
-    if (!QUIET) console.log('Page title removed');
+      if (!QUIET) console.log('Page title removed');
+    }
+
+    if (elementConfig.color !== '') {
+      CUSTOM_STYLE.textContent += `
+        ${SELECTORS.pageTitle.links}
+        {
+          color: ${elementConfig.color} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.hover.color !== '') {
+      CUSTOM_STYLE.textContent += `
+        ${SELECTORS.pageTitle.links}:hover
+        {
+          color: ${elementConfig.hover.color} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.hover.backgroundColor !== '') {
+      CUSTOM_STYLE.textContent += `
+        ${SELECTORS.pageTitle.links}:hover
+        {
+          background-color: ${elementConfig.hover.backgroundColor} !important;
+        }
+      `;
+    }
   }
 
   function updateSearch() {
@@ -463,7 +860,7 @@
       `;
     }
 
-    if (OLD_STYLE) {
+    if (OLD_SCHOOL) {
       CUSTOM_STYLE.textContent += `
         @media (min-width: 768px)
         {
@@ -532,6 +929,24 @@
       `;
     }
 
+    if (elementConfig.borderColor !== '') {
+      CUSTOM_STYLE.textContent += `
+        ${SELECTORS.search.button}
+        {
+          border-color: ${elementConfig.borderColor} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.boxShadow !== '') {
+      CUSTOM_STYLE.textContent += `
+        ${SELECTORS.search.button}
+        {
+          box-shadow: ${elementConfig.boxShadow} !important;
+        }
+      `;
+    }
+
     if (elementConfig.magnifyingGlassIcon.remove) {
       searchButton?.parentNode?.firstElementChild?.remove();
     }
@@ -545,7 +960,7 @@
       `;
     }
 
-    if (OLD_STYLE) {
+    if (OLD_SCHOOL) {
       CUSTOM_STYLE.textContent += `
         ${SELECTORS.search.placeholderSpan}
         {
@@ -659,7 +1074,7 @@
       `;
     }
 
-    if (OLD_STYLE) {
+    if (OLD_SCHOOL) {
       let elementToInsertAfter;
 
       if (configKey === 'pullRequests') {
@@ -799,7 +1214,7 @@
       `;
     }
 
-    if (OLD_STYLE) {
+    if (OLD_SCHOOL) {
       const actionMenu = button.parentNode.parentNode.parentNode;
       actionMenu.parentNode.removeChild(actionMenu);
 
@@ -838,13 +1253,24 @@
           content: none !important;
         }
       `;
-    } else if (elementConfig.dot.color !== '') {
-      CUSTOM_STYLE.textContent += `
-        ${SELECTORS.notifications.dot}
-        {
-          background: ${elementConfig.dot.color} !important;
-        }
-      `;
+    } else {
+      if (elementConfig.dot.color !== '') {
+        CUSTOM_STYLE.textContent += `
+          ${SELECTORS.notifications.dot}
+          {
+            background: ${elementConfig.dot.color} !important;
+          }
+        `;
+      }
+
+      if (elementConfig.dot.boxShadowColor !== '') {
+        CUSTOM_STYLE.textContent += `
+          ${SELECTORS.notifications.dot}
+          {
+            box-shadow: 0 0 0 calc(var(--base-size-4, 4px)/2) ${elementConfig.dot.boxShadowColor} !important;
+          }
+        `;
+      }
     }
 
     if (elementConfig.icon.symbol === 'inbox') {
@@ -1001,6 +1427,16 @@
         }
       `;
     }
+
+    if (elementConfig.links.color !== '') {
+      CUSTOM_STYLE.textContent += `
+        ${SELECTORS.header.localBar} a,
+        ${SELECTORS.header.localBar} a span
+        {
+          color: ${elementConfig.links.color} !important;
+        }
+      `;
+    }
   }
 
   function updateSidebarBackdropColor() {
@@ -1067,6 +1503,11 @@
       {
         gap: 2px !important;
       }
+
+      ${SELECTORS.header.self} .Button--secondary
+      {
+        box-shadow: none !important;
+      }
     `;
   }
 
@@ -1075,44 +1516,64 @@
 
     const repositoryHeader = document.querySelector(SELECTORS.repositoryHeader.id);
 
+    const topRepositoryHeaderElement = document.createElement('div');
+    topRepositoryHeaderElement.style.setProperty('display', 'flex');
+    topRepositoryHeaderElement.style.setProperty('padding', '0px');
+    topRepositoryHeaderElement.style.setProperty('box-shadow', 'none');
+
+    if (elementConfig.backgroundColor !== '') {
+      topRepositoryHeaderElement.style.setProperty('background-color', elementConfig.backgroundColor);
+    }
+
     if (!repositoryHeader) {
       console.error(`${SELECTORS.repositoryHeader.id} not found`);
       return;
     } else if (repositoryHeader.hidden) {
-      if (!QUIET) console.log(`${SELECTORS.repositoryHeader.id} is hiddne`);
-      return;
+      if (!QUIET) console.log(`${SELECTORS.repositoryHeader.id} is hidden`);
+
+      if (!HEADER.querySelector(SELECTORS.pageTitle.separator)) {
+        if (!QUIET) {
+          console.log(`${SELECTORS.pageTitle.separator} div not found`);
+          console.log('Not creating a repository header');
+        }
+
+        return;
+      }
+
+      // A repo tab other than Code is being loaded for the first time
+      if (!CONFIG.pageTitle.remove) return;
+
+      const pageTitle = HEADER.querySelector(SELECTORS.pageTitle.topDiv);
+
+      if (!pageTitle) {
+        console.error(`${SELECTORS.pageTitle.topDiv} div not found`);
+        return;
+      }
+
+      const repositoryHeaderElement = document.createElement('div');
+      repositoryHeaderElement.id = TEMP_REPOSITORY_HEADER_FLAG;
+      repositoryHeaderElement.classList.add('pt-3', 'mb-2', REPOSITORY_HEADER_CLASS);
+
+      const clonedPageTitle = pageTitle.cloneNode(true);
+      repositoryHeaderElement.appendChild(clonedPageTitle);
+
+      topRepositoryHeaderElement.appendChild(repositoryHeaderElement);
+      insertNewGlobalBar(topRepositoryHeaderElement);
+    } else if (HEADER.querySelector(`#${TEMP_REPOSITORY_HEADER_FLAG}`)) {
+      // The Code tab is being loaded from another tab which has a temporary header
+      HEADER.querySelector(`#${TEMP_REPOSITORY_HEADER_FLAG}`).remove();
+
+      insertPermanentRepositoryHeader(topRepositoryHeaderElement, repositoryHeader);
+    } else {
+      // The Code tab being loaded for the first time
+      insertPermanentRepositoryHeader(topRepositoryHeaderElement, repositoryHeader);
     }
-
-    const clonedRepositoryHeader = repositoryHeader.cloneNode(true);
-
-    // This is needed to prevent pop-in via Turbo when navigating between tabs on a repo
-    repositoryHeader.removeAttribute('data-turbo-replace');
-    clonedRepositoryHeader.removeAttribute('data-turbo-replace');
-
-    repositoryHeader.style.setProperty('display', 'none', 'important');
-
-    const divElement = document.createElement('div');
-    divElement.classList.add('AppHeader-globalBar');
-    divElement.style.setProperty('padding', '0px', 'important');
-    divElement.style.setProperty('box-shadow', 'none', 'important');
-
-    if (elementConfig.backgroundColor !== '') {
-      divElement.style.setProperty('background-color', elementConfig.backgroundColor);
-    }
-
-    divElement.appendChild(clonedRepositoryHeader);
-
-    let elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
-
-    elementToInsertAfter.parentNode.insertBefore(divElement, elementToInsertAfter.nextSibling);
-
-    clonedRepositoryHeader.firstElementChild.classList.remove('container-xl', 'px-lg-5');
 
     updateRepositoryHeaderName();
 
     if (elementConfig.backgroundColor !== '') {
       CUSTOM_STYLE.textContent += `
-        ${SELECTORS.repositoryHeader.id}
+        .${REPOSITORY_HEADER_CLASS}
         {
           background-color: ${elementConfig.backgroundColor} !important;
         }
@@ -1121,21 +1582,21 @@
 
     if (elementConfig.centered) {
       CUSTOM_STYLE.textContent += `
-        ${SELECTORS.repositoryHeader.id}
+        .${REPOSITORY_HEADER_CLASS}
         {
           max-width: 1280px;
           margin-right: auto;
           margin-left: auto;
         }
 
-        ${SELECTORS.repositoryHeader.id} > div
+        .${REPOSITORY_HEADER_CLASS} div
         {
           padding-left: 0px !important;
           padding-right: 0px !important;
         }
 
         @media (min-width: 768px) {
-          ${SELECTORS.repositoryHeader.id}
+          .${REPOSITORY_HEADER_CLASS}
           {
             padding-right: var(--base-size-24, 24px) !important;
             padding-left: var(--base-size-24, 24px) !important;
@@ -1143,7 +1604,7 @@
         }
 
         @media (min-width: 1012px) {
-          ${SELECTORS.repositoryHeader.id}
+          .${REPOSITORY_HEADER_CLASS}
           {
             padding-right: var(--base-size-32, 32px) !important;
             padding-left: var(--base-size-32, 32px) !important;
@@ -1175,7 +1636,7 @@
     }
 
     CUSTOM_STYLE.textContent += `
-      ${SELECTORS.repositoryHeader.id}
+      .${REPOSITORY_HEADER_CLASS}
       {
         flex: auto !important;
       }
@@ -1198,7 +1659,7 @@
         ${linkHoverTextDecoration}
       }
 
-      ${SELECTORS.title}
+      ${SELECTORS.pageTitle.topDiv}
       {
         flex: 0 1 auto !important;
         height: auto !important;
@@ -1213,13 +1674,53 @@
         }
       }
 
-      ${SELECTORS.header.globalBar} .AppHeader-context .AppHeader-context-full
+      .AppHeader-context .AppHeader-context-full
       {
         display: inline-flex !important;
         width: 100% !important;
         min-width: 0 !important;
         max-width: 100% !important;
         overflow: hidden !important;
+      }
+
+      .AppHeader-context .AppHeader-context-full ul {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .AppHeader-context .AppHeader-context-full li:first-child {
+        flex: 0 100 max-content;
+      }
+
+      .AppHeader-context .AppHeader-context-full li {
+        display: inline-grid;
+        grid-auto-flow: column;
+        align-items: center;
+        flex: 0 99999 auto;
+      }
+
+      .AppHeader-context .AppHeader-context-full ul, .AppHeader .AppHeader-globalBar .AppHeader-context .AppHeader-context-full li {
+        list-style: none;
+      }
+
+      .AppHeader-context .AppHeader-context-item {
+        display: flex;
+        align-items: center;
+        min-width: 3ch;
+        line-height: var(--text-body-lineHeight-medium, 1.4285714286);
+        text-decoration: none !important;
+        border-radius: var(--borderRadius-medium, 6px);
+        padding-inline: var(--control-medium-paddingInline-condensed, 8px);
+        padding-block: var(--control-medium-paddingBlock, 6px);
+      }
+
+      .AppHeader-context .AppHeader-context-full li:last-child .AppHeader-context-item {
+        font-weight: var(--base-text-weight-semibold, 600);
+      }
+
+      .AppHeader-context .AppHeader-context-item-separator {
+        color: var(--fgColor-muted, var(--color-fg-muted));
+        white-space: nowrap;
       }
 
       ${SELECTORS.header.globalBar}
@@ -1229,6 +1730,24 @@
     `;
 
     return true;
+  }
+
+  function insertPermanentRepositoryHeader(topRepositoryHeaderElement, repositoryHeader) {
+    const clonedRepositoryHeader = repositoryHeader.cloneNode(true);
+
+    // This is needed to prevent pop-in via Turbo when navigating between tabs on a repo
+    repositoryHeader.removeAttribute('data-turbo-replace');
+    clonedRepositoryHeader.removeAttribute('data-turbo-replace');
+
+    repositoryHeader.style.setProperty('display', 'none', 'important');
+
+    clonedRepositoryHeader.classList.add(REPOSITORY_HEADER_SUCCESS_FLAG, REPOSITORY_HEADER_CLASS);
+
+    topRepositoryHeaderElement.appendChild(clonedRepositoryHeader);
+
+    insertNewGlobalBar(topRepositoryHeaderElement);
+
+    clonedRepositoryHeader.firstElementChild.classList.remove('container-xl', 'px-lg-5');
   }
 
   function updateRepositoryHeaderName() {
@@ -1244,10 +1763,10 @@
 
     name.style.setProperty('display', 'none', 'important');
 
-    const pageTitle = HEADER.querySelector(SELECTORS.title);
+    const pageTitle = HEADER.querySelector(SELECTORS.pageTitle.topDiv);
 
     if (!pageTitle) {
-      console.error(`${SELECTORS.title} div not found`);
+      console.error(`${SELECTORS.pageTitle.topDiv} div not found`);
       return;
     }
 
@@ -1284,118 +1803,128 @@
     document.querySelector(SELECTORS.repositoryHeader.bottomBorder).remove();
   }
 
+  function insertNewGlobalBar(element) {
+    let elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
+
+    elementToInsertAfter.parentNode.insertBefore(element, elementToInsertAfter.nextSibling);
+  }
+
   function isValidURL(string) {
     const urlPattern = /^(https?:\/\/)?([\w.]+)\.([a-z]{2,6}\.?)(\/[\w.]*)*\/?$/i;
     return urlPattern.test(string);
+  }
+
+  function setSelectors(headerSelector, repositoryHeaderId) {
+    const toolTips = Array.from(HEADER.querySelectorAll('tool-tip'));
+    SELECTORS = {
+      header: {
+        self: headerSelector,
+        actionsDiv: '.AppHeader-actions',
+        globalBar: '.AppHeader-globalBar',
+        localBar: '.AppHeader-localBar',
+        leftAligned: '.AppHeader-globalBar-start',
+        rightAligned: '.AppHeader-globalBar-end',
+      },
+      logo: {
+        topDiv: '.AppHeader-logo',
+        svg: '.AppHeader-logo svg',
+      },
+      toolTips: {
+        create: toolTips.find(
+          tooltip => tooltip.textContent.includes('Create new')
+        ),
+        pullRequests: toolTips.find(
+          tooltip => tooltip.textContent.includes('Pull requests')
+        ),
+        issues: toolTips.find(
+          tooltip => tooltip.textContent.includes('Issues')
+        ),
+        notifications: toolTips.find(
+          tooltip => tooltip.getAttribute('data-target') === 'notification-indicator.tooltip'
+        ),
+      },
+      hamburgerButton: 'deferred-side-panel',
+      pageTitle: {
+        topDiv: '.AppHeader-context',
+        links: '.AppHeader-context a',
+        separator: '.AppHeader-context-item-separator',
+      },
+      search: {
+        topDiv: '.AppHeader-search',
+        input: '.search-input',
+        button: '[data-target="qbsearch-input.inputButton"]',
+        commandPalette: '#AppHeader-commandPalette-button',
+        placeholderSpan: '#qb-input-query',
+        placeholderDiv: '.AppHeader-search-control .overflow-hidden',
+        modal: '[data-target="qbsearch-input.queryBuilderContainer"]',
+      },
+      create: {
+        button: '#global-create-menu-button',
+        plusIcon: '#global-create-menu-button .Button-visual.Button-leadingVisual',
+        dropdownIcon: '#global-create-menu-button .Button-label',
+      },
+      pullRequests: '#pullRequests-div',
+      notifications: {
+        indicator: 'notification-indicator',
+        link: 'notification-indicator a',
+        dot: '.AppHeader-button.AppHeader-button--hasIndicator::before',
+      },
+      repositoryHeader: {
+        id: repositoryHeaderId,
+        ownerImg: `.${REPOSITORY_HEADER_CLASS} img`,
+        name: `.${REPOSITORY_HEADER_CLASS} strong`,
+        links: `.${REPOSITORY_HEADER_CLASS} nav[role="navigation"] a`,
+        details: '#repository-details-container',
+        bottomBorder: `.${REPOSITORY_HEADER_CLASS} .border-bottom.mx-xl-5`,
+      },
+    };
   }
 
   function observeAndModify(mutationsList) {
     const headerSuccessFlag = 'customizedHeader';
 
     const repositoryHeaderId = '#repository-container-header';
-    const repositoryHeaderSuccessFlag = 'customizedRepositoryHeader';
 
     for (const mutation of mutationsList) {
       // Use header id to determine if updates have already been applied
-      if (mutation.type === 'childList' && !document.getElementById(headerSuccessFlag)) {
+      if (mutation.type !== 'childList') return;
+
+      if (!document.getElementById(headerSuccessFlag)) {
         const headerSelector = 'header.AppHeader';
         HEADER = document.querySelector(headerSelector);
 
         if (!HEADER) continue;
 
-        const toolTips = Array.from(HEADER.querySelectorAll('tool-tip'));
-        SELECTORS = {
-          header: {
-            self: headerSelector,
-            actionsDiv: '.AppHeader-actions',
-            globalBar: '.AppHeader-globalBar',
-            localBar: '.AppHeader-localBar',
-            leftAligned: '.AppHeader-globalBar-start',
-            rightAligned: '.AppHeader-globalBar-end',
-          },
-          logo: {
-            topDiv: '.AppHeader-logo',
-            svg: '.AppHeader-logo svg',
-          },
-          toolTips: {
-            create: toolTips.find(
-              tooltip => tooltip.textContent.includes('Create new')
-            ),
-            pullRequests: toolTips.find(
-              tooltip => tooltip.textContent.includes('Pull requests')
-            ),
-            issues: toolTips.find(
-              tooltip => tooltip.textContent.includes('Issues')
-            ),
-            notifications: toolTips.find(
-              tooltip => tooltip.getAttribute('data-target') === 'notification-indicator.tooltip'
-            ),
-          },
-          hamburgerButton: 'deferred-side-panel',
-          title: '.AppHeader-context',
-          search: {
-            topDiv: '.AppHeader-search',
-            input: '.search-input',
-            button: '[data-target="qbsearch-input.inputButton"]',
-            commandPalette: '#AppHeader-commandPalette-button',
-            placeholderSpan: '#qb-input-query',
-            placeholderDiv: '.AppHeader-search-control .overflow-hidden',
-            modal: '[data-target="qbsearch-input.queryBuilderContainer"]',
-          },
-          create: {
-            button: '#global-create-menu-button',
-            plusIcon: '#global-create-menu-button .Button-visual.Button-leadingVisual',
-            dropdownIcon: '#global-create-menu-button .Button-label',
-          },
-          pullRequests: '#pullRequests-div',
-          notifications: {
-            indicator: 'notification-indicator',
-            link: 'notification-indicator a',
-            dot: '.AppHeader-button.AppHeader-button--hasIndicator::before',
-          },
-          repositoryHeader: {
-            id: repositoryHeaderId,
-            ownerImg: `${repositoryHeaderId} img`,
-            name: `${repositoryHeaderId} strong`,
-            links: `${repositoryHeaderId} nav[role="navigation"] a`,
-            details: '#repository-details-container',
-            bottomBorder: `${repositoryHeaderId} .border-bottom.mx-xl-5`,
-          },
-        };
+        setSelectors(headerSelector, repositoryHeaderId);
         CUSTOM_STYLE = document.createElement('style');
 
         updateHeader();
         HEADER.setAttribute('id', headerSuccessFlag);
 
-        HEADER.querySelector(repositoryHeaderId)?.classList.add(repositoryHeaderSuccessFlag);
-
         if (!SILENT) console.log('GitHub Custom Global Navigation complete!');
 
         break;
-      } else if (
-        mutation.type === 'childList' &&
-        (
+      }
+      else if (CONFIG.repositoryHeader.import) {
+        // When starting in a repository tab like Issues, the proper repository header
+        // (including  Unwatch, Star, and Fork) is not present per GitHub's design.
+        // If page title is removed, the page will be missing any location context in the header.
+        // To improve this experience, a temporary repository header is created with the
+        // page title or breadcrumbs.
+        // The proper repository header replaces the temporary one when navigating to the Code tab.
+        if (
           !document.querySelector(repositoryHeaderId)?.hidden &&
-          !document.querySelector(`.${repositoryHeaderSuccessFlag}`)
-        ) &&
-        CONFIG.repositoryHeader.import
-      ) {
-        // When starting in a repository tab like Issues, then navigating to the Code tab
-        // the repository header will first not be present then inserted.
+          (
+            document.querySelector(`#${TEMP_REPOSITORY_HEADER_FLAG}`) ||
+            !document.querySelector(`.${REPOSITORY_HEADER_SUCCESS_FLAG}`)
+          )
+        ) {
+          importRepositoryHeader();
 
-        // This is a known cosmetic issue, but matches the default GitHub behavior, as the
-        // Unwatch, Star, and Fork buttons are only present on the Code tab.
+          if (!SILENT) console.log('GitHub Custom Global Navigation complete!');
 
-        // Note that if you start on the Code tab and navigate to another (except Actions which
-        // refreshes the page) the repository header will stay displayed, unlike the default
-        // GitHub behavior.
-        importRepositoryHeader();
-
-        HEADER.querySelector(repositoryHeaderId)?.classList.add(repositoryHeaderSuccessFlag);
-
-        if (!SILENT) console.log('GitHub Custom Global Navigation complete!');
-
-        break;
+          break;
+        }
       }
     }
   }

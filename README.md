@@ -1,7 +1,7 @@
 <p align="center">
   <img
-    height="60%"
-    width="60%"
+    height="30%"
+    width="30%"
     src="img/logo.svg"
     alt="GitHub Custom Global Navigation logo"
     title="GitHub Custom Global Navigation logo"
@@ -25,16 +25,16 @@ This is a [userscript](https://openuserjs.org/about/Userscript-Beginners-HOWTO) 
 
 There are two (2) default configurations that are actively maintained and supported.
 
-1. True default
+#### True Default
 
    - This is the out-of-the-box experience
    - It previews some the best features and aims to deliver a "[happy medium](https://dictionary.cambridge.org/dictionary/english/happy-medium)" between the old and new styles without compromising on accessibility
    - It relies more on CSS variables to adapt to GitHub changes
 
-1. Old style
+#### Old School
 
    - This is a single opt-in flag that overrides the true defaults
-   - It aims to deliver an experience as close to the old style as reasonably possible without compromising on accessibility
+   - It aims to deliver an experience as close to the style in March 2023 as reasonably possible without compromising on accessibility
    - It may not match the old mobile experience, as the details surrounding this are more difficult to find online
    - Where applicable, it uses hardcoded values instead of CSS variables to prevent side effects from GitHub changes
    - It contains unique updates that are not otherwise available (e.g. button rearranging)
@@ -53,6 +53,12 @@ With these considerations in mind, this is the support priority order of screen 
 1. `1920px` and up (e.g. external monitors)
 1. `1011px` and below (e.g. tablets, phones)
 
+### Theming
+
+As of the time of writing, GitHub supports four (4) light and an equal number of dark themes.
+
+This userscript does not have first-class support for sub-themes, but can tell light or dark preference either from GitHub (`data-color-mode`) or falling back to browser-level (`data-color-mode`), which typically matches the OS-level.
+
 ## Background
 
 In April 2023, GitHub released a public beta for a redesigned global navigation and asked for [feedback](https://github.com/orgs/community/discussions/52083).
@@ -66,6 +72,8 @@ In October 2023, GitHub initiated a [public rollout](https://github.blog/changel
   - [GitHub](https://github.com/)
   - [Gist](https://gist.github.com/)
   - [YouTube](https://www.youtube.com) <sup><a href="https://www.youtube.com/watch?v=ULsLaA__Xe8">[1]</a></sup><sup><a href="https://www.youtube.com/watch?v=v_1iqtOnUMg">[2]</a></sup><sup><a href="https://youtu.be/jG4Vs81kMlc">[3]</a></sup>
+
+  - If you have video sources that show Old School user navigation around the website, please contribute to [this thread](https://github.com/blakegearin/github-custom-global-naviation/issues/1)
 
 - Archiving
 
