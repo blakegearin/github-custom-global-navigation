@@ -136,7 +136,7 @@
     localBar: {
       backgroundColor: '#02040A',
       boxShadow: {
-        remove: true,
+        consistentColor: true,
       },
       centered: false,
     },
@@ -286,7 +286,7 @@
       localBar: {
         backgroundColor: '#0D1116',
         boxShadow: {
-          remove: true,
+          consistentColor: true,
         },
         centered: true,
       },
@@ -994,7 +994,7 @@
       `;
     }
 
-    if (elementConfig.boxShadow.remove) {
+    if (elementConfig.boxShadow.consistentColor) {
       CUSTOM_STYLE.textContent += `
         .UnderlineNav
         {
