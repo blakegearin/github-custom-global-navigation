@@ -670,6 +670,7 @@
     console.error('Unknown color mode');
   }
 
+  const userscriptName = 'GitHub Custom Global Navigation';
   const UNICODE_NON_BREAKING_SPACE = '\u00A0';
   const REPOSITORY_HEADER_SUCCESS_FLAG = 'permCustomizedRepositoryHeader';
   const TEMP_REPOSITORY_HEADER_FLAG = 'tempCustomizedRepositoryHeader';
@@ -679,7 +680,7 @@
   let SELECTORS;
   let CUSTOM_STYLE;
 
-  if (!SILENT) console.log('GitHub Custom Global Navigation running');
+  if (!SILENT) console.log(`${userscriptName}: Running`);
 
   function updateHeader() {
     if (!QUIET) console.log('GitHub Custom Global Navigation updating links...');
@@ -1526,7 +1527,8 @@
     }
 
     if (!repositoryHeader) {
-      console.error(`${SELECTORS.repositoryHeader.id} not found`);
+      // This is expected on pages that aren't repositories
+      if (!QUIET) console.log(`${SELECTORS.repositoryHeader.id} not found`);
       return;
     } else if (repositoryHeader.hidden) {
       if (!QUIET) console.log(`${SELECTORS.repositoryHeader.id} is hidden`);
@@ -1901,7 +1903,7 @@
         updateHeader();
         HEADER.setAttribute('id', headerSuccessFlag);
 
-        if (!SILENT) console.log('GitHub Custom Global Navigation complete!');
+        if (!SILENT) console.log(`${userscriptName}: Complete`);
 
         break;
       }
@@ -1919,9 +1921,9 @@
             !document.querySelector(`.${REPOSITORY_HEADER_SUCCESS_FLAG}`)
           )
         ) {
-          importRepositoryHeader();
+          const updated = importRepositoryHeader();
 
-          if (!SILENT) console.log('GitHub Custom Global Navigation complete!');
+          if (!SILENT && updated) console.log(`${userscriptName}: Repository header updated`);
 
           break;
         }
