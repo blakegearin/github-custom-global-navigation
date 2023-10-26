@@ -18,28 +18,44 @@ This is a [userscript](https://openuserjs.org/about/Userscript-Beginners-HOWTO) 
 1. Go to this userscript's [GreasyFork page](https://greasyfork.org/en/scripts/477926-github-custom-global-navigation)
 1. Click "Install this script"
 1. The userscript will open in your userscript manager where you can install it
+1. Once installed, click your avatar in the top right to open the sidebar
+1. "Customize global navigation" will be listed underneath the regular "Settings" option
+
+    <img
+      height="40%"
+      width="40%"
+      src="img/menu_option.png"
+      alt="menu option for 'Customize global navigation'"
+      title="GitHub Custom Global Navigation logo"
+    />
 
 ## Documentation
 
-### Defaults
+### Configurations
 
-There are two (2) default configurations that are actively maintained and supported.
+There are two (2) preset configurations that are actively maintained and supported.
 
-#### True Default
+#### Happy Medium
 
    - This is the out-of-the-box experience
-   - It previews some the best features and aims to deliver a [happy medium](https://dictionary.cambridge.org/dictionary/english/happy-medium) between the old and new styles without compromising on accessibility
-   - It relies more on CSS variables to adapt to GitHub changes
+   - This previews some the best features and aims to deliver a [happy medium](https://dictionary.cambridge.org/dictionary/english/happy-medium) between the old and new styles without compromising on accessibility
+   - It relies relatively more on CSS variables in hopes of adapting to GitHub's changes
 
 #### Old School
 
    - This is a single opt-in flag that overrides the true defaults
-   - It aims to deliver an experience as close to the style in March 2023 as reasonably possible without compromising on accessibility
+   - It aims to deliver an experience as close to the style  March 2023 as reasonably possible without compromising on accessibility
    - It may not match the old mobile experience, as the details surrounding this are more difficult to find online
-   - Where applicable, it uses hardcoded values instead of CSS variables to prevent side effects from GitHub changes
+   - Where applicable, it uses hardcoded values instead of CSS variables to prevent side effects from GitHub's changes
    - It contains unique updates that are not otherwise available (e.g. button rearranging)
 
-Accessibility is important, and GitHub [agrees](https://accessibility.github.com). However, this userscript doesn't go out of its way to improve accessability when it comes to HTML tags. For example, there are several `a` tags presenting as buttons, which is not ideal. In some cases, elements added by the userscript take a similar approach for consistency.
+### Accessability
+
+Accessibility is important. GitHub [agrees](https://accessibility.github.com).
+
+This userscript should not make GitHub less accessible. However, this userscript doesn't go _out of its way_ to improve accessability on existing elements, and elements added are configured to be consistent with existing ones.
+
+If you have an accessibility concern with the userscript's operations or additions, please create a new issue.
 
 ### Responsive Design
 
@@ -71,13 +87,18 @@ In October 2023, GitHub initiated a [public rollout](https://github.blog/changel
 
 ## Credit
 
-- Colors, icons, and element properties were collected from a variety of sources
+- Colors, icons, and element properties for theming were collected from a variety of sources
   - [Internet Archive](https://archive.org) ([donate](https://archive.org/donate))
   - [GitHub](https://github.com/)
   - [Gist](https://gist.github.com/)
   - [YouTube](https://www.youtube.com) <sup><a href="https://www.youtube.com/watch?v=ULsLaA__Xe8">[1]</a></sup><sup><a href="https://www.youtube.com/watch?v=v_1iqtOnUMg">[2]</a></sup><sup><a href="https://youtu.be/jG4Vs81kMlc">[3]</a></sup>
 
-  - If you have video sources that show Old School user navigation around the website, please contribute to [this thread](https://github.com/blakegearin/github-custom-global-naviation/issues/1)
+  - If you have video sources that show Old School user navigation around the website (or better yet, some HTML), please contribute to [this thread](https://github.com/blakegearin/github-custom-global-naviation/issues/1)
+
+- Configuration menu
+
+  - Dependency: [GM_config](https://github.com/sizzlemctwizzle/GM_config)
+  - Icons: [mhudaaa](https://www.reshot.com/free-svg-icons/item/space-line-icon-set-7YDXQBCTRH/)
 
 - Archiving
 
