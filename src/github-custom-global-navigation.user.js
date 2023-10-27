@@ -23,8 +23,9 @@
   const INFO = 2;
   const DEBUG = 3;
   const VERBOSE = 4;
+  const TRACE = 5;
 
-  const CURRENT_LOG_LEVEL = VERBOSE;
+  const CURRENT_LOG_LEVEL = DEBUG;
   const USERSCRIPT_NAME = 'GitHub Custom Global Navigation';
 
   function log(level, message, variable = null) {
@@ -77,7 +78,9 @@
 
     if (CONFIG.sidebars.backdropColor !== '') updateSidebarBackdropColor();
 
-    HEADER.appendChild(HEADER_STYLE);
+    modifyThenObserve(() => {
+      document.body.appendChild(HEADER_STYLE);
+    });
   }
 
   function updateHamburgerButton() {
@@ -85,7 +88,7 @@
 
     const configKey = 'hamburgerButton';
     const elementConfig = CONFIG.hamburgerButton;
-    log(DEBUG, `elementConfig: ${elementConfig}`);
+    log(DEBUG, 'elementConfig', elementConfig);
 
     const hamburgerButton = HEADER.querySelector(SELECTORS[configKey]);
 
@@ -95,7 +98,13 @@
     }
 
     if (elementConfig.remove) {
-      hamburgerButton.remove();
+      HEADER_STYLE.textContent += `
+        ${SELECTORS[configKey]}
+        {
+          display: none !important;
+        }
+      `;
+
       return;
     }
   }
@@ -106,7 +115,12 @@
     const elementConfig = CONFIG.logo;
 
     if (elementConfig.remove) {
-      HEADER.querySelector(SELECTORS.logo.topDiv).remove();
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.logo.topDiv}
+        {
+          display: none !important;
+        }
+      `;
     }
 
     const logo = HEADER.querySelector(SELECTORS.logo.svg);
@@ -254,7 +268,12 @@
       if (!commandPaletteButton) {
         logError(`Selector ${SELECTORS.search.commandPalette} not found`);
       } else {
-        commandPaletteButton.remove();
+        HEADER_STYLE.textContent += `
+          ${SELECTORS.search.commandPalette}
+          {
+            display: none !important;
+          }
+        `;
       }
     }
 
@@ -317,7 +336,12 @@
     }
 
     if (elementConfig.magnifyingGlassIcon.remove) {
-      searchButton?.parentNode?.firstElementChild?.remove();
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.search.magnifyingGlassIcon}
+        {
+          display: none !important;
+        }
+      `;
     }
 
     if (elementConfig.modal.width !== '') {
@@ -328,7 +352,6 @@
         }
       `;
     }
-
 
     if (elementConfig.rightButton === 'slash key') {
       HEADER_STYLE.textContent += `
@@ -427,10 +450,24 @@
     const elementConfig = CONFIG[configKey];
 
     if (elementConfig.remove) {
-      link.parentNode.remove();
+      const topDivId = `${configKey}-topDiv`;
+      link.parentNode.setAttribute('id', topDivId);
+
+      HEADER_STYLE.textContent += `
+        #${topDivId}
+        {
+          display: none !important;
+        }
+      `;
+
       return;
     } else if (!elementConfig.tooltip) {
-      tooltipElement.remove();
+      HEADER_STYLE.textContent += `
+        #${SELECTORS.toolTips[configKey].id}
+        {
+          display: none !important;
+        }
+      `;
     }
 
     const padding = '7px';
@@ -445,14 +482,33 @@
     link.parentNode.setAttribute('id', divId);
 
     if (elementConfig.icon.remove) {
-      link.querySelector('svg').remove();
+      const svgId = `${configKey}-svg`;
+      const svg = link.querySelector('svg');
+
+      if (!svg) logError(`${configKey} svg not found`);
+
+      svg.setAttribute('id', svgId);
+
+      HEADER_STYLE.textContent += `
+        #${svgId}
+        {
+          display: none !important;
+        }
+      `;
     } else {
       link.querySelector('svg').style.setProperty('fill', elementConfig.icon.color);
       textContent = UNICODE_NON_BREAKING_SPACE + textContent;
     }
 
+
+    modifyThenObserve(() => {
+      HEADER.querySelector(`#${SELECTORS[configKey].textContent}`)?.remove();
+    });
+
     if (elementConfig.text.content !== '') {
       const spanElement = document.createElement('span');
+      spanElement.setAttribute('id', `${configKey}-text-content-span`);
+
       if (elementConfig.text.color) spanElement.style.setProperty('color', elementConfig.text.color);
 
       const textNode = document.createTextNode(textContent);
@@ -493,8 +549,8 @@
   function flipIssuesPullRequests() {
     log(DEBUG, 'flipIssuesPullRequest()');
 
-    const issuesDiv = HEADER.querySelector(SELECTORS.issues);
-    const pullRequestsDiv = HEADER.querySelector(SELECTORS.pullRequests);
+    const issuesDiv = HEADER.querySelector(SELECTORS.issues.topDiv);
+    const pullRequestsDiv = HEADER.querySelector(SELECTORS.pullRequests.topDiv);
 
     issuesDiv.parentNode.insertBefore(pullRequestsDiv, issuesDiv);
   }
@@ -520,25 +576,41 @@
     const elementConfig = CONFIG[configKey];
 
     if (elementConfig.remove) {
-      button.parentNode.parentNode.parentNode.remove();
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.create.topDiv}
+        {
+          display: none !important;
+        }
+      `;
+
       return;
     } else if (!elementConfig.tooltip) {
-      tooltipElement.remove();
+      HEADER_STYLE.textContent += `
+        #${tooltipElement.id}
+        {
+          display: none !important
+        }
+      `;
     }
 
     const buttonLabel = button.querySelector(SELECTORS.create.dropdownIcon);
 
     if (elementConfig.plusIcon.remove) {
-      button.querySelector(SELECTORS.create.plusIcon).remove();
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.create.button} ${SELECTORS.create.plusIcon}
+        {
+          display: none !important
+        }
+      `;
     } else {
 
       if (elementConfig.plusIcon.color !== '') {
         HEADER_STYLE.textContent += `
-        ${SELECTORS.create.plusIcon}
-        {
-          color: ${elementConfig.plusIcon.color} !important;
-        }
-      `;
+          ${SELECTORS.create.plusIcon}
+          {
+            color: ${elementConfig.plusIcon.color} !important;
+          }
+        `;
       }
 
       if (elementConfig.plusIcon.hover.color !== '') {
@@ -560,6 +632,10 @@
       }
     }
 
+    modifyThenObserve(() => {
+      HEADER.querySelector(`#${SELECTORS[configKey].textContent}`)?.remove();
+    });
+
     if (elementConfig.text.content !== '') {
       // Update the text's font properties to match the others
       HEADER_STYLE.textContent += `
@@ -571,6 +647,8 @@
       `;
 
       const spanElement = document.createElement('span');
+      spanElement.setAttribute('id', SELECTORS.create.textContent);
+
       spanElement.style.setProperty('color', elementConfig.text.color);
       spanElement.textContent = elementConfig.text.content;
 
@@ -579,7 +657,12 @@
     }
 
     if (elementConfig.dropdownIcon.remove) {
-      buttonLabel.remove();
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.create.dropdownIcon}
+        {
+          display: none !important
+        }
+      `;
     } else {
       HEADER_STYLE.textContent += `
         ${SELECTORS.create.dropdownIcon}
@@ -643,9 +726,19 @@
     const elementConfig = CONFIG[configKey];
 
     if (elementConfig.remove) {
-      inboxLink.parentNode.remove();
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.notifications.indicator}
+        {
+          display: none !important;
+        }
+      `;
     } else if (!elementConfig.tooltip) {
-      SELECTORS.toolTips.notifications.remove();
+      HEADER_STYLE.textContent += `
+        #${SELECTORS.toolTips.notifications.id}
+        {
+          display: none !important;
+        }
+      `;
     }
 
     if (elementConfig.dot.remove) {
@@ -685,7 +778,16 @@
         `;
       }
     } else {
-      inboxLink.querySelector('svg').remove();
+      const inboxSvgId = 'inbox-svg';
+      const inboxSvg = inboxLink.querySelector('svg');
+      inboxSvg.setAttribute('id', inboxSvgId);
+
+      HEADER_STYLE.textContent += `
+        #${inboxSvgId}
+        {
+          display: none !important;
+        }
+      `;
     }
 
     if (elementConfig.icon.symbol === 'bell') {
@@ -702,6 +804,10 @@
         }
       `;
     }
+
+    modifyThenObserve(() => {
+      HEADER.querySelector(`#${SELECTORS[configKey].textContent}`)?.remove();
+    });
 
     if (elementConfig.text.content !== '') {
       const padding = '9px';
@@ -724,6 +830,7 @@
       }
 
       const spanElement = document.createElement('span');
+      spanElement.setAttribute('id', SELECTORS.notifications.textContent);
 
       // Update the text's font properties to match the others
       spanElement.style.setProperty('font-size', 'var(--text-body-size-medium, 0.875rem)', 'important');
@@ -941,7 +1048,12 @@
       insertNewGlobalBar(topRepositoryHeaderElement);
     } else if (HEADER.querySelector(`#${TEMP_REPOSITORY_HEADER_FLAG}`)) {
       // The Code tab is being loaded from another tab which has a temporary header
-      HEADER.querySelector(`#${TEMP_REPOSITORY_HEADER_FLAG}`).remove();
+      HEADER_STYLE.textContent += `
+        #${TEMP_REPOSITORY_HEADER_FLAG}
+        {
+          display: none !important;
+        }
+      `;
 
       insertPermanentRepositoryHeader(topRepositoryHeaderElement, repositoryHeader);
     } else {
@@ -1184,7 +1296,12 @@
       }
     }
 
-    document.querySelector(SELECTORS.repositoryHeader.bottomBorder).remove();
+    HEADER_STYLE.textContent += `
+      ${SELECTORS.repositoryHeader.bottomBorder}
+      {
+        display: none !important;
+      }
+    `;
   }
 
   function leftAlignElement(element) {
@@ -1215,73 +1332,23 @@
     return urlPattern.test(string);
   }
 
-  function setSelectors(headerSelector, repositoryHeaderId) {
-    log(DEBUG, 'setSelectors()');
+  function updateSelectors() {
+    log(DEBUG, 'updateSelectors()');
 
     const toolTips = Array.from(HEADER.querySelectorAll('tool-tip'));
-    SELECTORS = {
-      header: {
-        self: headerSelector,
-        actionsDiv: '.AppHeader-actions',
-        globalBar: '.AppHeader-globalBar',
-        localBar: '.AppHeader-localBar',
-        leftAligned: '.AppHeader-globalBar-start',
-        rightAligned: '.AppHeader-globalBar-end',
-      },
-      logo: {
-        topDiv: '.AppHeader-logo',
-        svg: '.AppHeader-logo svg',
-      },
-      toolTips: {
-        create: toolTips.find(
-          tooltip => tooltip.textContent.includes('Create new')
-        ),
-        pullRequests: toolTips.find(
-          tooltip => tooltip.textContent.includes('Pull requests')
-        ),
-        issues: toolTips.find(
-          tooltip => tooltip.textContent.includes('Issues')
-        ),
-        notifications: toolTips.find(
-          tooltip => tooltip.getAttribute('data-target') === 'notification-indicator.tooltip'
-        ),
-      },
-      hamburgerButton: 'deferred-side-panel',
-      pageTitle: {
-        topDiv: '.AppHeader-context',
-        links: '.AppHeader-context a',
-        separator: '.AppHeader-context-item-separator',
-      },
-      search: {
-        topDiv: '.AppHeader-search',
-        input: '.search-input',
-        button: '[data-target="qbsearch-input.inputButton"]',
-        commandPalette: '#AppHeader-commandPalette-button',
-        placeholderSpan: '#qb-input-query',
-        placeholderDiv: '.AppHeader-search-control .overflow-hidden',
-        modal: '[data-target="qbsearch-input.queryBuilderContainer"]',
-      },
-      create: {
-        topDiv: 'action-menu',
-        button: '#global-create-menu-button',
-        plusIcon: '#global-create-menu-button .Button-visual.Button-leadingVisual',
-        dropdownIcon: '#global-create-menu-button .Button-label',
-      },
-      issues: '#issues-div',
-      pullRequests: '#pullRequests-div',
-      notifications: {
-        indicator: 'notification-indicator',
-        link: 'notification-indicator a',
-        dot: '.AppHeader-button.AppHeader-button--hasIndicator::before',
-      },
-      repositoryHeader: {
-        id: repositoryHeaderId,
-        ownerImg: `.${REPOSITORY_HEADER_CLASS} img`,
-        name: `.${REPOSITORY_HEADER_CLASS} strong`,
-        links: `.${REPOSITORY_HEADER_CLASS} nav[role="navigation"] a`,
-        details: '#repository-details-container',
-        bottomBorder: `.${REPOSITORY_HEADER_CLASS} .border-bottom.mx-xl-5`,
-      },
+    SELECTORS.toolTips = {
+      create: toolTips.find(
+        tooltip => tooltip.textContent.includes('Create new')
+      ),
+      pullRequests: toolTips.find(
+        tooltip => tooltip.textContent.includes('Pull requests')
+      ),
+      issues: toolTips.find(
+        tooltip => tooltip.textContent.includes('Issues')
+      ),
+      notifications: toolTips.find(
+        tooltip => tooltip.getAttribute('data-target') === 'notification-indicator.tooltip'
+      ),
     };
   }
 
@@ -1382,13 +1449,7 @@
 
     GMC.css.basic = '';
     window.addEventListener('load', () => {
-      OBSERVER.observe(
-        document.body,
-        {
-          childList: true,
-          subtree: true
-        }
-      );
+      startObserving();
     });
   }
 
@@ -1424,13 +1485,50 @@
       if (label && select) label.style.lineHeight = '33px';
     });
 
-    document.querySelector('#gmc-frame .reset_holder').remove();
+    modifyThenObserve(() => {
+      document.querySelector('#gmc-frame .reset_holder').remove();
+    });
 
     document.querySelector('#gmc').classList.remove('hidden');
   }
 
+  function gmcSaved() {
+    log(DEBUG, 'gmcSaved()');
+
+    switch (GMC.get('on_save')) {
+      case 'refresh tab':
+        location.reload();
+        break;
+      case 'run script (experimental)':
+        modifyThenObserve(() => {
+          document.querySelector(`#${SELECTORS.header.style}`)?.remove();
+          HEADER_STYLE.textContent = '';
+        });
+
+        applyCustomizations(true);
+
+        break;
+    }
+
+    document.querySelector('#gmc').classList.add('hidden');
+  }
+
   function gmcClosed() {
     log(DEBUG, 'gmcClosed()');
+
+    switch (GMC.get('on_close')) {
+      case 'refresh tab':
+        location.reload();
+        break;
+      case 'run script (experimental)':
+        modifyThenObserve(() => {
+          document.querySelector(`#${SELECTORS.header.style}`)?.remove();
+        });
+
+        applyCustomizations(true);
+
+        break;
+    }
 
     document.querySelector('#gmc').classList.add('hidden');
   }
@@ -1730,7 +1828,7 @@
 
       #gmc-frame #gmc-frame_section_0
       {
-        width: 49%;
+        width: 100%;
         border-radius: 6px;
         border: 1px solid #30363D;
         display: table;
@@ -1976,8 +2074,100 @@
     return gmcFrameDiv;
   }
 
+  function applyCustomizations(refresh = false) {
+    const configName = {
+      'Happy Medium': 'happyMedium',
+      'Old School': 'oldSchool',
+      'Custom': 'custom',
+    }[GMC.get('type')];
+
+    if (configName === 'off') return 'break';
+
+    if (configName === 'custom') configs.custom = generateCustomConfig();
+
+    CONFIG = configs[configName][THEME];
+
+    log(VERBOSE, 'CONFIG', CONFIG);
+
+    const headerSuccessFlag = 'customizedHeader';
+
+    if (!document.getElementById(headerSuccessFlag) || refresh) {
+      HEADER = document.querySelector(SELECTORS.header.self);
+
+      if (!HEADER) return 'continue';
+
+      updateSelectors();
+
+      if (configName === 'oldSchool') {
+        HEADER_STYLE.textContent += `
+          @media (max-width: 767.98px)
+          {
+            action-menu
+            {
+              display: none !important;
+            }
+          }
+        `;
+      }
+
+      updateHeader();
+      HEADER.setAttribute('id', headerSuccessFlag);
+
+      log(QUIET, 'Complete');
+
+      const featurePreviewButton = HEADER.querySelector('[aria-label="Open user account menu"]');
+      if (featurePreviewButton) {
+        featurePreviewButton.addEventListener('click', waitForFeaturePreviewButton);
+      }
+
+      return 'break';
+    } else if (CONFIG.repositoryHeader.import) {
+      // When starting in a repository tab like Issues, the proper repository header
+      // (including  Unwatch, Star, and Fork) is not present per GitHub's design.
+      // If page title is removed, the page will be missing any location context in the header.
+      // To improve this experience, a temporary repository header is created with the
+      // page title or breadcrumbs.
+      // The proper repository header replaces the temporary one when navigating to the Code tab.
+      if (
+        !document.querySelector(SELECTORS.repositoryHeader.id)?.hidden &&
+        (
+          document.querySelector(`#${TEMP_REPOSITORY_HEADER_FLAG}`) ||
+          !document.querySelector(`.${REPOSITORY_HEADER_SUCCESS_FLAG}`)
+        )
+      ) {
+        const updated = importRepositoryHeader();
+
+        if (updated) {
+          log(QUIET, 'Repository header updated');
+        } else {
+          IDLE_MUTATION_COUNT++;
+        }
+
+        return 'break';
+      }
+    }
+  }
+
+  function startObserving() {
+    OBSERVER.observe(
+      document.body,
+      {
+        childList: true,
+        subtree: true,
+      },
+    );
+  }
+
+  function modifyThenObserve(callback) {
+    OBSERVER.disconnect();
+
+    callback();
+
+    startObserving();
+  }
+
   function observeAndModify(mutationsList) {
-    log(DEBUG, 'observeAndModify()');
+    log(VERBOSE, 'observeAndModify()');
 
     if (IDLE_MUTATION_COUNT > MAX_IDLE_MUTATIONS) {
       // This is a failsafe to prevent infinite loops
@@ -1987,103 +2177,93 @@
       return;
     }
 
-    const configName = {
-      'Happy Medium': 'happyMedium',
-      'Old School': 'oldSchool',
-      'Custom': 'custom',
-    }[GMC.get('type')];
-
-    if (configName === 'off') return;
-
-    if (configName === 'custom') configs.custom = generateCustomConfig();
-
-    CONFIG = configs[configName][THEME];
-
-    log(VERBOSE, 'CONFIG');
-    log(VERBOSE, CONFIG);
-
-    const headerSuccessFlag = 'customizedHeader';
-    const repositoryHeaderId = '#repository-container-header';
-
     for (const mutation of mutationsList) {
       // Use header id to determine if updates have already been applied
       if (mutation.type !== 'childList') return;
 
-      log(VERBOSE, 'mutation');
-      log(VERBOSE, mutation);
+      log(TRACE, 'mutation', mutation);
 
-      if (!document.getElementById(headerSuccessFlag)) {
-        const headerSelector = 'header.AppHeader';
-        HEADER = document.querySelector(headerSelector);
+      const outcome = applyCustomizations();
 
-        if (!HEADER) continue;
-
-        setSelectors(headerSelector, repositoryHeaderId);
-
-        if (configName === 'oldSchool') {
-          HEADER_STYLE.textContent += `
-            @media (max-width: 767.98px)
-            {
-              action-menu
-              {
-                display: none !important;
-              }
-            }
-          `;
-        }
-
-        updateHeader();
-        HEADER.setAttribute('id', headerSuccessFlag);
-
-        log(QUIET, 'Complete');
-
-        const featurePreviewButton = HEADER.querySelector('[aria-label="Open user account menu"]');
-        if (featurePreviewButton) {
-          featurePreviewButton.addEventListener('click', waitForFeaturePreviewButton);
-        }
-
-        break;
-      }
-      else if (CONFIG.repositoryHeader.import) {
-        // When starting in a repository tab like Issues, the proper repository header
-        // (including  Unwatch, Star, and Fork) is not present per GitHub's design.
-        // If page title is removed, the page will be missing any location context in the header.
-        // To improve this experience, a temporary repository header is created with the
-        // page title or breadcrumbs.
-        // The proper repository header replaces the temporary one when navigating to the Code tab.
-        if (
-          !document.querySelector(repositoryHeaderId)?.hidden &&
-          (
-            document.querySelector(`#${TEMP_REPOSITORY_HEADER_FLAG}`) ||
-            !document.querySelector(`.${REPOSITORY_HEADER_SUCCESS_FLAG}`)
-          )
-        ) {
-          const updated = importRepositoryHeader();
-
-          if (updated) {
-            log(QUIET, 'Repository header updated');
-          } else {
-            IDLE_MUTATION_COUNT++;
-          }
-
-          break;
-        }
-      }
+      if (outcome === 'continue') continue;
+      if (outcome === 'break') break;
     }
   }
-
-  let CONFIG;
-  let HEADER;
-  let SELECTORS;
-  let HEADER_STYLE = document.createElement('style');
-  let THEME = 'light';
-  let IDLE_MUTATION_COUNT = 0;
 
   const UNICODE_NON_BREAKING_SPACE = '\u00A0';
   const REPOSITORY_HEADER_SUCCESS_FLAG = 'permCustomizedRepositoryHeader';
   const TEMP_REPOSITORY_HEADER_FLAG = 'tempCustomizedRepositoryHeader';
   const REPOSITORY_HEADER_CLASS = 'customizedRepositoryHeader';
   const MAX_IDLE_MUTATIONS = 1000;
+
+  let CONFIG;
+  let HEADER;
+  let HEADER_STYLE = document.createElement('style');
+
+  let THEME = 'light';
+  let IDLE_MUTATION_COUNT = 0;
+  let SELECTORS = {
+    header: {
+      self: 'header.AppHeader',
+      actionsDiv: '.AppHeader-actions',
+      globalBar: '.AppHeader-globalBar',
+      localBar: '.AppHeader-localBar',
+      leftAligned: '.AppHeader-globalBar-start',
+      rightAligned: '.AppHeader-globalBar-end',
+      style: 'customHeaderStyle',
+    },
+    logo: {
+      topDiv: '.AppHeader-globalBar-start .AppHeader-logo',
+      svg: '.AppHeader-logo svg',
+    },
+    hamburgerButton: '.AppHeader-globalBar-start deferred-side-panel',
+    pageTitle: {
+      topDiv: '.AppHeader-context',
+      links: '.AppHeader-context a',
+      separator: '.AppHeader-context-item-separator',
+    },
+    search: {
+      topDiv: '.AppHeader-search',
+      input: '.search-input',
+      button: '[data-target="qbsearch-input.inputButton"]',
+      magnifyingGlassIcon: '.AppHeader-search-control label',
+      commandPalette: '#AppHeader-commandPalette-button',
+      placeholderSpan: '#qb-input-query',
+      placeholderDiv: '.AppHeader-search-control .overflow-hidden',
+      modal: '[data-target="qbsearch-input.queryBuilderContainer"]',
+    },
+    create: {
+      topDiv: 'action-menu',
+      button: '#global-create-menu-button',
+      plusIcon: '#global-create-menu-button .Button-visual.Button-leadingVisual',
+      dropdownIcon: '#global-create-menu-button .Button-label',
+      textContent: 'create-text-content-span',
+    },
+    issues: {
+      topDiv: '#issues-div',
+      textContent: 'issues-text-content-span',
+    },
+    pullRequests: {
+      topDiv: '#pullRequests-div',
+      textContent: 'pullRequests-text-content-span',
+    },
+    notifications: {
+      indicator: 'notification-indicator',
+      link: 'notification-indicator a',
+      dot: '.AppHeader-button.AppHeader-button--hasIndicator::before',
+      textContent: 'textContent-text-content-spa'
+    },
+    repositoryHeader: {
+      id: '#repository-container-header',
+      ownerImg: `.${REPOSITORY_HEADER_CLASS} img`,
+      name: `.${REPOSITORY_HEADER_CLASS} strong`,
+      links: `.${REPOSITORY_HEADER_CLASS} nav[role="navigation"] a`,
+      details: '#repository-details-container',
+      bottomBorder: `.${REPOSITORY_HEADER_CLASS} .border-bottom.mx-xl-5`,
+    },
+  };
+
+  HEADER_STYLE.id = SELECTORS.header.style;
 
   setTheme();
 
@@ -2099,7 +2279,7 @@
           remove: false,
         },
         logo: {
-          remove: true,
+          remove: false,
           color: '',
           customSvg: '',
         },
@@ -2167,7 +2347,7 @@
           remove: false,
           border: true,
           tooltip: false,
-          alignLeft: true,
+          alignLeft: false,
           icon: {
             remove: false,
             color: '',
@@ -2185,7 +2365,7 @@
           remove: false,
           border: true,
           tooltip: false,
-          alignLeft: true,
+          alignLeft: false,
           icon: {
             remove: false,
             color: '',
@@ -2271,7 +2451,7 @@
           remove: false,
         },
         logo: {
-          remove: true,
+          remove: false,
           color: '',
           customSvg: '',
         },
@@ -2339,7 +2519,7 @@
           remove: false,
           border: true,
           tooltip: false,
-          alignLeft: true,
+          alignLeft: false,
           icon: {
             remove: false,
             color: '',
@@ -2357,7 +2537,7 @@
           remove: false,
           border: true,
           tooltip: false,
-          alignLeft: true,
+          alignLeft: false,
           icon: {
             remove: false,
             color: '',
@@ -2796,6 +2976,7 @@
     events: {
       init: gmcInitialized,
       open: gmcOpened,
+      save: gmcSaved,
       close: gmcClosed,
     },
     frame: gmcBuildFrame(),
@@ -3723,7 +3904,7 @@
         options: [
           'do nothing',
           'refresh tab',
-          'run script',
+          'run script (experimental)',
         ],
         default: 'do nothing',
       },
@@ -3733,7 +3914,7 @@
         options: [
           'do nothing',
           'refresh tab',
-          'run script',
+          'run script (experimental)',
         ],
         default: 'do nothing',
       },
