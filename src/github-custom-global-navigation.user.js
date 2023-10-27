@@ -24,19 +24,14 @@
   const DEBUG = 3;
   const VERBOSE = 4;
 
-  const CURRENT_LOG_LEVEL = INFO;
+  const CURRENT_LOG_LEVEL = VERBOSE;
   const USERSCRIPT_NAME = 'GitHub Custom Global Navigation';
 
-  function log(level, message) {
+  function log(level, message, variable = null) {
     if (CURRENT_LOG_LEVEL < level) return;
 
-    if (level === VERBOSE) {
-      console.dir(message);
-
-      return;
-    }
-
     console.log(`${USERSCRIPT_NAME}: ${message}`);
+    if (variable) console.log(variable);
   }
 
   function logError(message) {
