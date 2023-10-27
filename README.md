@@ -77,7 +77,16 @@ This userscript does not have first-class support for sub-themes, but can tell l
 
 ### Archiving
 
-Part of the challenge of maintaining the Old School configuration is finding enough archival resources to make it accurate. To help maintain this project and in the spirit of aiding future developers, the HTML of the main `header` tag and `repository-container-header` will be archived as breaking changes occur.
+Part of the challenge of maintaining the Old School configuration is finding enough archival resources to make it accurate. To help maintain this project and in the spirit of aiding future developers, the HTML of the main `header` tag and `repository-container-header` will be archived as breaking changes occur. These elements will also be archived in a post-script state for each supported configuration.
+
+### Maintenance
+
+This was built with long-term maintenance in mind.
+
+- Keeping selectors neatly sorted and in one place
+- Minimizing DOM traversal
+- Adding unique IDs to relevant HTML elements that don't have good selectors
+- Logging errors cleanly
 
 ## Background
 

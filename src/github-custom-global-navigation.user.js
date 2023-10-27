@@ -26,6 +26,7 @@
   const TRACE = 5;
 
   const CURRENT_LOG_LEVEL = DEBUG;
+
   const USERSCRIPT_NAME = 'GitHub Custom Global Navigation';
 
   function log(level, message, variable = null) {
@@ -1438,7 +1439,7 @@
     } else if (dataColorMode === 'dark') {
       THEME = 'dark';
     } else if (dataColorMode !== 'light')  {
-      logError(`${USERSCRIPT_NAME}: Unknown color mode`);
+      logError('Unknown color mode');
     }
 
     log(VERBOSE, `THEME: ${THEME}`);
@@ -2171,7 +2172,7 @@
 
     if (IDLE_MUTATION_COUNT > MAX_IDLE_MUTATIONS) {
       // This is a failsafe to prevent infinite loops
-      console.error('MAX_IDLE_MUTATIONS exceeded');
+      logError('MAX_IDLE_MUTATIONS exceeded');
       OBSERVER.disconnect();
 
       return;
