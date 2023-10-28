@@ -27,6 +27,9 @@
     "semi": [
       "error",
       "always"
-    ]
+    ],
+    "error": {
+      "varsIgnorePattern": "^_"
+    }
   }
 }
