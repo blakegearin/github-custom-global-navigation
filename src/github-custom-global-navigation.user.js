@@ -25,7 +25,7 @@
   const VERBOSE = 4;
   const TRACE = 5;
 
-  const CURRENT_LOG_LEVEL = DEBUG;
+  const CURRENT_LOG_LEVEL = QUIET;
 
   const USERSCRIPT_NAME = 'GitHub Custom Global Navigation';
 
@@ -406,13 +406,6 @@
     }
 
     if (elementConfig.alignLeft) {
-      const searchTopDiv = HEADER.querySelector(SELECTORS.search.topDiv);
-
-      if (!searchTopDiv) {
-        logError(`${SELECTORS.search.topDiv} div not found`);
-        return;
-      }
-
       HEADER_STYLE.textContent += `
         ${SELECTORS.search.topDiv}
         {
@@ -421,7 +414,7 @@
         }
       `;
 
-      leftAlignElement(searchTopDiv);
+      cloneAndLeftAlignElement(SELECTORS.search.topDiv, 'search-topDiv');
     }
   }
 
@@ -446,9 +439,20 @@
       return;
     }
 
-    const link = tooltipElement.previousElementSibling;
+    let link = tooltipElement.previousElementSibling;
 
     const elementConfig = CONFIG[configKey];
+
+    let divId = `${configKey}-div`;
+    link.parentNode.setAttribute('id', divId);
+
+    if (elementConfig.alignLeft) {
+      const [cloneId, cloneElement] = cloneAndLeftAlignElement(`#${divId}`, divId);
+
+      SELECTORS[configKey].topDiv = `#${cloneId}`;
+      divId = cloneId;
+      link = cloneElement.querySelector('a');
+    }
 
     if (elementConfig.remove) {
       const topDivId = `${configKey}-topDiv`;
@@ -479,9 +483,6 @@
 
     let textContent = elementConfig.text.content;
 
-    const divId = `${configKey}-div`;
-    link.parentNode.setAttribute('id', divId);
-
     if (elementConfig.icon.remove) {
       const svgId = `${configKey}-svg`;
       const svg = link.querySelector('svg');
@@ -501,16 +502,25 @@
       textContent = UNICODE_NON_BREAKING_SPACE + textContent;
     }
 
-
     modifyThenObserve(() => {
       HEADER.querySelector(`#${SELECTORS[configKey].textContent}`)?.remove();
     });
 
     if (elementConfig.text.content !== '') {
       const spanElement = document.createElement('span');
-      spanElement.setAttribute('id', `${configKey}-text-content-span`);
+      const spanId = `${configKey}-text-content-span`;
+      spanElement.setAttribute('id', spanId);
 
-      if (elementConfig.text.color) spanElement.style.setProperty('color', elementConfig.text.color);
+      if (elementConfig.text.color) {
+        // spanElement.style.setProperty('color', elementConfig.text.color);
+
+        HEADER_STYLE.textContent += `
+          #${spanId}
+          {
+            color: ${elementConfig.text.color} !important;
+          }
+        `;
+      }
 
       const textNode = document.createTextNode(textContent);
       spanElement.appendChild(textNode);
@@ -519,7 +529,12 @@
     }
 
     if (!elementConfig.border) {
-      link.style.setProperty('border', 'none', 'important');
+      HEADER_STYLE.textContent += `
+        #${divId} a
+        {
+          border: none !important;
+        }
+      `;
     }
 
     if (elementConfig.hover.backgroundColor !== '') {
@@ -540,20 +555,88 @@
       `;
     }
 
-    if (elementConfig.alignLeft) {
-      leftAlignElement(link.parentNode);
+    log(DEBUG, `Updates applied to link ${configKey}: `, link);
+  }
+
+  function cloneAndFlipElements(firstElementSelector, secondElementSelector, firstElementId, secondElementId) {
+    log(DEBUG, 'cloneAndFlipElements()');
+
+    const firstElement = HEADER.querySelector(firstElementSelector);
+
+    if (!firstElement) {
+      logError(`${firstElementSelector} not found`);
+      return;
     }
 
-    log(DEBUG, `Updates applied to link ${configKey}: `, link);
+    const secondElement = HEADER.querySelector(secondElementSelector);
+
+    if (!secondElement) {
+      logError(`${secondElementSelector} not found`);
+      return;
+    }
+
+    const firstElementClone = firstElement.cloneNode(true);
+    const secondElementClone = secondElement.cloneNode(true);
+
+    const firstElementCloneId = `${firstElementId}-clone`;
+    const secondElementCloneId = `${secondElementId}-clone`;
+
+    firstElementClone.setAttribute('id', firstElementCloneId);
+    secondElementClone.setAttribute('id', secondElementCloneId);
+
+    firstElementClone.style.setProperty('display', 'none');
+    secondElementClone.style.setProperty('display', 'none');
+
+    console.log(`Changing ${firstElementSelector} to #${firstElementCloneId}`);
+
+    HEADER_STYLE.textContent = HEADER_STYLE.textContent.replace(
+      new RegExp(escapeRegExp(firstElementSelector), 'g'),
+      `#${firstElementCloneId}`,
+    );
+
+    HEADER_STYLE.textContent += `
+      ${firstElementSelector},
+      ${secondElementSelector}
+      {
+        display: none !important;
+      }
+
+      #${firstElementCloneId},
+      #${secondElementCloneId}
+      {
+        display: initial !important;
+      }
+    `;
+
+    console.log(`Changing ${secondElementSelector} to #${secondElementCloneId}`);
+
+    HEADER_STYLE.textContent = HEADER_STYLE.textContent.replace(
+      new RegExp(escapeRegExp(secondElementSelector), 'g'),
+      `#${secondElementCloneId}`,
+    );
+
+    if (secondElement.nextElementSibling === null) {
+      secondElement.parentNode.appendChild(firstElementClone);
+    } else {
+      secondElement.parentNode.insertBefore(firstElementClone, secondElement.nextElementSibling);
+    }
+
+    if (firstElement.nextElementSibling === null) {
+      firstElement.parentNode.appendChild(secondElementClone);
+    } else{
+      firstElement.parentNode.insertBefore(secondElementClone, firstElement.nextElementSibling);
+    }
   }
 
   function flipIssuesPullRequests() {
     log(DEBUG, 'flipIssuesPullRequest()');
 
-    const issuesDiv = HEADER.querySelector(SELECTORS.issues.topDiv);
-    const pullRequestsDiv = HEADER.querySelector(SELECTORS.pullRequests.topDiv);
-
-    issuesDiv.parentNode.insertBefore(pullRequestsDiv, issuesDiv);
+    cloneAndFlipElements(
+      SELECTORS.issues.topDiv,
+      SELECTORS.pullRequests.topDiv,
+      'issues-flip-div',
+      'pullRequests-flip-div'
+    );
   }
 
   function updateCreateNewButton() {
@@ -561,13 +644,14 @@
 
     const configKey = 'create';
     const tooltipElement = SELECTORS.toolTips[configKey];
+    const elementSelector = SELECTORS[configKey];
 
     if (!tooltipElement) {
       logError(`${configKey} tooltip not found`);
       return;
     }
 
-    const button = HEADER.querySelector(SELECTORS.create.button);
+    const button = HEADER.querySelector(elementSelector.button);
 
     if (!button) {
       logError('"Create new..." button not found');
@@ -578,7 +662,7 @@
 
     if (elementConfig.remove) {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.create.topDiv}
+        ${elementSelector.topDiv}
         {
           display: none !important;
         }
@@ -594,11 +678,20 @@
       `;
     }
 
-    const buttonLabel = button.querySelector(SELECTORS.create.dropdownIcon);
+    const topDiv = HEADER.querySelector(elementSelector.topDiv);
+
+    if (!topDiv) {
+      logError(`${elementSelector.topDiv} div not found`);
+      return;
+    }
+
+    topDiv.setAttribute('id', elementSelector.id);
+
+    const buttonLabel = button.querySelector(elementSelector.dropdownIcon);
 
     if (elementConfig.plusIcon.remove) {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.create.button} ${SELECTORS.create.plusIcon}
+        ${elementSelector.button} ${elementSelector.plusIcon}
         {
           display: none !important
         }
@@ -607,7 +700,7 @@
 
       if (elementConfig.plusIcon.color !== '') {
         HEADER_STYLE.textContent += `
-          ${SELECTORS.create.plusIcon}
+          ${elementSelector.plusIcon}
           {
             color: ${elementConfig.plusIcon.color} !important;
           }
@@ -616,7 +709,7 @@
 
       if (elementConfig.plusIcon.hover.color !== '') {
         HEADER_STYLE.textContent += `
-          ${SELECTORS.create.plusIcon.split(' ').join(':hover ')} svg path
+          ${elementSelector.plusIcon.split(' ').join(':hover ')} svg path
           {
             fill: ${elementConfig.plusIcon.hover.color} !important;
           }
@@ -625,7 +718,7 @@
 
       if (elementConfig.plusIcon.marginRight !== '') {
         HEADER_STYLE.textContent += `
-          ${SELECTORS.create.plusIcon}
+          ${elementSelector.plusIcon}
           {
             margin-right: ${elementConfig.plusIcon.marginRight} !important;
           }
@@ -640,7 +733,7 @@
     if (elementConfig.text.content !== '') {
       // Update the text's font properties to match the others
       HEADER_STYLE.textContent += `
-        ${SELECTORS.create.button}
+        ${elementSelector.button}
         {
           font-size: var(--text-body-size-medium, 0.875rem) !important;
           font-weight: var(--base-text-weight-medium, 500) !important;
@@ -648,7 +741,7 @@
       `;
 
       const spanElement = document.createElement('span');
-      spanElement.setAttribute('id', SELECTORS.create.textContent);
+      spanElement.setAttribute('id', elementSelector.textContent);
 
       spanElement.style.setProperty('color', elementConfig.text.color);
       spanElement.textContent = elementConfig.text.content;
@@ -659,14 +752,14 @@
 
     if (elementConfig.dropdownIcon.remove) {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.create.dropdownIcon}
+        ${elementSelector.dropdownIcon}
         {
           display: none !important
         }
       `;
     } else {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.create.dropdownIcon}
+        ${elementSelector.dropdownIcon}
         {
           grid-area: initial !important;
         }
@@ -674,7 +767,7 @@
 
       if (elementConfig.dropdownIcon.color !== '') {
         HEADER_STYLE.textContent += `
-          ${SELECTORS.create.dropdownIcon}
+          ${elementSelector.dropdownIcon}
           {
             color: ${elementConfig.dropdownIcon.color} !important;
           }
@@ -683,7 +776,7 @@
 
       if (elementConfig.dropdownIcon.hover.color !== '') {
         HEADER_STYLE.textContent += `
-          ${SELECTORS.create.dropdownIcon.split(' ').join(':hover ')} svg path
+          ${elementSelector.dropdownIcon.split(' ').join(':hover ')} svg path
           {
             fill: ${elementConfig.dropdownIcon.hover.color} !important;
           }
@@ -693,7 +786,7 @@
 
     if (!elementConfig.border) {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.create.button}
+        ${elementSelector.button}
         {
           border: none !important;
         }
@@ -702,14 +795,12 @@
 
     if (elementConfig.hoverBackgroundColor !== '') {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.create.button}:hover
+        ${elementSelector.button}:hover
         {
           background-color: ${elementConfig.hoverBackgroundColor} !important;
         }
       `;
     }
-
-    log(DEBUG, `Updates applied to button ${configKey}: `, button);
   }
 
   function updateInboxLink() {
@@ -717,10 +808,12 @@
 
     const configKey = 'notifications';
 
-    const inboxLink = HEADER.querySelector(SELECTORS.notifications.link);
+    const elementSelector = SELECTORS[configKey];
+
+    const inboxLink = HEADER.querySelector(elementSelector.link);
 
     if (!inboxLink) {
-      logError(`${SELECTORS.notifications.link} link not found`);
+      logError(`${elementSelector.link} link not found`);
       return;
     }
 
@@ -728,7 +821,7 @@
 
     if (elementConfig.remove) {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.notifications.indicator}
+        ${elementSelector.indicator}
         {
           display: none !important;
         }
@@ -742,9 +835,18 @@
       `;
     }
 
+    const notificationIndicator = HEADER.querySelector(elementSelector.indicator);
+
+    if (!notificationIndicator) {
+      logError(`${elementSelector.indicator} not found`);
+      return;
+    }
+
+    notificationIndicator.setAttribute('id', elementSelector.id);
+
     if (elementConfig.dot.remove) {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.notifications.dot}
+        ${elementSelector.dot}
         {
           content: none !important;
         }
@@ -752,7 +854,7 @@
     } else {
       if (elementConfig.dot.color !== '') {
         HEADER_STYLE.textContent += `
-          ${SELECTORS.notifications.dot}
+          ${elementSelector.dot}
           {
             background: ${elementConfig.dot.color} !important;
           }
@@ -761,7 +863,7 @@
 
       if (elementConfig.dot.boxShadowColor !== '') {
         HEADER_STYLE.textContent += `
-          ${SELECTORS.notifications.dot}
+          ${elementSelector.dot}
           {
             box-shadow: 0 0 0 calc(var(--base-size-4, 4px)/2) ${elementConfig.dot.boxShadowColor} !important;
           }
@@ -772,7 +874,7 @@
     if (elementConfig.icon.symbol === 'inbox') {
       if (elementConfig.icon.color !== '') {
         HEADER_STYLE.textContent += `
-          ${SELECTORS.notifications.link} svg
+          ${elementSelector.link} svg
           {
             fill: elementConfig.icon.color !important;
           }
@@ -793,13 +895,35 @@
 
     if (elementConfig.icon.symbol === 'bell') {
       // Bell icon from https://gist.github.com
-      const bellSvg = `<svg aria-hidden='true' height='16' viewBox='0 0 16 16' version='1.1' width='16' data-view-component='true' class='octicon octicon-bell'><path fill='${elementConfig.icon.color}' d='M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01l.001.006c0 .002.002.004.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007a.017.017 0 0 0-.003-.01l-1.703-2.554a1.745 1.745 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5Z'></path></svg>`;
+      const bellSvgId = 'bell-svg';
+      const bellSvg = `
+        <svg id=${bellSvgId} style="display: none;" aria-hidden='true' height='16' viewBox='0 0 16 16' version='1.1' width='16' data-view-component='true' class='octicon octicon-bell'>
+          <path d='M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01l.001.006c0 .002.002.004.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007a.017.017 0 0 0-.003-.01l-1.703-2.554a1.745 1.745 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5Z'></path>
+        </svg>
+      `;
+
       inboxLink.insertAdjacentHTML('afterbegin', bellSvg);
+
+      HEADER_STYLE.textContent += `
+        #${bellSvgId}
+        {
+          display: initial !important;
+        }
+      `;
+
+      if (elementConfig.icon.color !== '') {
+        HEADER_STYLE.textContent += `
+          #${bellSvgId} path
+          {
+            fill: ${elementConfig.icon.color} !important;
+          }
+        `;
+      }
     }
 
     if (elementConfig.icon.hover.color !== '') {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.notifications.link}:hover svg path
+        ${elementSelector.link}:hover svg path
         {
           fill: ${elementConfig.icon.hover.color} !important;
         }
@@ -814,7 +938,7 @@
       const padding = '9px';
 
       HEADER_STYLE.textContent += `
-        ${SELECTORS.notifications.link}
+        ${elementSelector.link}
         {
           padding-left: ${padding} !important;
           padding-right: ${padding} !important;
@@ -831,7 +955,7 @@
       }
 
       const spanElement = document.createElement('span');
-      spanElement.setAttribute('id', SELECTORS.notifications.textContent);
+      spanElement.setAttribute('id', elementSelector.textContent);
 
       // Update the text's font properties to match the others
       spanElement.style.setProperty('font-size', 'var(--text-body-size-medium, 0.875rem)', 'important');
@@ -847,7 +971,7 @@
 
     if (!elementConfig.border) {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.notifications.link}
+        ${elementSelector.link}
         {
           border: none !important;
         }
@@ -856,7 +980,7 @@
 
     if (elementConfig.dot.displayOverIcon) {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.notifications.dot}
+        ${elementSelector.dot}
         {
           top: 5px !important;
           left: 18px !important;
@@ -866,7 +990,7 @@
 
     if (elementConfig.hoverBackgroundColor !== '') {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.notifications.link}:hover
+        ${elementSelector.link}:hover
         {
           background-color: ${elementConfig.hoverBackgroundColor} !important;
         }
@@ -874,6 +998,17 @@
     }
 
     log(DEBUG, `Updates applied to link ${configKey}: `, inboxLink);
+  }
+
+  function flipCreateInbox() {
+    log(DEBUG, 'flipCreateInbox()');
+
+    cloneAndFlipElements(
+      `#${SELECTORS.create.id}`,
+      `#${SELECTORS.notifications.id}`,
+      `${SELECTORS.create.id}-flip`,
+      `${SELECTORS.notifications.id}-flip`,
+    );
   }
 
   function updateGlobalBar() {
@@ -907,19 +1042,6 @@
         }
       `;
     }
-  }
-
-  function flipCreateInbox() {
-    log(DEBUG, 'flipCreateInbox()');
-
-    const createTopDiv = HEADER.querySelector(SELECTORS.create.topDiv);
-    const notificationsIndicator = HEADER.querySelector(SELECTORS.notifications.indicator);
-
-    let createTopDivClone = createTopDiv.cloneNode(true);
-    let notificationsIndicatorClone = notificationsIndicator.cloneNode(true);
-
-    createTopDiv.parentNode.replaceChild(notificationsIndicatorClone, createTopDiv);
-    notificationsIndicator.parentNode.replaceChild(createTopDivClone, notificationsIndicator);
   }
 
   function updateLocalBar() {
@@ -1305,8 +1427,8 @@
     `;
   }
 
-  function leftAlignElement(element) {
-    log(DEBUG, 'leftAlignElement()');
+  function cloneAndLeftAlignElement(elementSelector, elementId) {
+    log(DEBUG, 'cloneAndLeftAlignElement()');
 
     const leftAlignedDiv = HEADER.querySelector(SELECTORS.header.leftAligned);
 
@@ -1315,13 +1437,41 @@
       return;
     }
 
-    leftAlignedDiv.appendChild(element);
+    const element = HEADER.querySelector(elementSelector);
+
+    if (!element) {
+      logError(`${elementSelector} not found`);
+      return;
+    }
+
+    const elementClone = element.cloneNode(true);
+    const elementCloneId = `${elementId}-clone`;
+
+    elementClone.setAttribute('id', elementCloneId);
+
+    elementClone.style.setProperty('display', 'none');
+
+    HEADER_STYLE.textContent += `
+      ${elementSelector}
+      {
+        display: none !important;
+      }
+
+      #${elementCloneId}
+      {
+        display: initial !important;
+      }
+    `;
+
+    leftAlignedDiv.appendChild(elementClone);
+
+    return [elementCloneId, elementClone];
   }
 
   function insertNewGlobalBar(element) {
     log(DEBUG, 'insertNewGlobalBar()');
 
-    let elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
+    const elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
 
     elementToInsertAfter.parentNode.insertBefore(element, elementToInsertAfter.nextSibling);
   }
@@ -1331,6 +1481,12 @@
 
     const urlPattern = /^(https?:\/\/)?([\w.]+)\.([a-z]{2,6}\.?)(\/[\w.]*)*\/?$/i;
     return urlPattern.test(string);
+  }
+
+  function escapeRegExp(string) {
+    log(DEBUG, 'escapeRegExp()');
+
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
   function updateSelectors() {
@@ -1574,6 +1730,8 @@
   }
 
   function gmcBuildStyle() {
+    log(DEBUG, 'gmcBuildStyle()');
+
     const gmcFrameStyle = document.createElement('style');
     gmcFrameStyle.textContent += `
       #gmc
@@ -2047,6 +2205,8 @@
   }
 
   function gmcBuildFrame() {
+    log(DEBUG, 'gmcBuildFrame()');
+
     const body = document.querySelector('body');
     const gmcDiv = document.createElement('div');
     gmcDiv.id = 'gmc';
@@ -2076,6 +2236,8 @@
   }
 
   function applyCustomizations(refresh = false) {
+    log(DEBUG, 'applyCustomizations()');
+
     const configName = {
       'Happy Medium': 'happyMedium',
       'Old School': 'oldSchool',
@@ -2111,7 +2273,9 @@
         `;
       }
 
+      HEADER_UPDATES_COUNT++;
       updateHeader();
+
       HEADER.setAttribute('id', headerSuccessFlag);
 
       log(QUIET, 'Complete');
@@ -2150,6 +2314,8 @@
   }
 
   function startObserving() {
+    log(DEBUG, 'startObserving()');
+
     OBSERVER.observe(
       document.body,
       {
@@ -2160,6 +2326,7 @@
   }
 
   function modifyThenObserve(callback) {
+    log(DEBUG, 'modifyThenObserve()');
     OBSERVER.disconnect();
 
     callback();
@@ -2173,6 +2340,12 @@
     if (IDLE_MUTATION_COUNT > MAX_IDLE_MUTATIONS) {
       // This is a failsafe to prevent infinite loops
       logError('MAX_IDLE_MUTATIONS exceeded');
+      OBSERVER.disconnect();
+
+      return;
+    } else if (HEADER_UPDATES_COUNT >= MAX_HEADER_UPDATES) {
+      // This is a failsafe to prevent infinite loops
+      logError('MAX_HEADER_UPDATES exceeded');
       OBSERVER.disconnect();
 
       return;
@@ -2196,6 +2369,7 @@
   const TEMP_REPOSITORY_HEADER_FLAG = 'tempCustomizedRepositoryHeader';
   const REPOSITORY_HEADER_CLASS = 'customizedRepositoryHeader';
   const MAX_IDLE_MUTATIONS = 1000;
+  const MAX_HEADER_UPDATES = 100;
 
   let CONFIG;
   let HEADER;
@@ -2203,6 +2377,7 @@
 
   let THEME = 'light';
   let IDLE_MUTATION_COUNT = 0;
+  let HEADER_UPDATES_COUNT = 0;
   let SELECTORS = {
     header: {
       self: 'header.AppHeader',
@@ -2234,6 +2409,7 @@
       modal: '[data-target="qbsearch-input.queryBuilderContainer"]',
     },
     create: {
+      id: 'create-div',
       topDiv: 'action-menu',
       button: '#global-create-menu-button',
       plusIcon: '#global-create-menu-button .Button-visual.Button-leadingVisual',
@@ -2249,6 +2425,7 @@
       textContent: 'pullRequests-text-content-span',
     },
     notifications: {
+      id: 'custom-notifications',
       indicator: 'notification-indicator',
       link: 'notification-indicator a',
       dot: '.AppHeader-button.AppHeader-button--hasIndicator::before',
@@ -2317,7 +2494,7 @@
         divider: {
           remove: true,
         },
-        flipCreateInbox: true,
+        flipCreateInbox: false,
         create: {
           remove: false,
           border: true,
@@ -2489,7 +2666,7 @@
         divider: {
           remove: true,
         },
-        flipCreateInbox: true,
+        flipCreateInbox: false,
         create: {
           remove: false,
           border: true,
