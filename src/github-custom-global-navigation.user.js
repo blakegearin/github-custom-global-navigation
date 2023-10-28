@@ -195,13 +195,12 @@
     const topDiv = HEADER.querySelector(createId(elementSelector.id)) ||
       HEADER.querySelector(elementSelector.topDiv);
 
-    if (!topDiv ) {
-      logError(`${elementSelector.topDiv} div not found`);
+    if (!topDiv) {
+      logError(`${createId(elementSelector.id)} div not found`);
       return;
     }
 
     topDiv.setAttribute('id', elementSelector.id);
-
 
     if (elementConfig.alignLeft) {
       const response = cloneAndLeftAlignElement(createId(topDivSelector), topDivSelector);
@@ -242,7 +241,7 @@
             justify-content: space-between !important;
           }
 
-          #${topDivSelector}
+          ${createId(topDivSelector)}
           {
             display: block !important;
           }
@@ -445,31 +444,32 @@
     let link = tooltipElement.previousElementSibling;
 
     const elementConfig = CONFIG[configKey];
+    const elementSelector = SELECTORS[configKey];
 
-    let divId = `${configKey}-div`;
-    link.parentNode.setAttribute('id', divId);
+    let topDivSelector = `${configKey}-div`;
+    link.parentNode.setAttribute('id', topDivSelector);
+
+    debugger;
+
+    if (elementConfig.remove) {
+      HEADER_STYLE.textContent += cssHideElement(createId(topDivSelector));
+
+      return;
+    } else if (!elementConfig.tooltip) {
+      HEADER_STYLE.textContent += cssHideElement(createId(SELECTORS.toolTips[configKey].id));
+    }
 
     if (elementConfig.alignLeft) {
-      const response = cloneAndLeftAlignElement(createId(divId), divId);
+      const response = cloneAndLeftAlignElement(createId(elementSelector.id), elementSelector.id);
 
       if (response.length == 0) return;
 
       const [cloneId, cloneElement] = response;
 
-      SELECTORS[configKey].topDiv = createId(cloneId);
-      divId = cloneId;
+      if (!elementConfig.tooltip) cloneElement.querySelector('tool-tip').remove();
+
+      elementSelector.id = createId(cloneId);
       link = cloneElement.querySelector('a');
-    }
-
-    if (elementConfig.remove) {
-      const topDivId = `${configKey}-topDiv`;
-      link.parentNode.setAttribute('id', topDivId);
-
-      HEADER_STYLE.textContent += cssHideElement(createId(topDivId));
-
-      return;
-    } else if (!elementConfig.tooltip) {
-      HEADER_STYLE.textContent += cssHideElement(createId(SELECTORS.toolTips[configKey].id));
     }
 
     const padding = '7px';
@@ -495,7 +495,7 @@
     }
 
     modifyThenObserve(() => {
-      HEADER.querySelector(createId(SELECTORS[configKey].textContent))?.remove();
+      HEADER.querySelector(createId(elementSelector.textContent))?.remove();
     });
 
     if (elementConfig.text.content !== '') {
@@ -504,10 +504,8 @@
       spanElement.setAttribute('id', spanId);
 
       if (elementConfig.text.color) {
-        // spanElement.style.setProperty('color', elementConfig.text.color);
-
         HEADER_STYLE.textContent += `
-          #${spanId}
+          ${createId(spanId)}
           {
             color: ${elementConfig.text.color} !important;
           }
@@ -522,7 +520,7 @@
 
     if (!elementConfig.border) {
       HEADER_STYLE.textContent += `
-        #${divId} a
+        ${elementSelector.id} a
         {
           border: none !important;
         }
@@ -531,7 +529,7 @@
 
     if (elementConfig.hover.backgroundColor !== '') {
       HEADER_STYLE.textContent += `
-        #${divId} a:hover
+        ${elementSelector.id} a:hover
         {
           background-color: ${elementConfig.hover.backgroundColor} !important;
         }
@@ -540,7 +538,7 @@
 
     if (elementConfig.hover.color !== '') {
       HEADER_STYLE.textContent += `
-        #${divId} a span:hover
+        ${elementSelector.id} a span:hover
         {
           color: ${elementConfig.hover.color} !important;
         }
@@ -621,8 +619,8 @@
     log(DEBUG, 'flipIssuesPullRequest()');
 
     cloneAndFlipElements(
-      SELECTORS.issues.topDiv,
-      SELECTORS.pullRequests.topDiv,
+      SELECTORS.issues.id,
+      SELECTORS.pullRequests.id,
       'issues-flip-div',
       'pullRequests-flip-div'
     );
@@ -655,7 +653,7 @@
       return;
     } else if (!elementConfig.tooltip) {
       HEADER_STYLE.textContent += `
-        #${tooltipElement.id}
+        ${createId(tooltipElement.id)}
         {
           display: none !important
         }
@@ -874,7 +872,7 @@
       inboxLink.insertAdjacentHTML('afterbegin', bellSvg);
 
       HEADER_STYLE.textContent += `
-        #${bellSvgId}
+        ${createId(bellSvgId)}
         {
           display: initial !important;
         }
@@ -882,7 +880,7 @@
 
       if (elementConfig.icon.color !== '') {
         HEADER_STYLE.textContent += `
-          #${bellSvgId} path
+          ${createId(bellSvgId)} path
           {
             fill: ${elementConfig.icon.color} !important;
           }
@@ -1413,7 +1411,7 @@
     HEADER_STYLE.textContent += cssHideElement(elementSelector);
 
     HEADER_STYLE.textContent += `
-      #${elementCloneId}
+      ${createId(elementCloneId)}
       {
         display: initial !important;
       }
@@ -2387,10 +2385,12 @@
       textContent: 'create-text-content-span',
     },
     issues: {
+      id: 'issues-div',
       topDiv: '#issues-div',
       textContent: 'issues-text-content-span',
     },
     pullRequests: {
+      id: 'pullRequests-div',
       topDiv: '#pullRequests-div',
       textContent: 'pullRequests-text-content-span',
     },
