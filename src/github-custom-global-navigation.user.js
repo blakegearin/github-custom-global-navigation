@@ -25,7 +25,7 @@
   const VERBOSE = 4;
   const TRACE = 5;
 
-  const CURRENT_LOG_LEVEL = DEBUG;
+  const CURRENT_LOG_LEVEL = QUIET;
 
   const USERSCRIPT_NAME = 'GitHub Custom Global Navigation';
 
@@ -74,10 +74,12 @@
 
     if (CONFIG.flipCreateInbox) flipCreateInbox();
 
+    updateAvatar();
+
     updateGlobalBar();
     updateLocalBar();
 
-    if (CONFIG.sidebars.backdropColor !== '') updateSidebarBackdropColor();
+    updateSidebars();
 
     modifyThenObserve(() => {
       document.body.appendChild(HEADER_STYLE);
@@ -94,7 +96,7 @@
     const hamburgerButton = HEADER.querySelector(SELECTORS[configKey]);
 
     if (!hamburgerButton) {
-      logError(`${SELECTORS[configKey]} button not found`);
+      logError(`Selector '${SELECTORS[configKey]}' not found`);
       return;
     }
 
@@ -147,7 +149,7 @@
     const pageTitle = HEADER.querySelector(SELECTORS.pageTitle.topDiv);
 
     if (!pageTitle) {
-      logError(`${SELECTORS.pageTitle.topDiv} div not found`);
+      logError(`Selector '${SELECTORS.pageTitle.topDiv}' not found`);
       return;
     }
 
@@ -196,7 +198,7 @@
       HEADER.querySelector(elementSelector.topDiv);
 
     if (!topDiv) {
-      logError(`${createId(elementSelector.id)} div not found`);
+      logError(`Selectors '${createId(elementSelector.id)}' and '${elementSelector.topDiv}' not found`);
       return;
     }
 
@@ -291,7 +293,7 @@
     if (elementConfig.rightButton !== 'command palette') {
       const commandPaletteButton = HEADER.querySelector(elementSelector.commandPalette);
       if (!commandPaletteButton) {
-        logError(`Selector ${elementSelector.commandPalette} not found`);
+        logError(`Selector '${elementSelector.commandPalette}' not found`);
       } else {
         HEADER_STYLE.textContent += cssHideElement(elementSelector.commandPalette);
       }
@@ -300,7 +302,7 @@
     const placeholderSpan = HEADER.querySelector(elementSelector.placeholderSpan);
 
     if (!placeholderSpan) {
-      logError(`Selector ${elementSelector.placeholderSpan} not found`);
+      logError(`Selector '${elementSelector.placeholderSpan}' not found`);
       return;
     }
 
@@ -324,7 +326,7 @@
     const searchButton = HEADER.querySelector(elementSelector.button);
 
     if (!searchButton) {
-      logError(`Selector ${elementSelector.button} not found`);
+      logError(`Selector '${elementSelector.button}' not found`);
       return;
     }
 
@@ -400,7 +402,7 @@
       const placeholderDiv = HEADER.querySelector(elementSelector.placeholderDiv);
 
       if (!placeholderDiv) {
-        logError(`Selector ${elementSelector.placeholderDiv} not found`);
+        logError(`Selector '${elementSelector.placeholderDiv}' not found`);
         return;
       }
 
@@ -437,7 +439,7 @@
     const tooltipElement = SELECTORS.toolTips[configKey];
 
     if (!tooltipElement) {
-      logError(`${configKey} tooltip not found`);
+      logError(`Selector '${configKey}' not found`);
       return;
     }
 
@@ -482,7 +484,7 @@
       const svgId = `${configKey}-svg`;
       const svg = link.querySelector('svg');
 
-      if (!svg) logError(`${configKey} svg not found`);
+      if (!svg) logError(`Selector '${configKey}' not found`);
 
       svg.setAttribute('id', svgId);
 
@@ -552,14 +554,14 @@
     const firstElement = HEADER.querySelector(firstElementSelector);
 
     if (!firstElement) {
-      logError(`${firstElementSelector} not found`);
+      logError(`Selector '${firstElementSelector}' not found`);
       return [];
     }
 
     const secondElement = HEADER.querySelector(secondElementSelector);
 
     if (!secondElement) {
-      logError(`${secondElementSelector} not found`);
+      logError(`Selector '${secondElementSelector}' not found`);
       return [];
     }
 
@@ -575,14 +577,10 @@
     firstElementClone.style.setProperty('display', 'none');
     secondElementClone.style.setProperty('display', 'none');
 
-    console.log(`Changing ${firstElementSelector} to #${firstElementCloneId}`);
-
     HEADER_STYLE.textContent = HEADER_STYLE.textContent.replace(
       new RegExp(escapeRegExp(firstElementSelector), 'g'),
       createId(firstElementCloneId),
     );
-
-    console.log(`Changing ${secondElementSelector} to #${secondElementCloneId}`);
 
     HEADER_STYLE.textContent = HEADER_STYLE.textContent.replace(
       new RegExp(escapeRegExp(secondElementSelector), 'g'),
@@ -634,14 +632,14 @@
     const elementSelector = SELECTORS[configKey];
 
     if (!tooltipElement) {
-      logError(`${configKey} tooltip not found`);
+      logError(`Selector '${configKey}' not found`);
       return;
     }
 
     const button = HEADER.querySelector(elementSelector.button);
 
     if (!button) {
-      logError('"Create new..." button not found');
+      logError(`Selector '${elementSelector.button}' not found`);
       return;
     }
 
@@ -663,7 +661,7 @@
     const topDiv = HEADER.querySelector(elementSelector.topDiv);
 
     if (!topDiv) {
-      logError(`${elementSelector.topDiv} div not found`);
+      logError(`Selector '${elementSelector.topDiv}' not found`);
       return;
     }
 
@@ -797,7 +795,7 @@
       HEADER.querySelector(elementSelector.indicator);
 
     if (!notificationIndicator) {
-      logError(`${elementSelector.indicator} not found`);
+      logError(`Selectors '${createId(elementSelector.id)}' and '${elementSelector.indicator}' not found`);
       return;
     }
 
@@ -806,7 +804,7 @@
     const inboxLink = notificationIndicator.querySelector('a');
 
     if (!inboxLink) {
-      logError(`${elementSelector.indicator} link not found`);
+      logError(`Selector '${elementSelector.indicator} a' not found`);
       return;
     }
 
@@ -967,6 +965,112 @@
     log(DEBUG, `Updates applied to link ${configKey}: `, inboxLink);
   }
 
+  function insertAvatarDropdown() {
+    log(DEBUG, 'insertAvatarDropdown()');
+
+    const elementSelector = SELECTORS.avatar;
+    const svgSelector = elementSelector.svg;
+
+    if (HEADER.querySelector(createId(svgSelector))) {
+      log(VERBOSE, `Selector ${createId(svgSelector)} not found`);
+      return;
+    }
+
+    const dropdownSvg = `
+      <svg id='${svgSelector}' style="display: none;" height="100%" width="100%" fill="#FFFFFF" class="octicon octicon-triangle-down" aria-hidden="true" viewBox="0 0 16 16" version="1.1" data-view-component="true">
+        <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
+      </svg>
+    `;
+
+    const button = HEADER.querySelector(elementSelector.button);
+
+    if (!button) {
+      logError(`Selector '${elementSelector.button}' not found`);
+      return;
+    }
+
+    const divElement = document.createElement('div');
+    divElement.insertAdjacentHTML('afterbegin', dropdownSvg);
+
+    button.appendChild(divElement);
+  }
+
+  function updateAvatarButton() {
+    log(DEBUG, 'updateAvatarButton()');
+
+    const elementSelector = SELECTORS.sidebars.right;
+    const topDivSelector = elementSelector.topDiv;
+
+    const topDiv = HEADER.querySelector(topDivSelector);
+
+    if (!topDiv) {
+      log(SILENT, `Selector ${topDivSelector} not found`);
+      return;
+    }
+
+    const avatarButton = HEADER.querySelector(SELECTORS.avatar.button);
+
+    if (!avatarButton) {
+      log(SILENT, `Selector ${SELECTORS.avatar.button} not found`);
+      return;
+    }
+
+    if (topDiv.classList.contains('Overlay--hidden')) {
+      if (avatarButton.hasAttribute('data-close-dialog-id')) {
+        const dialogId = avatarButton.getAttribute('data-close-dialog-id');
+        avatarButton.setAttribute('data-show-dialog-id', dialogId);
+
+        avatarButton.removeAttribute('data-close-dialog-id');
+      }
+    } else {
+      if (avatarButton.hasAttribute('data-show-dialog-id')) {
+        const dialogId = avatarButton.getAttribute('data-show-dialog-id');
+        avatarButton.setAttribute('data-close-dialog-id', dialogId);
+
+        avatarButton.removeAttribute('data-show-dialog-id');
+      }
+    }
+  }
+
+  function updateAvatar() {
+    log(DEBUG, 'updateAvatar()');
+
+    const configKey = 'avatar';
+
+    const elementConfig = CONFIG[configKey];
+    const elementSelector = SELECTORS[configKey];
+
+    if (elementConfig.dropdownIcon) {
+      insertAvatarDropdown();
+
+      HEADER_STYLE.textContent += `
+        ${elementSelector.topDiv}
+        {
+          background-color: transparent !important;
+        }
+
+        ${createId(elementSelector.svg)}
+        {
+          display: initial !important;
+          fill: #FFFFFF;
+          height: 16px;
+          width: 16px;
+          margin-bottom: 1.5px;
+        }
+
+        ${elementSelector.button}:hover ${createId(elementSelector.svg)}
+        {
+          fill: #FFFFFFB3 !important;
+        }
+
+        ${elementSelector.button}
+        {
+          gap: 0px !important;
+        }
+      `;
+    }
+  }
+
   function flipCreateInbox() {
     log(DEBUG, 'flipCreateInbox()');
 
@@ -1073,15 +1177,52 @@
     }
   }
 
-  function updateSidebarBackdropColor() {
-    log(DEBUG, 'updateSidebarBackdropColor()');
+  function updateSidebars() {
+    log(DEBUG, 'updateSidebars()');
 
-    HEADER_STYLE.textContent += `
-      .Overlay-backdrop--side
-      {
-        background-color: ${CONFIG.sidebars.backdropColor} !important;
-      }
-    `;
+    const configKey = 'sidebars';
+
+    const elementConfig = CONFIG[configKey];
+    const elementSelector = SELECTORS[configKey];
+
+    if (elementConfig.backdropColor !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.backdrop}
+        {
+          background-color: ${CONFIG.sidebars.backdropColor} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.right.floatUnderneath) {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.right.backdrop}
+        {
+          padding-top: 10px !important;
+          padding-right: 15px !important;
+          border-top-right-radius: 6px !important;
+          bottom: initial !important;
+          top: initial !important;
+        }
+
+        ${elementSelector.right.modalDialog}
+        {
+          border-top-right-radius: var(--borderRadius-large, 0.75rem) !important;
+          border-bottom-right-radius: var(--borderRadius-large, 0.75rem) !important;
+          height: initial !important;
+        }
+
+        ${elementSelector.right.navParentDiv}
+        {
+          margin-bottom: 0px !important;
+        }
+
+        ${elementSelector.right.nav}
+        {
+          padding-bottom: 0px !important;
+        }
+      `;
+    }
   }
 
   function importRepositoryHeader() {
@@ -1092,7 +1233,7 @@
 
     if (!repositoryHeader) {
       // This is expected on pages that aren't repositories
-      log(DEBUG, `${SELECTORS[configKey].id} not found`);
+      log(DEBUG, `Selector '${SELECTORS[configKey].id}' not found`);
       return;
     }
 
@@ -1111,7 +1252,7 @@
       log(DEBUG, `${SELECTORS[configKey].id} is hidden`);
 
       if (!HEADER.querySelector(SELECTORS.pageTitle.separator)) {
-        log(INFO, `${SELECTORS.pageTitle.separator} div not found`);
+        logError(`Selector '${SELECTORS.pageTitle.separator}' not found`);
         log(INFO, 'Not creating a repository header');
 
         return;
@@ -1123,7 +1264,7 @@
       const pageTitle = HEADER.querySelector(SELECTORS.pageTitle.topDiv);
 
       if (!pageTitle) {
-        logError(`${SELECTORS.pageTitle.topDiv} div not found`);
+        logError(`Selector '${SELECTORS.pageTitle.topDiv}' not found`);
         return;
       }
 
@@ -1338,7 +1479,7 @@
 
     if (!name) {
       // When not in a repo, this is expected
-      log(DEBUG, `${SELECTORS.repositoryHeader.name} link not found`);
+      log(DEBUG, `Selector '${SELECTORS.repositoryHeader.name}' not found`);
       return;
     }
 
@@ -1347,14 +1488,14 @@
     const pageTitle = HEADER.querySelector(SELECTORS.pageTitle.topDiv);
 
     if (!pageTitle) {
-      logError(`${SELECTORS.pageTitle.topDiv} div not found`);
+      logError(`Selector '${SELECTORS.pageTitle.topDiv}' not found`);
       return;
     }
 
     const ownerImg = document.querySelector(SELECTORS.repositoryHeader.ownerImg);
 
     if (!ownerImg) {
-      logError(`${SELECTORS.repositoryHeader.ownerImg} avatar not found`);
+      logError(`Selector '${SELECTORS.repositoryHeader.ownerImg}' not found`);
       return;
     }
 
@@ -1390,14 +1531,14 @@
     const leftAlignedDiv = HEADER.querySelector(SELECTORS.header.leftAligned);
 
     if (!leftAlignedDiv) {
-      logError(`${SELECTORS.header.leftAligned} div not found`);
+      logError(`Selector '${SELECTORS.header.leftAligned}' not found`);
       return [];
     }
 
     const element = HEADER.querySelector(elementSelector);
 
     if (!element) {
-      logError(`${elementSelector} not found`);
+      logError(`Selector '${elementSelector}' not found`);
       return [];
     }
 
@@ -1623,7 +1764,7 @@
       case 'refresh tab':
         location.reload();
         break;
-      case 'run script (experimental)':
+      case 'run script':
         modifyThenObserve(() => {
           document.querySelector(createId(SELECTORS.header.style))?.remove();
           HEADER_STYLE.textContent = '';
@@ -1644,7 +1785,7 @@
       case 'refresh tab':
         location.reload();
         break;
-      case 'run script (experimental)':
+      case 'run script':
         modifyThenObserve(() => {
           document.querySelector(createId(SELECTORS.header.style))?.remove();
         });
@@ -2118,7 +2259,7 @@
         margin-left: 0.5rem;
       }
 
-      #gmc-frame small
+      #gmc small
       {
         font-size: x-small;
         margin-left: 3px;
@@ -2253,31 +2394,38 @@
       }
 
       return 'break';
-    } else if (CONFIG.repositoryHeader.import) {
-      // When starting in a repository tab like Issues, the proper repository header
-      // (including  Unwatch, Star, and Fork) is not present per GitHub's design.
-      // If page title is removed, the page will be missing any location context in the header.
-      // To improve this experience, a temporary repository header is created with the
-      // page title or breadcrumbs.
-      // The proper repository header replaces the temporary one when navigating to the Code tab.
-      if (
-        !document.querySelector(SELECTORS.repositoryHeader.id)?.hidden &&
-        (
-          document.querySelector(createId(TEMP_REPOSITORY_HEADER_FLAG)) ||
-          !document.querySelector(`.${REPOSITORY_HEADER_SUCCESS_FLAG}`)
-        )
-      ) {
-        const updated = importRepositoryHeader();
+    } else {
+      if (CONFIG.avatar.dropdownIcon) insertAvatarDropdown();
+      if (CONFIG.sidebars.right.floatUnderneath) updateAvatarButton();
 
-        if (updated) {
-          log(QUIET, 'Repository header updated');
-        } else {
-          IDLE_MUTATION_COUNT++;
+      if (CONFIG.repositoryHeader.import) {
+        // When starting in a repository tab like Issues, the proper repository header
+        // (including  Unwatch, Star, and Fork) is not present per GitHub's design.
+        // If page title is removed, the page will be missing any location context in the header.
+        // To improve this experience, a temporary repository header is created with the
+        // page title or breadcrumbs.
+        // The proper repository header replaces the temporary one when navigating to the Code tab.
+        if (
+          !document.querySelector(SELECTORS.repositoryHeader.id)?.hidden &&
+          (
+            document.querySelector(createId(TEMP_REPOSITORY_HEADER_FLAG)) ||
+            !document.querySelector(`.${REPOSITORY_HEADER_SUCCESS_FLAG}`)
+          )
+        ) {
+          const updated = importRepositoryHeader();
+
+          if (updated) {
+            log(QUIET, 'Repository header updated');
+          } else {
+            IDLE_MUTATION_COUNT++;
+          }
+
+          return 'break';
         }
-
-        return 'break';
       }
     }
+
+    if (CONFIG.avatar.dropdownIcon) insertAvatarDropdown();
   }
 
   function startObserving() {
@@ -2400,6 +2548,11 @@
       dot: '.AppHeader-button.AppHeader-button--hasIndicator::before',
       textContent: 'textContent-text-content-spa'
     },
+    avatar: {
+      topDiv: '.AppHeader-user',
+      button: '.AppHeader-user button',
+      svg: 'avatar-dropdown',
+    },
     repositoryHeader: {
       id: '#repository-container-header',
       ownerImg: `.${REPOSITORY_HEADER_CLASS} img`,
@@ -2408,6 +2561,16 @@
       details: '#repository-details-container',
       bottomBorder: `.${REPOSITORY_HEADER_CLASS} .border-bottom.mx-xl-5`,
     },
+    sidebars: {
+      backdrop: '.Overlay-backdrop--side',
+      right: {
+        backdrop: '.AppHeader-user .Overlay-backdrop--side',
+        topDiv: '.AppHeader-user .Overlay-backdrop--placement-right',
+        modalDialog: '.AppHeader-user modal-dialog',
+        navParentDiv: '.AppHeader-user modal-dialog div.Overlay-body > div',
+        nav: '.AppHeader-user modal-dialog nav',
+      },
+    }
   };
 
   HEADER_STYLE.id = SELECTORS.header.style;
@@ -2472,7 +2635,7 @@
           plusIcon: {
             remove: false,
             color: '',
-            marginRight: '0px',
+            marginRight: '0.25rem',
             hover: {
               color: '',
             }
@@ -2573,6 +2736,9 @@
         },
         sidebars: {
           backdropColor: 'transparent',
+          right: {
+            floatUnderneath: true,
+          },
         },
         repositoryHeader: {
           import: true,
@@ -2644,7 +2810,7 @@
           plusIcon: {
             remove: false,
             color: '',
-            marginRight: '0px',
+            marginRight: '0.25rem',
             hover: {
               color: '',
             }
@@ -2745,6 +2911,9 @@
         },
         sidebars: {
           backdropColor: 'transparent',
+          right: {
+            floatUnderneath: true,
+          },
         },
         repositoryHeader: {
           import: true,
@@ -2920,6 +3089,9 @@
         },
         sidebars: {
           backdropColor: oldSchoolHoverBackgroundColor,
+          right: {
+            floatUnderneath: true,
+          }
         },
         repositoryHeader: {
           import: true,
@@ -3092,6 +3264,9 @@
         },
         sidebars: {
           backdropColor: oldSchoolHoverBackgroundColor,
+          right: {
+            floatUnderneath: true,
+          }
         },
         repositoryHeader: {
           import: true,
@@ -3118,7 +3293,17 @@
 
   let GMC = new GM_config({
     id: 'gmc-frame',
-    title: 'Customize Global Navigation',
+    title: `
+      Customize Global Navigation
+      <small>
+        <a
+          href="https://github.com/blakegearin/github-custom-global-navigation"
+          target="_blank"
+        >
+          source
+        </a>
+      </small>
+    `,
     center: false,
     events: {
       init: gmcInitialized,
@@ -3133,7 +3318,10 @@
           `
             Configuration Type
             <small>
-              <a href="https://github.com/blakegearin/github-custom-global-naviation#configurations" target="_blank">
+              <a
+                href="https://github.com/blakegearin/github-custom-global-naviation#configurations"
+                target="_blank"
+              >
                 learn more
               </a>
             </small>
@@ -3550,6 +3738,11 @@
         label: '<h3>Sidebars</h3><div class="gmc-label">Backdrop color</div>',
         type: 'text',
         default: '',
+      },
+      light_sidebars_right_floatUnderneath: {
+        label: 'Right float underneath',
+        type: 'checkbox',
+        default: false,
       },
       light_repositoryHeader_import: {
         label: '<h3>Repository header</h3><div class="gmc-label">Import</div>',
@@ -3999,6 +4192,11 @@
         type: 'text',
         default: '',
       },
+      dark_sidebars_right_floatUnderneath: {
+        label: 'Right float underneath',
+        type: 'checkbox',
+        default: false,
+      },
       dark_repositoryHeader_import: {
         label: '<h3>Repository header</h3><div class="gmc-label">Import</div>',
         type: 'checkbox',
@@ -4051,7 +4249,7 @@
         options: [
           'do nothing',
           'refresh tab',
-          'run script (experimental)',
+          'run script',
         ],
         default: 'do nothing',
       },
@@ -4061,7 +4259,7 @@
         options: [
           'do nothing',
           'refresh tab',
-          'run script (experimental)',
+          'run script',
         ],
         default: 'do nothing',
       },
@@ -4084,5 +4282,5 @@
     },
   });
 
-  GMC.open();
+  // GMC.open();
 })();
