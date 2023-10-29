@@ -449,8 +449,6 @@
     let topDivSelector = `${configKey}-div`;
     link.parentNode.setAttribute('id', topDivSelector);
 
-    debugger;
-
     if (elementConfig.remove) {
       HEADER_STYLE.textContent += cssHideElement(createId(topDivSelector));
 
@@ -555,14 +553,14 @@
 
     if (!firstElement) {
       logError(`${firstElementSelector} not found`);
-      return;
+      return [];
     }
 
     const secondElement = HEADER.querySelector(secondElementSelector);
 
     if (!secondElement) {
       logError(`${secondElementSelector} not found`);
-      return;
+      return [];
     }
 
     const firstElementClone = firstElement.cloneNode(true);
@@ -584,6 +582,13 @@
       createId(firstElementCloneId),
     );
 
+    console.log(`Changing ${secondElementSelector} to #${secondElementCloneId}`);
+
+    HEADER_STYLE.textContent = HEADER_STYLE.textContent.replace(
+      new RegExp(escapeRegExp(secondElementSelector), 'g'),
+      createId(secondElementCloneId),
+    );
+
     HEADER_STYLE.textContent += cssHideElement(firstElementSelector);
     HEADER_STYLE.textContent += cssHideElement(secondElementSelector);
 
@@ -594,13 +599,6 @@
         display: initial !important;
       }
     `;
-
-    console.log(`Changing ${secondElementSelector} to #${secondElementCloneId}`);
-
-    HEADER_STYLE.textContent = HEADER_STYLE.textContent.replace(
-      new RegExp(escapeRegExp(secondElementSelector), 'g'),
-      createId(secondElementCloneId),
-    );
 
     if (secondElement.nextElementSibling === null) {
       secondElement.parentNode.appendChild(firstElementClone);
@@ -613,6 +611,8 @@
     } else{
       firstElement.parentNode.insertBefore(secondElementClone, firstElement.nextElementSibling);
     }
+
+    return [firstElementClone, secondElementClone];
   }
 
   function flipIssuesPullRequests() {
@@ -790,24 +790,11 @@
 
     const configKey = 'notifications';
 
+    const elementConfig = CONFIG[configKey];
     const elementSelector = SELECTORS[configKey];
 
-    const inboxLink = HEADER.querySelector(elementSelector.link);
-
-    if (!inboxLink) {
-      logError(`${elementSelector.link} link not found`);
-      return;
-    }
-
-    const elementConfig = CONFIG[configKey];
-
-    if (elementConfig.remove) {
-      HEADER_STYLE.textContent += cssHideElement(elementSelector.indicator);
-    } else if (!elementConfig.tooltip) {
-      HEADER_STYLE.textContent += cssHideElement(createId(SELECTORS.toolTips.notifications.id));
-    }
-
-    const notificationIndicator = HEADER.querySelector(elementSelector.indicator);
+    const notificationIndicator =  HEADER.querySelector(createId(elementSelector.id)) ||
+      HEADER.querySelector(elementSelector.indicator);
 
     if (!notificationIndicator) {
       logError(`${elementSelector.indicator} not found`);
@@ -815,6 +802,19 @@
     }
 
     notificationIndicator.setAttribute('id', elementSelector.id);
+
+    const inboxLink = notificationIndicator.querySelector('a');
+
+    if (!inboxLink) {
+      logError(`${elementSelector.indicator} link not found`);
+      return;
+    }
+
+    if (elementConfig.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.indicator);
+    } else if (!elementConfig.tooltip) {
+      HEADER_STYLE.textContent += cssHideElement(createId(SELECTORS.toolTips.notifications.id));
+    }
 
     if (elementConfig.dot.remove) {
       HEADER_STYLE.textContent += `
@@ -846,7 +846,7 @@
     if (elementConfig.icon.symbol === 'inbox') {
       if (elementConfig.icon.color !== '') {
         HEADER_STYLE.textContent += `
-          ${elementSelector.link} svg
+          ${createId(elementSelector.id)} a svg
           {
             fill: elementConfig.icon.color !important;
           }
@@ -890,7 +890,7 @@
 
     if (elementConfig.icon.hover.color !== '') {
       HEADER_STYLE.textContent += `
-        ${elementSelector.link}:hover svg path
+        ${createId(elementSelector.id)} a:hover svg path
         {
           fill: ${elementConfig.icon.hover.color} !important;
         }
@@ -905,7 +905,7 @@
       const padding = '9px';
 
       HEADER_STYLE.textContent += `
-        ${elementSelector.link}
+        ${createId(elementSelector.id)} a
         {
           padding-left: ${padding} !important;
           padding-right: ${padding} !important;
@@ -938,7 +938,7 @@
 
     if (!elementConfig.border) {
       HEADER_STYLE.textContent += `
-        ${elementSelector.link}
+        ${createId(elementSelector.id)} a
         {
           border: none !important;
         }
@@ -957,7 +957,7 @@
 
     if (elementConfig.hoverBackgroundColor !== '') {
       HEADER_STYLE.textContent += `
-        ${elementSelector.link}:hover
+        ${createId(elementSelector.id)} a:hover
         {
           background-color: ${elementConfig.hoverBackgroundColor} !important;
         }
@@ -2397,7 +2397,6 @@
     notifications: {
       id: 'custom-notifications',
       indicator: 'notification-indicator',
-      link: 'notification-indicator a',
       dot: '.AppHeader-button.AppHeader-button--hasIndicator::before',
       textContent: 'textContent-text-content-spa'
     },
