@@ -28,8 +28,11 @@
       "error",
       "always"
     ],
-    "error": {
-      "varsIgnorePattern": "^_"
-    }
+    "no-unused-vars" : [
+      1,
+      {
+        "varsIgnorePattern": "^_"
+      }
+    ]
   }
 }

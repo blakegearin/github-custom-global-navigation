@@ -1572,7 +1572,7 @@
   }
 
   function createId(string) {
-    return `#${string}`
+    return `#${string}`;
   }
 
   function cssHideElement(elementSelector) {
@@ -1594,7 +1594,7 @@
   function escapeRegExp(string) {
     log(DEBUG, 'escapeRegExp()');
 
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   function updateSelectors() {
@@ -1757,25 +1757,38 @@
     document.querySelector('#gmc').classList.remove('hidden');
   }
 
+  function gmcRefreshTab() {
+    location.reload();
+  }
+
+  function gmcRunScript() {
+    modifyThenObserve(() => {
+      document.querySelector(createId(SELECTORS.header.style))?.remove();
+      HEADER_STYLE.textContent = '';
+    });
+
+    applyCustomizations(true);
+  }
+
   function gmcSaved() {
     log(DEBUG, 'gmcSaved()');
 
     switch (GMC.get('on_save')) {
       case 'refresh tab':
-        location.reload();
+        gmcRefreshTab();
+        break;
+      case 'refresh tab and close':
+        gmcRefreshTab();
+        GMC.close();
         break;
       case 'run script':
-        modifyThenObserve(() => {
-          document.querySelector(createId(SELECTORS.header.style))?.remove();
-          HEADER_STYLE.textContent = '';
-        });
-
-        applyCustomizations(true);
-
+        gmcRunScript();
+        break;
+      case 'run script and close':
+        gmcRunScript();
+        GMC.close();
         break;
     }
-
-    document.querySelector('#gmc').classList.add('hidden');
   }
 
   function gmcClosed() {
@@ -1783,15 +1796,10 @@
 
     switch (GMC.get('on_close')) {
       case 'refresh tab':
-        location.reload();
+        gmcRefreshTab();
         break;
       case 'run script':
-        modifyThenObserve(() => {
-          document.querySelector(createId(SELECTORS.header.style))?.remove();
-        });
-
-        applyCustomizations(true);
-
+        gmcRunScript();
         break;
     }
 
@@ -1814,15 +1822,16 @@
         const fieldName = path.concat(key).join('_');
         const fieldValue = config[key];
 
+        log(VERBOSE, 'fieldName', fieldName);
         GMC.set(fieldName, fieldValue);
       }
     }
   }
 
-  function gmcApplyCustomDefaultConfig() {
-    log(DEBUG, 'gmcApplyCustomDefaultConfig()');
+  function gmcApplyCustomHappyMediumConfig() {
+    log(DEBUG, 'gmcApplyCustomHappyMediumConfig()');
 
-    configsToGMC(configs.default);
+    configsToGMC(configs.happyMedium);
 
     GMC.close();
     GMC.open();
@@ -1844,14 +1853,16 @@
     gmcFrameStyle.textContent += `
       #gmc
       {
-        border: none !important;
-        border-radius: 0.75rem !important;
-        box-shadow: 0 0 0 1px #30363d, 0 16px 32px rgba(1,4,9,0.85) !important;
-      }
-
-      #gmc.hidden
-      {
-        display: none !important;
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999;
+        background-color: transparent !important;
       }
 
       #gmc-frame
@@ -1861,16 +1872,26 @@
 
         inset: initial !important;
         border: none !important;
-        height: auto !important;
         max-height: initial !important;
         max-width: initial !important;
         opacity: 1 !important;
-        overflow: visible !important;
-        padding: initial !important;
         position: static !important;
-        width: auto !important;
         z-index: initial !important;
-        display: block !important;
+
+        width: 85% !important;
+        height: 75% !important;
+        overflow-y: auto !important;
+
+
+        border: none !important;
+        border-radius: 0.75rem !important;
+        box-shadow: 0 0 0 1px #30363d, 0 16px 32px rgba(1,4,9,0.85) !important;
+      }
+
+      #gmc-frame_wrapper
+      {
+        display: flow-root !important;
+        padding: 2rem !important;
       }
 
       #gmc-frame .config_header
@@ -1956,7 +1977,7 @@
       #gmc-frame .field_label,
       #gmc-frame .gmc-label
       {
-        width: 13rem;
+        width: 15vw;
       }
 
       #gmc-frame .radio_label:not(:last-child)
@@ -2026,7 +2047,8 @@
         background-color: #2f81f7;
       }
 
-      #gmc-frame .gmc-checkbox:checked::before {
+      #gmc-frame .gmc-checkbox:checked::before
+      {
         visibility: visible;
         transition: visibility 0s linear 0s;
       }
@@ -2156,18 +2178,18 @@
       #gmc-frame #gmc-frame_buttons_holder
       {
         position: fixed;
-        transform: translate(-50%, 0%);
+        width: 85%;
+        text-align: center;
+
         left: 50%;
-        bottom: 0;
+        bottom: 2%;
+        transform: translate(-50%, 0%);
         padding: 1rem;
 
-        border-bottom: none !important;
         border-radius: 6px;
-        border-bottom-left-radius: 0px;
-        border-bottom-right-radius: 0px;
       }
 
-      #gmc-frame .saveclose_buttons
+      #gmc-frame .saveclose_buttons:not(:last-child)
       {
         margin-right: 0.25rem;
       }
@@ -2268,7 +2290,7 @@
 
     if (THEME === 'light') {
       gmcFrameStyle.textContent += `
-        #gmc
+        #gmc-frame
         {
           background-color: #FFFFFF;
           color: #1F2328;
@@ -2276,7 +2298,7 @@
       `;
     } else if (THEME === 'dark') {
       gmcFrameStyle.textContent += `
-        #gmc
+        #gmc-frame
         {
           background-color: #161B22;
           color: #E6EDF3;
@@ -2284,7 +2306,7 @@
 
         #gmc-frame_buttons_holder
         {
-          background-color: #0D1117;
+          background-color: #161B22;
           border: 1px solid #30363D;
         }
 
@@ -2317,19 +2339,8 @@
 
     const body = document.querySelector('body');
     const gmcDiv = document.createElement('div');
-    gmcDiv.id = 'gmc';
-    gmcDiv.style = `
-      display: grid;
-      position: fixed;
-      height: 75%;
-      width: 75%;
-      max-height: 95%;
-      max-width: 95%;
-      inset: 69px auto auto 208px;
-      padding: 2rem !important;
-      overflow: auto;
-      z-index: 9999;
-    `;
+    gmcDiv.setAttribute('id', 'gmc');
+
     gmcDiv.classList.add('hidden');
     body.appendChild(gmcDiv);
 
@@ -2584,7 +2595,6 @@
     happyMedium: {
       light: {
         backgroundColor: '',
-        applyPositionTransformations: false,
         hamburgerButton: {
           remove: false,
         },
@@ -2937,7 +2947,6 @@
     oldSchool: {
       light: {
         backgroundColor: '#161C20',
-        applyPositionTransformations: true,
         hamburgerButton: {
           remove: true,
         },
@@ -3549,6 +3558,11 @@
         type: 'checkbox',
         default: true,
       },
+      light_issues_alignLeft: {
+        label: 'Align left',
+        type: 'checkbox',
+        default: false,
+      },
       light_issues_icon_remove: {
         label: 'Icon remove',
         type: 'checkbox',
@@ -3593,6 +3607,11 @@
         label: 'Tooltip',
         type: 'checkbox',
         default: true,
+      },
+      light_pullRequests_alignLeft: {
+        label: 'Align left',
+        type: 'checkbox',
+        default: false,
       },
       light_pullRequests_icon_remove: {
         label: 'Icon remove',
@@ -4002,6 +4021,11 @@
         type: 'checkbox',
         default: true,
       },
+      dark_issues_alignLeft: {
+        label: 'Align left',
+        type: 'checkbox',
+        default: false,
+      },
       dark_issues_icon_remove: {
         label: 'Icon remove',
         type: 'checkbox',
@@ -4046,6 +4070,11 @@
         label: 'Tooltip',
         type: 'checkbox',
         default: true,
+      },
+      dark_pullRequests_alignLeft: {
+        label: 'Align left',
+        type: 'checkbox',
+        default: false,
       },
       dark_pullRequests_icon_remove: {
         label: 'Icon remove',
@@ -4249,7 +4278,9 @@
         options: [
           'do nothing',
           'refresh tab',
+          'refresh tab and close',
           'run script',
+          'run script and close',
         ],
         default: 'do nothing',
       },
@@ -4270,9 +4301,9 @@
         click: gmcClearCustom,
       },
       apply_default_config: {
-        label: 'Apply Default to Custom',
+        label: 'Apply Happy Medium to Custom',
         type: 'button',
-        click: gmcApplyCustomDefaultConfig,
+        click: gmcApplyCustomHappyMediumConfig,
       },
       apply_oldSchool_config: {
         label: 'Apply Old School to Custom',
