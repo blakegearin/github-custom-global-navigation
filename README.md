@@ -104,10 +104,9 @@ In October 2023, GitHub initiated a [public rollout](https://github.blog/changel
 
   - If you have video sources that show Old School user navigation around the website (or better yet, some HTML), please contribute to [this thread](https://github.com/blakegearin/github-custom-global-naviation/issues/1)
 
-- Configuration menu
+- Menu
 
   - Dependency: [GM_config](https://github.com/sizzlemctwizzle/GM_config)
-  - Icons: [mhudaaa](https://www.reshot.com/free-svg-icons/item/space-line-icon-set-7YDXQBCTRH/)
 
 - Archiving
 

@@ -119,7 +119,12 @@
     const logo = HEADER.querySelector(SELECTORS.logo.svg);
 
     if (elementConfig.color !== '') {
-      logo.style.setProperty('fill', elementConfig.color, 'important');
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.logo.svg} path
+        {
+          fill: ${elementConfig.color} !important;
+        }
+      `;
     }
 
     if (elementConfig.customSvg !== '') {
@@ -140,6 +145,10 @@
     }
   }
 
+  function removePageTitle() {
+    HEADER_STYLE.textContent += cssHideElement(createId(SELECTORS.pageTitle.id));
+  }
+
   function updatePageTitle() {
     log(DEBUG, 'updatePageTitle()');
 
@@ -153,8 +162,11 @@
       return;
     }
 
+    pageTitle.setAttribute('id', SELECTORS.pageTitle.id);
+
     if (elementConfig.remove) {
-      HEADER_STYLE.textContent += cssHideElement(SELECTORS.pageTitle.topDiv);
+      removePageTitle();
+      return;
     }
 
     if (elementConfig.color !== '') {
@@ -527,6 +539,15 @@
       `;
     }
 
+    if (elementConfig.boxShadow !== '') {
+      HEADER_STYLE.textContent += `
+      ${elementSelector.id} a
+        {
+          box-shadow: ${elementConfig.boxShadow} !important;
+        }
+      `;
+    }
+
     if (elementConfig.hover.backgroundColor !== '') {
       HEADER_STYLE.textContent += `
         ${elementSelector.id} a:hover
@@ -617,8 +638,8 @@
     log(DEBUG, 'flipIssuesPullRequest()');
 
     cloneAndFlipElements(
-      SELECTORS.issues.id,
-      SELECTORS.pullRequests.id,
+      createId(SELECTORS.issues.id),
+      createId(SELECTORS.pullRequests.id),
       'issues-flip-div',
       'pullRequests-flip-div'
     );
@@ -773,6 +794,15 @@
       `;
     }
 
+    if (elementConfig.boxShadow !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.button}
+        {
+          box-shadow: ${elementConfig.boxShadow} !important;
+        }
+      `;
+    }
+
     if (elementConfig.hoverBackgroundColor !== '') {
       HEADER_STYLE.textContent += `
         ${elementSelector.button}:hover
@@ -810,7 +840,9 @@
 
     if (elementConfig.remove) {
       HEADER_STYLE.textContent += cssHideElement(elementSelector.indicator);
-    } else if (!elementConfig.tooltip) {
+    }
+
+    if (!elementConfig.tooltip) {
       HEADER_STYLE.textContent += cssHideElement(createId(SELECTORS.toolTips.notifications.id));
     }
 
@@ -943,6 +975,15 @@
       `;
     }
 
+    if (elementConfig.boxShadow !== '') {
+      HEADER_STYLE.textContent += `
+        ${createId(elementSelector.id)} a
+        {
+          box-shadow: ${elementConfig.boxShadow} !important;
+        }
+      `;
+    }
+
     if (elementConfig.dot.displayOverIcon) {
       HEADER_STYLE.textContent += `
         ${elementSelector.dot}
@@ -1004,14 +1045,14 @@
     const topDiv = HEADER.querySelector(topDivSelector);
 
     if (!topDiv) {
-      log(SILENT, `Selector ${topDivSelector} not found`);
+      log(DEBUG, `Selector ${topDivSelector} not found`);
       return;
     }
 
     const avatarButton = HEADER.querySelector(SELECTORS.avatar.button);
 
     if (!avatarButton) {
-      log(SILENT, `Selector ${SELECTORS.avatar.button} not found`);
+      log(DEBUG, `Selector ${SELECTORS.avatar.button} not found`);
       return;
     }
 
@@ -1058,7 +1099,7 @@
           margin-bottom: 1.5px;
         }
 
-        ${elementSelector.button}:hover ${createId(elementSelector.svg)}
+        ${elementSelector.button}:hover ${createId(elementSelector.svg)} path
         {
           fill: #FFFFFFB3 !important;
         }
@@ -1209,7 +1250,7 @@
         {
           border-top-right-radius: var(--borderRadius-large, 0.75rem) !important;
           border-bottom-right-radius: var(--borderRadius-large, 0.75rem) !important;
-          height: initial !important;
+          max-height: 85vh !important;
         }
 
         ${elementSelector.right.navParentDiv}
@@ -1447,6 +1488,8 @@
       }
     `;
 
+    if (elementConfig.removePageTitle) removePageTitle();
+
     return true;
   }
 
@@ -1572,6 +1615,8 @@
   }
 
   function createId(string) {
+    if (string.startsWith('#')) return string;
+
     return `#${string}`;
   }
 
@@ -1620,6 +1665,8 @@
   function waitForFeaturePreviewButton() {
     log(DEBUG, 'waitForFeaturePreviewButton()');
 
+    if (!HEADER) return;
+
     const featurePreviewSearch = HEADER.querySelectorAll('[data-analytics-event*="FEATURE_PREVIEW"]');
 
     if (featurePreviewSearch.length === 1) {
@@ -1641,7 +1688,7 @@
       };
 
       const textElement = newLiElement.querySelector('.ActionListItem-label');
-      textElement.textContent = 'Customize global navigation';
+      textElement.textContent = 'Custom global navigation';
 
       const oldSvg = newLiElement.querySelector('svg');
 
@@ -1846,7 +1893,12 @@
   function gmcClearCustom() {
     log(DEBUG, 'gmcClearCustom()');
 
-    GMC.reset();
+    const confirmed = confirm('Are you sure you want to clear your custom configuration? This is irreversible.');
+
+    if (confirmed) {
+      GMC.reset();
+      GMC.save();
+    }
   }
 
   function configsToGMC(config, path = []) {
@@ -1868,19 +1920,23 @@
   function gmcApplyCustomHappyMediumConfig() {
     log(DEBUG, 'gmcApplyCustomHappyMediumConfig()');
 
-    configsToGMC(configs.happyMedium);
+    const confirmed = confirm('Are you sure you want to overwrite your custom configuration with Happy Medium? This is irreversible.');
 
-    GMC.close();
-    GMC.open();
+    if (confirmed) {
+      configsToGMC(configs.happyMedium);
+      GMC.save();
+    }
   }
 
   function gmcApplyCustomOldSchoolConfig() {
     log(DEBUG, 'gmcApplyCustomOldSchoolConfig()');
 
-    configsToGMC(configs.oldSchool);
+    const confirmed = confirm('Are you sure you want to overwrite your custom configuration with Old School? This is irreversible.');
 
-    GMC.close();
-    GMC.open();
+    if (confirmed) {
+      configsToGMC(configs.oldSchool);
+      GMC.save();
+    }
   }
 
   function gmcBuildStyle() {
@@ -1929,8 +1985,7 @@
         overflow-y: auto !important;
 
         border: none !important;
-        border-radius: 0.75rem !important;
-        box-shadow: 0 0 0 1px #30363d, 0 16px 32px rgba(1,4,9,0.85) !important;
+        border-radius: 0.375rem !important;
 
         pointer-events: auto;
       }
@@ -1947,40 +2002,36 @@
       {
         width: 100%;
         border-radius: 6px;
-        border: 1px solid #30363D;
         display: table;
       }
 
       #gmc-frame #gmc-frame_section_1,
-      #gmc-frame #gmc-frame_section_2
+      #gmc-frame #gmc-frame_section_2,
+      #gmc-frame #gmc-frame_section_3,
+      #gmc-frame #gmc-frame_section_4
       {
         margin-top: 2rem;
         width: 49%;
         box-sizing: border-box;
-        float: left;
       }
 
       #gmc-frame #gmc-frame_section_1
       {
         border-radius: 6px;
-        border: 1px solid #30363D;
         float: left;
       }
 
       #gmc-frame #gmc-frame_section_2
       {
         border-radius: 6px;
-        border: 1px solid #30363D;
         float: right;
       }
 
       #gmc-frame #gmc-frame_section_3
       {
-        display: inline-grid;
         width: 49%;
         margin-top: 2rem;
         box-sizing: border-box;
-        border: 1px solid #30363D;
         border-radius: 6px;
         float: left;
       }
@@ -1991,7 +2042,6 @@
         width: 49%;
         margin-top: 2rem;
         box-sizing: border-box;
-        border: 1px solid #f8514966;
         border-radius: 6px;
         float: right
       }
@@ -2000,21 +2050,6 @@
       #gmc-frame #gmc-frame_section_4 .config_var:not(:last-child)
       {
         padding-bottom: 1rem;
-        border-bottom: 1px solid #30363D;
-      }
-
-      #gmc-frame #gmc-frame_section_4 input
-      {
-        background-color: #21262d;
-        border-color: #f0f6fc1a;
-        color: #f85149;
-      }
-
-      #gmc-frame #gmc-frame_section_4 input:hover
-      {
-        background-color: #da3633;
-        border-color: #f85149;
-        color: #ffffff;
       }
 
       /* Fields */
@@ -2042,7 +2077,6 @@
 
         margin-bottom: 16px;
         padding: 1rem 1.5rem;
-        border-bottom: 1px solid #30363D;
       }
 
       #gmc-frame .section_desc,
@@ -2083,7 +2117,6 @@
       #gmc-frame .config_var[id*='flipIssuesPullRequests_var']
       {
         display: flow;
-        border-top: 1px solid #30363D;
         padding-top: 1rem;
       }
 
@@ -2139,7 +2172,6 @@
       #gmc-frame input[type="checkbox"]
       {
         appearance: none;
-        border-color: #6e7681;
         border-style: solid;
         border-width: 1px;
         cursor: pointer;
@@ -2202,7 +2234,6 @@
       #gmc-frame .gmc-checkbox
       {
         appearance: none;
-        border-color: #6E7681;
         border-style: solid;
         border-width: 1px;
         cursor: pointer;
@@ -2235,18 +2266,12 @@
         transition: background-color 0s ease 0s, border-color 80ms cubic-bezier(0.32, 0, 0.67, 0) 0ms;
       }
 
-      #gmc-frame input[type="radio"]
-      {
-        color: #6D7681;
-      }
-
       #gmc-frame input[type="text"],
       #gmc-frame textarea,
       #gmc-frame select
       {
         padding: 5px 12px;
         border-radius: 6px;
-        border: 1px solid #5B626C;
       }
 
       #gmc-frame input[type="text"]:focus,
@@ -2261,13 +2286,13 @@
       {
         height: 17px;
         width: 17px;
-        fill: #E6EDF3;
         margin-left: 0.5rem;
       }
 
       #gmc small
       {
         font-size: x-small;
+        font-weight: 600;
         margin-left: 3px;
       }
 
@@ -2284,7 +2309,7 @@
         transform: translate(-50%, 0%);
         padding: 1rem;
 
-        border-radius: 6px;
+        border-radius: 0.375rem;
 
         display: flex;
         align-items: center;
@@ -2297,8 +2322,7 @@
       }
 
       #gmc-frame [type=button],
-      #gmc-frame .saveclose_buttons,
-      #gmc-frame .reset_holder
+      #gmc-frame .saveclose_buttons
       {
         position: relative;
         display: inline-block;
@@ -2316,32 +2340,7 @@
         -webkit-appearance: none;
         appearance: none;
 
-        color: #c9d1d9;
-        background-color: #21262d;
-        border-color: #f0f6fc1a;
-
         font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
-      }
-
-      #gmc-frame [type=button]:hover,
-      #gmc-frame .saveclose_buttons:hover
-      {
-        background-color: #30363d;
-        border-color: #8b949e;
-      }
-
-      #gmc-frame #gmc-frame_saveBtn
-      {
-        background-color: #238636;
-        border-color: #F0F6FC1A;
-        box-shadow: 0 0 transparent;
-        color: #FFFFFF;
-      }
-
-      #gmc-frame #gmc-frame_saveBtn:hover
-      {
-        background-color: #2EA043;
-        border-color: #F0F6FC1A;
       }
 
       @keyframes fadeOut
@@ -2372,8 +2371,148 @@
       gmcFrameStyle.textContent += `
         #gmc-frame
         {
-          background-color: #FFFFFF;
+          background-color: #F6F8FA;
           color: #1F2328;
+          box-shadow: 0 0 0 1px #D0D7DE, 0 16px 32px rgba(1,4,9,0.15) !important;
+        }
+
+        #gmc-frame .section_header_holder
+        {
+          background-color: #FFFFFF;
+          border: 1px solid #D0D7DE;
+        }
+
+        #gmc-frame_buttons_holder
+        {
+          background-color: #FFFFFF;
+          box-shadow: 0 0 0 1px #D0D7DE, 0 16px 32px rgba(1,4,9,0.15) !important;
+        }
+
+        #gmc-frame input[type="text"],
+        #gmc-frame textarea,
+        #gmc-frame select
+        {
+          border: 1px solid #D0D7DE;
+        }
+
+        #gmc-frame select
+        {
+          background-color: #F6F8FA;
+        }
+
+        #gmc-frame select:hover
+        {
+          background-color: #F3F4F6;
+          border-color: #1F232826;
+        }
+
+        #gmc-frame input[type="text"],
+        #gmc-frame textarea
+        {
+          background-color: #F6F8FA;
+          color: #1F2328;
+        }
+
+        #gmc-frame input[type="text"]:focus,
+        #gmc-frame textarea:focus
+        {
+          background-color: #FFFFFF;
+        }
+
+        #gmc-frame [type=button],
+        #gmc-frame .saveclose_buttons
+        {
+          background-color: #f6f8fa;
+          border-color: #1f232826;
+          box-shadow: 0 1px 0 rgba(31,35,40,0.04), inset 0 1px 0 rgba(255,255,255,0.25);
+          color: #24292f;
+        }
+
+        #gmc-frame [type=button]:hover,
+        #gmc-frame .saveclose_buttons:hover
+        {
+          background-color: #f3f4f6;
+          border-color: #1f232826;
+        }
+
+        #gmc-frame .gmc-checkbox
+        {
+          border-color: #6E7781;
+        }
+
+        #gmc-frame input[type="radio"]
+        {
+          color: #6E7781;
+        }
+
+        #gmc-frame svg
+        {
+          fill: #000000;
+        }
+
+        #gmc-frame .section_header
+        {
+          border-bottom: 1px solid #D0D7DE;
+        }
+
+        #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
+        #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
+        #gmc-frame .config_var[id*='logo_remove_var'],
+        #gmc-frame .config_var[id*='pageTitle_remove_var'],
+        #gmc-frame .config_var[id*='search_backgroundColor_var'],
+        #gmc-frame .config_var[id*='divider_remove_var'],
+        #gmc-frame .config_var[id*='create_remove_var'],
+        #gmc-frame .config_var[id*='issues_remove_var'],
+        #gmc-frame .config_var[id*='pullRequests_remove_var'],
+        #gmc-frame .config_var[id*='notifications_remove_var'],
+        #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
+        #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
+        #gmc-frame .config_var[id*='sidebars_backdropColor_var'],
+        #gmc-frame .config_var[id*='repositoryHeader_import_var'],
+        #gmc-frame .config_var[id*='flipCreateInbox_var'],
+        #gmc-frame .config_var[id*='flipIssuesPullRequests_var']
+        {
+          border-top: 1px solid #D0D7DE;
+        }
+
+        #gmc-frame #gmc-frame_section_3 .config_var:not(:last-child),
+        #gmc-frame #gmc-frame_section_4 .config_var:not(:last-child)
+        {
+          border-bottom: 1px solid #D0D7DE;
+        }
+
+        #gmc-frame #gmc-frame_saveBtn
+        {
+          background-color: #1F883D;
+          border-color: rgba(31, 35, 40, 0.15);
+          box-shadow: rgba(31, 35, 40, 0.1) 0px 1px 0px;
+          color: #FFFFFF;
+        }
+
+        #gmc-frame #gmc-frame_saveBtn:hover
+        {
+          background-color: rgb(26, 127, 55);
+        }
+
+        #gmc-frame #gmc-frame_section_4
+        {
+          border: 1px solid #FF818266;
+        }
+
+        #gmc-frame #gmc-frame_section_4 input
+        {
+          background-color: #F6F8FA;
+          border-color: #1F232826;
+          box-shadow: 0 1px 0 rgba(31,35,40,0.04), inset 0 1px 0 rgba(255,255,255,0.25);
+          color: #CF222E;
+        }
+
+        #gmc-frame #gmc-frame_section_4 input:hover
+        {
+          background-color: #A40E26;
+          border-color: #1F232826;
+          box-shadow: 0 1px 0 rgba(31,35,40,0.04);
+          color: #ffffff;
         }
       `;
     } else if (THEME === 'dark') {
@@ -2382,31 +2521,138 @@
         {
           background-color: #161B22;
           color: #E6EDF3;
+          box-shadow: 0 0 0 1px #30363D, 0 16px 32px #010409 !important;
+        }
+
+        #gmc-frame .section_header_holder
+        {
+          background-color: #0D1117;
+          border: 1px solid #30363D;
         }
 
         #gmc-frame_buttons_holder
         {
           background-color: #161B22;
-          border: 1px solid #30363D;
+          box-shadow: 0 0 0 1px #30363D, 0 16px 32px #010409 !important;
+        }
+
+        #gmc-frame input[type="text"],
+        #gmc-frame textarea,
+        #gmc-frame select
+        {
+          border: 1px solid #5B626C;
         }
 
         #gmc-frame input[type="text"],
         #gmc-frame textarea
         {
           background-color: #010409;
-          border: 1px solid #5B626C;
           color: #FFFFFF;
+        }
+
+        #gmc-frame [type=button]:hover,
+        #gmc-frame .saveclose_buttons:hover
+        {
+          background-color: #30363d;
+          border-color: #8b949e;
+        }
+
+        #gmc-frame .gmc-checkbox
+        {
+          border-color: #6E7681;
+        }
+
+        #gmc-frame input[type="radio"]
+        {
+          color: #6D7681;
         }
 
         #gmc-frame input[type="text"]:focus,
         textarea:focus
         {
-          background-color: #0d1117;
+          background-color: #0D1117;
         }
 
-        #gmc-frame .section_header_holder
+        #gmc-frame [type=button],
+        #gmc-frame .saveclose_buttons
         {
-          background-color: #0D1117;
+          color: #c9d1d9;
+          background-color: #21262d;
+          border-color: #f0f6fc1a;
+        }
+
+        #gmc-frame svg
+        {
+          fill: #E6EDF3;
+        }
+
+        #gmc-frame .section_header
+        {
+          border-bottom: 1px solid #30363D;
+        }
+
+        #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
+        #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
+        #gmc-frame .config_var[id*='logo_remove_var'],
+        #gmc-frame .config_var[id*='pageTitle_remove_var'],
+        #gmc-frame .config_var[id*='search_backgroundColor_var'],
+        #gmc-frame .config_var[id*='divider_remove_var'],
+        #gmc-frame .config_var[id*='create_remove_var'],
+        #gmc-frame .config_var[id*='issues_remove_var'],
+        #gmc-frame .config_var[id*='pullRequests_remove_var'],
+        #gmc-frame .config_var[id*='notifications_remove_var'],
+        #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
+        #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
+        #gmc-frame .config_var[id*='sidebars_backdropColor_var'],
+        #gmc-frame .config_var[id*='repositoryHeader_import_var'],
+        #gmc-frame .config_var[id*='flipCreateInbox_var'],
+        #gmc-frame .config_var[id*='flipIssuesPullRequests_var']
+        {
+          border-top: 1px solid #30363D;
+        }
+
+        #gmc-frame #gmc-frame_section_3 .config_var:not(:last-child),
+        #gmc-frame #gmc-frame_section_4 .config_var:not(:last-child)
+        {
+          padding-bottom: 1rem;
+          border-bottom: 1px solid #30363D;
+        }
+
+        #gmc-frame #gmc-frame_saveBtn
+        {
+          background-color: #238636;
+          border-color: #F0F6FC1A;
+          box-shadow: 0 0 transparent;
+          color: #FFFFFF;
+        }
+
+        #gmc-frame #gmc-frame_saveBtn:hover
+        {
+          background-color: #2EA043;
+          border-color: #F0F6FC1A;
+        }
+
+        #gmc-frame #gmc-frame_section_4
+        {
+          border: 1px solid #f8514966;
+        }
+
+        #gmc-frame #gmc-frame_section_4 input
+        {
+          background-color: #21262D;
+          border-color: #F0F6FC1A;
+        }
+
+        #gmc-frame #gmc-frame_section_4 input
+        {
+          color: #F85149;
+        }
+
+        #gmc-frame #gmc-frame_section_4 input:hover
+        {
+          background-color: #DA3633;
+          border-color: #F85149;
+          color: #FFFFFF;
         }
       `;
     }
@@ -2438,7 +2684,21 @@
   function applyCustomizations(refresh = false) {
     log(DEBUG, 'applyCustomizations()');
 
+    HEADER = document.querySelector(SELECTORS.header.self);
+
+    if (!HEADER) return 'continue';
+
+    const featurePreviewButton = document.querySelector(SELECTORS.avatar.button);
+
+    if (!featurePreviewButton) {
+      logError(`Selector ${SELECTORS.avatar.button} not found`);
+      return 'break';
+    }
+
+    featurePreviewButton.addEventListener('click', waitForFeaturePreviewButton);
+
     const configName = {
+      'Off': 'off',
       'Happy Medium': 'happyMedium',
       'Old School': 'oldSchool',
       'Custom': 'custom',
@@ -2455,10 +2715,6 @@
     const headerSuccessFlag = 'customizedHeader';
 
     if (!document.getElementById(headerSuccessFlag) || refresh) {
-      HEADER = document.querySelector(SELECTORS.header.self);
-
-      if (!HEADER) return 'continue';
-
       updateSelectors();
 
       if (configName === 'oldSchool') {
@@ -2479,11 +2735,6 @@
       HEADER.setAttribute('id', headerSuccessFlag);
 
       log(QUIET, 'Complete');
-
-      const featurePreviewButton = HEADER.querySelector('[aria-label="Open user account menu"]');
-      if (featurePreviewButton) {
-        featurePreviewButton.addEventListener('click', waitForFeaturePreviewButton);
-      }
 
       return 'break';
     } else {
@@ -2601,6 +2852,7 @@
     },
     hamburgerButton: '.AppHeader-globalBar-start deferred-side-panel',
     pageTitle: {
+      id: 'custom-page-title',
       topDiv: '.AppHeader-context',
       links: '.AppHeader-context a',
       separator: '.AppHeader-context-item-separator',
@@ -2723,6 +2975,7 @@
           remove: false,
           border: true,
           tooltip: false,
+          boxShadow: '',
           hoverBackgroundColor: '',
           plusIcon: {
             remove: false,
@@ -2744,12 +2997,13 @@
             },
           },
         },
-        flipIssuesPullRequests: false,
+        flipIssuesPullRequests: true,
         issues: {
           remove: false,
           border: true,
           tooltip: false,
           alignLeft: false,
+          boxShadow: '',
           icon: {
             remove: false,
             color: '',
@@ -2768,6 +3022,7 @@
           border: true,
           tooltip: false,
           alignLeft: false,
+          boxShadow: '',
           icon: {
             remove: false,
             color: '',
@@ -2785,6 +3040,7 @@
           remove: false,
           border: true,
           tooltip: false,
+          boxShadow: '',
           hoverBackgroundColor: '',
           icon: {
             symbol: 'bell', // Accepts 'inbox', 'bell', or ''
@@ -2817,7 +3073,7 @@
           },
         },
         localBar: {
-          backgroundColor: '#02040A',
+          backgroundColor: '#F6F8FA',
           center: false,
           boxShadow: {
             consistentColor: true,
@@ -2835,13 +3091,14 @@
         repositoryHeader: {
           import: true,
           center: false,
-          backgroundColor: '#02040A',
+          removePageTitle: true,
+          backgroundColor: '#F6F8FA',
           avatar: {
             remove: false,
             customSvg: '',
           },
           link: {
-            color: '#6AAFF9',
+            color: '',
             hover: {
               backgroundColor: 'transparent',
               color: 'var(--color-accent-fg)',
@@ -2898,6 +3155,7 @@
           remove: false,
           border: true,
           tooltip: false,
+          boxShadow: '',
           hoverBackgroundColor: '',
           plusIcon: {
             remove: false,
@@ -2919,12 +3177,13 @@
             },
           },
         },
-        flipIssuesPullRequests: false,
+        flipIssuesPullRequests: true,
         issues: {
           remove: false,
           border: true,
           tooltip: false,
           alignLeft: false,
+          boxShadow: '',
           icon: {
             remove: false,
             color: '',
@@ -2943,6 +3202,7 @@
           border: true,
           tooltip: false,
           alignLeft: false,
+          boxShadow: '',
           icon: {
             remove: false,
             color: '',
@@ -2960,6 +3220,7 @@
           remove: false,
           border: true,
           tooltip: false,
+          boxShadow: '',
           hoverBackgroundColor: '',
           icon: {
             symbol: 'bell', // Accepts 'inbox', 'bell', or ''
@@ -3010,6 +3271,7 @@
         repositoryHeader: {
           import: true,
           center: false,
+          removePageTitle: true,
           backgroundColor: '#02040A',
           avatar: {
             remove: false,
@@ -3075,6 +3337,7 @@
           remove: false,
           border: false,
           tooltip: false,
+          boxShadow: 'none',
           hoverBackgroundColor: oldSchoolHoverBackgroundColor,
           plusIcon: {
             remove: false,
@@ -3102,6 +3365,7 @@
           border: false,
           tooltip: false,
           alignLeft: true,
+          boxShadow: 'none',
           icon: {
             remove: true,
             color: '',
@@ -3120,6 +3384,7 @@
           border: false,
           tooltip: false,
           alignLeft: true,
+          boxShadow: 'none',
           icon: {
             remove: true,
             color: '',
@@ -3137,6 +3402,7 @@
           remove: false,
           border: false,
           tooltip: false,
+          boxShadow: 'none',
           hoverBackgroundColor: oldSchoolHoverBackgroundColor,
           icon: {
             symbol: 'bell',
@@ -3152,7 +3418,7 @@
           dot: {
             remove: false,
             boxShadowColor: '#161C20',
-            color: '',
+            color: '#2f81f7',
             displayOverIcon: true,
           },
         },
@@ -3162,7 +3428,7 @@
         globalBar: {
           boxShadowColor: '#21262D',
           leftAligned: {
-            gap: '2px',
+            gap: '0.75rem',
           },
           rightAligned: {
             gap: '2px',
@@ -3187,6 +3453,7 @@
         repositoryHeader: {
           import: true,
           center: true,
+          removePageTitle: true,
           backgroundColor: '#FAFBFD',
           avatar: {
             remove: false,
@@ -3250,6 +3517,7 @@
           remove: false,
           border: false,
           tooltip: false,
+          boxShadow: 'none',
           hoverBackgroundColor: oldSchoolHoverBackgroundColor,
           plusIcon: {
             remove: false,
@@ -3277,6 +3545,7 @@
           border: false,
           tooltip: false,
           alignLeft: true,
+          boxShadow: 'none',
           icon: {
             remove: true,
             color: '',
@@ -3295,6 +3564,7 @@
           border: false,
           tooltip: false,
           alignLeft: true,
+          boxShadow: 'none',
           icon: {
             remove: true,
             color: '',
@@ -3312,6 +3582,7 @@
           remove: false,
           border: false,
           tooltip: false,
+          boxShadow: 'none',
           hoverBackgroundColor: oldSchoolHoverBackgroundColor,
           icon: {
             symbol: 'bell',
@@ -3327,7 +3598,7 @@
           dot: {
             remove: false,
             boxShadowColor: '#161C20',
-            color: '',
+            color: '#2f81f7',
             displayOverIcon: true,
           },
         },
@@ -3362,6 +3633,7 @@
         repositoryHeader: {
           import: true,
           center: true,
+          removePageTitle: true,
           backgroundColor: '#0D1116',
           avatar: {
             remove: false,
@@ -3385,7 +3657,7 @@
   let GMC = new GM_config({
     id: 'gmc-frame',
     title: `
-      Customize Global Navigation
+      Custom Global Navigation
       <small>
         <a
           href="https://github.com/blakegearin/github-custom-global-navigation"
@@ -3425,17 +3697,12 @@
           'Old School',
           'Custom',
         ],
-        default: 'Happy Medium',
+        default: 'Old School',
       },
       light_backgroundColor: {
         label: 'Background color',
         section: [
-          `
-          Custom Light
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-            <path d="M16 11.5a5 5 0 0 1 3.54 1.5A5 5 0 0 1 21 16.22a1 1 0 0 0 1.05 1 1 1 0 0 0 .95-1.11 7 7 0 1 0-2 5.34 6.49 6.49 0 0 0 .76-.89 1 1 0 1 0-1.63-1.16 5.38 5.38 0 0 1-.54.64A5 5 0 1 1 16 11.5z"/><path d="m29.29 15.54-1.21-.36a3 3 0 0 1-2-2 3 3 0 0 1 .47-2.82l.77-1a1 1 0 0 0 0-1.2 1 1 0 0 0-1.14-.35L25 8.26a2.91 2.91 0 0 1-2.75-.39A3 3 0 0 1 21 5.3V4a1 1 0 0 0-1.83-.59l-.71 1.05A3 3 0 0 1 16 5.81a3 3 0 0 1-2.48-1.32l-.71-1.05A1 1 0 0 0 11 4v1.3a3 3 0 0 1-.62 1.94A1 1 0 0 0 12 8.45a5 5 0 0 0 .85-1.76A5 5 0 0 0 16 7.81a5 5 0 0 0 3.15-1.12 5 5 0 0 0 5.1 3.74 5.08 5.08 0 0 0-.08 3.4 5 5 0 0 0 2 2.67 5 5 0 0 0-2 2.67 5.08 5.08 0 0 0 .08 3.4 5 5 0 0 0-5.1 3.74A5 5 0 0 0 16 25.19a5 5 0 0 0-3.15 1.12 5 5 0 0 0-1.92-2.8 4.94 4.94 0 0 0-3.18-.94 5.08 5.08 0 0 0 .08-3.4 5 5 0 0 0-2-2.67 5 5 0 0 0 2-2.67 5.08 5.08 0 0 0-.08-3.4 1 1 0 0 0 .25 0 1 1 0 0 0 0-2 2.88 2.88 0 0 1-1-.18l-1.18-.42a1 1 0 0 0-1.14.35 1 1 0 0 0 0 1.2l.77 1a3 3 0 0 1 .47 2.82 2.94 2.94 0 0 1-2 2l-1.21.36a1 1 0 0 0 0 1.92l1.21.36a2.94 2.94 0 0 1 2 2 3 3 0 0 1-.47 2.82l-.77 1a1 1 0 0 0 0 1.2 1 1 0 0 0 1.14.35L7 24.74a2.91 2.91 0 0 1 2.75.39A3 3 0 0 1 11 27.7V29a1 1 0 0 0 1.83.59l.71-1a3 3 0 0 1 5 0l.71 1A1 1 0 0 0 20 30a1 1 0 0 0 .3-.05 1 1 0 0 0 .7-1v-1.27a3 3 0 0 1 1.26-2.57 2.91 2.91 0 0 1 2.74-.37l1.19.43a1 1 0 0 0 1.14-.35 1 1 0 0 0 0-1.2l-.77-1a3 3 0 0 1-.47-2.82 3 3 0 0 1 2-2l1.21-.36a1 1 0 0 0 0-1.92z"/>
-          </svg>
-          `,
+          'Custom Light',
         ],
         type: 'text',
         default: '',
@@ -3570,6 +3837,11 @@
         type: 'checkbox',
         default: true,
       },
+      light_create_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
+      },
       light_create_hoverBackgroundColor: {
         label: 'Hover background color',
         type: 'text',
@@ -3645,6 +3917,11 @@
         type: 'checkbox',
         default: false,
       },
+      light_issues_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
+      },
       light_issues_icon_remove: {
         label: 'Icon remove',
         type: 'checkbox',
@@ -3695,6 +3972,11 @@
         type: 'checkbox',
         default: false,
       },
+      light_pullRequests_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
+      },
       light_pullRequests_icon_remove: {
         label: 'Icon remove',
         type: 'checkbox',
@@ -3739,6 +4021,11 @@
         label: 'Tooltip',
         type: 'checkbox',
         default: true,
+      },
+      light_notifications_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
       },
       light_notifications_hoverBackgroundColor: {
         label: 'Hover background color',
@@ -3855,6 +4142,11 @@
         type: 'checkbox',
         default: false,
       },
+      light_repositoryHeader_removePageTitle: {
+        label: 'Remove page title',
+        type: 'checkbox',
+        default: false,
+      },
       light_repositoryHeader_backgroundColor: {
         label: 'Background color',
         type: 'text',
@@ -3893,12 +4185,7 @@
       dark_backgroundColor: {
         label: 'Background color',
         section: [
-          `
-            Custom Dark
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-              <path d="M30 8.27a1 1 0 0 0-.8-.68L25.53 7l-1.62-3.42a1 1 0 0 0-1.82 0L20.47 7l-3.62.55a1 1 0 0 0-.8.68 1 1 0 0 0 .23 1L18.93 12l-.63 3.84a1 1 0 0 0 .42 1 1 1 0 0 0 1.06.06L23 15.09l3.22 1.79a1.07 1.07 0 0 0 .49.12 1 1 0 0 0 1-1.16L27.07 12l2.65-2.72A1 1 0 0 0 30 8.27zM25.28 11a1 1 0 0 0-.27.86l.38 2.31-1.91-1.05a1 1 0 0 0-1 0l-1.91 1.05.43-2.35a1 1 0 0 0-.27-.86l-1.65-1.68 2.22-.34a1 1 0 0 0 .75-.56l.95-2 .95 2a1 1 0 0 0 .75.56l2.22.34z"/><path d="M25.44 24A12.5 12.5 0 0 1 15.7 3.74a1.1 1.1 0 0 0 .3-.46.2.2 0 0 1 0-.07A1.9 1.9 0 0 0 16 3a1 1 0 0 0-.36-.72 1 1 0 0 0-1-.14A14 14 0 0 0 8.46 4.2a1 1 0 0 0-.3 1.38A1 1 0 0 0 9 6a1 1 0 0 0 .54-.15 12 12 0 0 1 3.28-1.44A14.66 14.66 0 0 0 11 11.5a14.5 14.5 0 0 0 12 14.27A12 12 0 0 1 6.77 8.33a1 1 0 1 0-1.54-1.28A14 14 0 0 0 16 30a13.91 13.91 0 0 0 9.69-3.9.7.7 0 0 0 .13-.17 1 1 0 0 0 .62-.93 1 1 0 0 0-1-1z"/>
-            </svg>
-          `,
+          'Custom Dark',
         ],
         type: 'text',
         default: '',
@@ -4033,6 +4320,11 @@
         type: 'checkbox',
         default: true,
       },
+      dark_create_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
+      },
       dark_create_hoverBackgroundColor: {
         label: 'Hover background color',
         type: 'text',
@@ -4103,6 +4395,11 @@
         type: 'checkbox',
         default: true,
       },
+      dark_issues_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
+      },
       dark_issues_alignLeft: {
         label: 'Align left',
         type: 'checkbox',
@@ -4158,6 +4455,11 @@
         type: 'checkbox',
         default: false,
       },
+      dark_pullRequests_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
+      },
       dark_pullRequests_icon_remove: {
         label: 'Icon remove',
         type: 'checkbox',
@@ -4202,6 +4504,11 @@
         label: 'Tooltip',
         type: 'checkbox',
         default: true,
+      },
+      dark_notifications_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
       },
       dark_notifications_hoverBackgroundColor: {
         label: 'Hover background color',
@@ -4318,6 +4625,11 @@
         type: 'checkbox',
         default: false,
       },
+      dark_repositoryHeader_removePageTitle: {
+        label: 'Remove page title',
+        type: 'checkbox',
+        default: false,
+      },
       dark_repositoryHeader_backgroundColor: {
         label: 'Background color',
         type: 'text',
@@ -4391,13 +4703,13 @@
         type: 'button',
         click: gmcClearCustom,
       },
-      apply_default_config: {
-        label: 'Apply Happy Medium to Custom',
+      apply_happyMedium_config: {
+        label: 'Overwrite Custom with Happy Medium',
         type: 'button',
         click: gmcApplyCustomHappyMediumConfig,
       },
       apply_oldSchool_config: {
-        label: 'Apply Old School to Custom',
+        label: 'Overwrite Custom with Old School',
         type: 'button',
         click: gmcApplyCustomOldSchoolConfig,
       },
