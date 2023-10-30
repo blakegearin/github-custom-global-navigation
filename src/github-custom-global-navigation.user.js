@@ -1788,7 +1788,7 @@
     });
   }
 
-  function gmcAddSavedSpan() {
+  function gmcAddSavedSpan(div) {
     log(DEBUG, 'gmcAddSavedSpan()');
 
     const savedDiv = document.createElement('div');
@@ -1809,8 +1809,23 @@
     savedDiv.appendChild(iconSpan);
     savedDiv.appendChild(textSpan);
 
-    const parentDiv = document.querySelector('#gmc-frame_buttons_holder');
-    parentDiv?.insertBefore(savedDiv, parentDiv.firstChild);
+    div.insertBefore(savedDiv, div.firstChild);
+  }
+
+  function gmcAddNewIssueButton(div) {
+    log(DEBUG, 'gmcAddSavedSpan()');
+
+    const small = document.createElement('small');
+    small.classList.add('left-aligned');
+    small.setAttribute('title', 'Submit bug or feature request');
+
+    const link = document.createElement('a');
+    link.href = 'https://github.com/blakegearin/github-custom-global-navigation/issues';
+    link.innerText = 'submit bug or feature request';
+
+    small.appendChild(link);
+
+    div.insertBefore(small, div.firstChild);
   }
 
   function gmcOpened() {
@@ -1847,7 +1862,17 @@
 
     modifyThenObserve(() => {
       document.querySelector('#gmc-frame .reset_holder').remove();
-      gmcAddSavedSpan();
+
+      const buttonHolderSelector = '#gmc-frame_buttons_holder';
+      const parentDiv = document.querySelector(buttonHolderSelector);
+
+      if (!parentDiv) {
+        logError(`Selector ${buttonHolderSelector} not found`);
+        return;
+      }
+
+      gmcAddSavedSpan(parentDiv);
+      gmcAddNewIssueButton(parentDiv);
     });
 
     document.querySelector('#gmc').classList.remove('hidden');
@@ -2339,12 +2364,22 @@
 
         display: flex;
         align-items: center;
-        justify-content: flex-end;
       }
 
-      #gmc-frame .saveclose_buttons:not(:last-child)
+      #gmc-frame #gmc-frame_buttons_holder .left-aligned
       {
-        margin-right: 0.25rem;
+        order: 1;
+        margin-right: auto;
+      }
+
+      #gmc-frame #gmc-frame_buttons_holder > *
+      {
+        order: 2;
+      }
+
+      #gmc-frame .saveclose_buttons
+      {
+        margin-left: 0.5rem;
       }
 
       #gmc-frame [type=button],
@@ -2382,7 +2417,7 @@
       #gmc-saved
       {
         display: none;
-        margin-right: 20px;
+        margin-right: 10px;
         animation: fadeOut 0.75s ease 2s forwards;
       }
     `;
@@ -4787,5 +4822,5 @@
     },
   });
 
-  // GMC.open();
+  GMC.open();
 })();
