@@ -37,23 +37,19 @@ There are two (2) preset configurations that are actively maintained and support
 
 #### Happy Medium
 
-   - This is the out-of-the-box experience
    - This previews some the best features and aims to deliver a [happy medium](https://dictionary.cambridge.org/dictionary/english/happy-medium) between the old and new styles without compromising on accessibility
-   - It relies relatively more on CSS variables in hopes of adapting to GitHub's changes
+   - It relies more on Github's CSS variables in hopes of adapting to their changes
 
 #### Old School
 
-   - This is a single opt-in flag that overrides the true defaults
-   - It aims to deliver an experience as close to the style  March 2023 as reasonably possible without compromising on accessibility
-   - It may not match the old mobile experience, as the details surrounding this are more difficult to find online
+   - This aims to deliver an experience as close to the style  March 2023 as reasonably possible without compromising on accessibility
    - Where applicable, it uses hardcoded values instead of CSS variables to prevent side effects from GitHub's changes
-   - It contains unique updates that are not otherwise available (e.g. button rearranging)
 
 ### Accessability
 
 Accessibility is important. GitHub [agrees](https://accessibility.github.com).
 
-This userscript should not make GitHub less accessible. However, this userscript doesn't go _out of its way_ to improve accessability on existing elements, and elements added are configured to be consistent with existing ones.
+This userscript should not make GitHub less accessible. However, this userscript doesn't go _out of its way_ to improve accessability on existing elements, and elements added try to be consistent with existing ones.
 
 If you have an accessibility concern with the userscript's operations or additions, please create a new issue.
 
