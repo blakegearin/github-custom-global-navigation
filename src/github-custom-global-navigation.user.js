@@ -1813,7 +1813,7 @@
   }
 
   function gmcAddNewIssueButton(div) {
-    log(DEBUG, 'gmcAddSavedSpan()');
+    log(DEBUG, 'gmcAddNewIssueButton()');
 
     const small = document.createElement('small');
     small.classList.add('left-aligned');
@@ -4821,6 +4821,4 @@
       },
     },
   });
-
-  GMC.open();
 })();

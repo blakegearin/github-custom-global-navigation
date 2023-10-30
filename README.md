@@ -37,13 +37,19 @@ There are two (2) preset configurations that are actively maintained and support
 
 #### Happy Medium
 
-   - This previews some the best features and aims to deliver a [happy medium](https://dictionary.cambridge.org/dictionary/english/happy-medium) between the old and new styles without compromising on accessibility
-   - It relies more on Github's CSS variables in hopes of adapting to their changes
+This previews some the best features and aims to deliver a [happy medium](https://dictionary.cambridge.org/dictionary/english/happy-medium) between the old and new styles without compromising on accessibility. It relies more on Github's CSS variables in hopes of adapting to their changes.
+
+![light header](img/happy_medium_light.png)
+
+![dark header](img/happy_medium_dark.png)
 
 #### Old School
 
-   - This aims to deliver an experience as close to the style  March 2023 as reasonably possible without compromising on accessibility
-   - Where applicable, it uses hardcoded values instead of CSS variables to prevent side effects from GitHub's changes
+This aims to deliver an experience as close to the style  March 2023 as reasonably possible without compromising on accessibility. Where applicable, it uses hardcoded values instead of CSS variables to prevent side effects from GitHub's changes.
+
+![light header](img/old_school_light.png)
+
+![dark header](img/old_school_dark.png)
 
 ### Accessability
 
