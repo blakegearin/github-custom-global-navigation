@@ -352,8 +352,9 @@
     }
 
     if (elementConfig.borderColor !== '') {
+      // There are different buttons at different widths
       HEADER_STYLE.textContent += `
-        ${elementSelector.button}
+        ${elementSelector.input} button
         {
           border-color: ${elementConfig.borderColor} !important;
         }
@@ -1080,6 +1081,16 @@
 
     const elementConfig = CONFIG[configKey];
     const elementSelector = SELECTORS[configKey];
+
+    if (elementConfig.size !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.img}
+        {
+          height: ${elementConfig.size} !important;
+          width: ${elementConfig.size} !important;
+        }
+      `;
+    }
 
     if (elementConfig.dropdownIcon) {
       insertAvatarDropdown();
@@ -1817,7 +1828,7 @@
       const label = configVar.querySelector('.field_label');
       const input = configVar.querySelector('input');
 
-      if (label && input) label.style.lineHeight = '33px';
+      if (label && input && input.type === 'text') label.style.lineHeight = '33px';
 
       const select = configVar.querySelector('select');
 
@@ -2109,6 +2120,7 @@
       #gmc-frame .config_var[id*='issues_remove_var'],
       #gmc-frame .config_var[id*='pullRequests_remove_var'],
       #gmc-frame .config_var[id*='notifications_remove_var'],
+      #gmc-frame .config_var[id*='avatar_size_var'],
       #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
       #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
       #gmc-frame .config_var[id*='sidebars_backdropColor_var'],
@@ -2465,6 +2477,7 @@
         #gmc-frame .config_var[id*='issues_remove_var'],
         #gmc-frame .config_var[id*='pullRequests_remove_var'],
         #gmc-frame .config_var[id*='notifications_remove_var'],
+        #gmc-frame .config_var[id*='avatar_size_var'],
         #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
         #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
         #gmc-frame .config_var[id*='sidebars_backdropColor_var'],
@@ -2601,6 +2614,7 @@
         #gmc-frame .config_var[id*='issues_remove_var'],
         #gmc-frame .config_var[id*='pullRequests_remove_var'],
         #gmc-frame .config_var[id*='notifications_remove_var'],
+        #gmc-frame .config_var[id*='avatar_size_var'],
         #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
         #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
         #gmc-frame .config_var[id*='sidebars_backdropColor_var'],
@@ -2895,6 +2909,7 @@
     avatar: {
       topDiv: '.AppHeader-user',
       button: '.AppHeader-user button',
+      img: '.AppHeader-user button img',
       svg: 'avatar-dropdown',
     },
     repositoryHeader: {
@@ -3061,6 +3076,7 @@
           },
         },
         avatar: {
+          size: '',
           dropdownIcon: false,
         },
         globalBar: {
@@ -3241,6 +3257,7 @@
           },
         },
         avatar: {
+          size: '',
           dropdownIcon: false,
         },
         globalBar: {
@@ -3423,6 +3440,7 @@
           },
         },
         avatar: {
+          size: '24px',
           dropdownIcon: true,
         },
         globalBar: {
@@ -3603,6 +3621,7 @@
           },
         },
         avatar: {
+          size: '24px',
           dropdownIcon: true,
         },
         globalBar: {
@@ -4082,8 +4101,13 @@
         type: 'checkbox',
         default: false,
       },
+      light_avatar_size: {
+        label: '<h3>Avatar</h3><div class="gmc-label">Size</div>',
+        type: 'text',
+        default: '',
+      },
       light_avatar_dropdownIcon: {
-        label: '<h3>Avatar</h3><div class="gmc-label">Dropdown icon</div>',
+        label: 'Dropdown icon',
         type: 'checkbox',
         default: false,
       },
@@ -4565,8 +4589,13 @@
         type: 'checkbox',
         default: false,
       },
+      dark_avatar_size: {
+        label: '<h3>Avatar</h3><div class="gmc-label">Size</div>',
+        type: 'text',
+        default: '',
+      },
       dark_avatar_dropdownIcon: {
-        label: '<h3>Avatar</h3><div class="gmc-label">Dropdown icon</div>',
+        label: 'Dropdown icon',
         type: 'checkbox',
         default: false,
       },
