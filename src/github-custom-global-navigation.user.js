@@ -1917,7 +1917,11 @@
     const confirmed = confirm('Are you sure you want to clear your custom configuration? This is irreversible.');
 
     if (confirmed) {
+      const currentType = GMC.get('type');
       GMC.reset();
+      GMC.save();
+
+      GMC.set('type', currentType);
       GMC.save();
     }
   }
@@ -2379,13 +2383,7 @@
       {
         display: none;
         margin-right: 20px;
-        color: #3FB950;
         animation: fadeOut 0.75s ease 2s forwards;
-      }
-
-      #gmc-saved svg path
-      {
-        fill: #3FB950;
       }
     `;
 
@@ -2537,6 +2535,16 @@
           box-shadow: 0 1px 0 rgba(31,35,40,0.04);
           color: #ffffff;
         }
+
+        #gmc-saved
+        {
+          color: #1a7f37;
+        }
+
+        #gmc-saved svg path
+        {
+          fill: #1a7f37;
+        }
       `;
     } else if (THEME === 'dark') {
       gmcFrameStyle.textContent += `
@@ -2677,6 +2685,16 @@
           background-color: #DA3633;
           border-color: #F85149;
           color: #FFFFFF;
+        }
+
+        #gmc-saved
+        {
+          color: #3FB950;
+        }
+
+        #gmc-saved svg path
+        {
+          fill: #3FB950;
         }
       `;
     }
