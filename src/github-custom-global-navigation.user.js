@@ -1275,6 +1275,11 @@
         }
       `;
     }
+
+    if (elementConfig.right.preload) {
+      HEADER.querySelector(elementSelector.right.backdrop).remove();
+      HEADER.querySelector(SELECTORS.avatar.button).click();
+    }
   }
 
   function importRepositoryHeader() {
@@ -1678,6 +1683,10 @@
 
     if (!HEADER) return;
 
+    const liElementId = 'custom-global-navigation-menu-item';
+
+    if (HEADER.querySelector(createId(liElementId))) return;
+
     const featurePreviewSearch = HEADER.querySelectorAll('[data-analytics-event*="FEATURE_PREVIEW"]');
 
     if (featurePreviewSearch.length === 1) {
@@ -1685,6 +1694,7 @@
       const featurePreviewLi = featurePreviewButton.parentNode;
 
       const newLiElement = featurePreviewLi.cloneNode(true);
+      newLiElement.setAttribute('id', liElementId);
       newLiElement.removeAttribute('data-targets');
 
       const newButton = newLiElement.querySelector('button');
@@ -1706,7 +1716,7 @@
       const newSvg = document.createElement('img');
       newSvg.setAttribute('height', '16px');
       newSvg.setAttribute('width', '16px');
-      newSvg.src = 'https://raw.githubusercontent.com/blakegearin/github-custom-global-naviation/main/img/logo_grey.svg';
+      newSvg.src = `https://raw.githubusercontent.com/blakegearin/github-custom-global-naviation/main/img/${THEME}_logo.svg`;
 
       oldSvg.parentNode.replaceChild(newSvg, oldSvg);
 
@@ -2385,7 +2395,7 @@
         {
           background-color: #F6F8FA;
           color: #1F2328;
-          box-shadow: 0 0 0 1px #D0D7DE, 0 16px 32px rgba(1,4,9,0.15) !important;
+          box-shadow: 0 0 0 1px #D0D7DE, 0 16px 32px rgba(1,4,9,0.2) !important;
         }
 
         #gmc-frame .section_header_holder
@@ -2397,7 +2407,7 @@
         #gmc-frame_buttons_holder
         {
           background-color: #FFFFFF;
-          box-shadow: 0 0 0 1px #D0D7DE, 0 16px 32px rgba(1,4,9,0.15) !important;
+          box-shadow: 0 0 0 1px #D0D7DE, 0 16px 32px rgba(1,4,9,0.2) !important;
         }
 
         #gmc-frame input[type="text"],
@@ -2909,7 +2919,7 @@
     avatar: {
       topDiv: '.AppHeader-user',
       button: '.AppHeader-user button',
-      img: '.AppHeader-user button img',
+      img: '.AppHeader-user button img.avatar',
       svg: 'avatar-dropdown',
     },
     repositoryHeader: {
@@ -3102,6 +3112,7 @@
           backdropColor: 'transparent',
           right: {
             floatUnderneath: true,
+            preload: true,
           },
         },
         repositoryHeader: {
@@ -3283,6 +3294,7 @@
           backdropColor: 'transparent',
           right: {
             floatUnderneath: true,
+            preload: true,
           },
         },
         repositoryHeader: {
@@ -3466,6 +3478,7 @@
           backdropColor: oldSchoolHoverBackgroundColor,
           right: {
             floatUnderneath: true,
+            preload: true,
           }
         },
         repositoryHeader: {
@@ -3647,6 +3660,7 @@
           backdropColor: oldSchoolHoverBackgroundColor,
           right: {
             floatUnderneath: true,
+            preload: true,
           }
         },
         repositoryHeader: {
@@ -4151,6 +4165,11 @@
         type: 'text',
         default: '',
       },
+      light_sidebars_right_preload: {
+        label: 'Right preload',
+        type: 'checkbox',
+        default: false,
+      },
       light_sidebars_right_floatUnderneath: {
         label: 'Right float underneath',
         type: 'checkbox',
@@ -4638,6 +4657,11 @@
         label: '<h3>Sidebars</h3><div class="gmc-label">Backdrop color</div>',
         type: 'text',
         default: '',
+      },
+      dark_sidebars_right_preload: {
+        label: 'Right preload',
+        type: 'checkbox',
+        default: false,
       },
       dark_sidebars_right_floatUnderneath: {
         label: 'Right float underneath',
