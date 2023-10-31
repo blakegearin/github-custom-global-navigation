@@ -2,7 +2,14 @@
   <img
     height="30%"
     width="30%"
-    src="img/logo.svg"
+    src="img/white_logo.svg#gh-dark-mode-only"
+    alt="GitHub Custom Global Navigation logo"
+    title="GitHub Custom Global Navigation logo"
+  />
+  <img
+    height="30%"
+    width="30%"
+    src="img/black_logo.svg#gh-light-mode-only"
     alt="GitHub Custom Global Navigation logo"
     title="GitHub Custom Global Navigation logo"
   />
