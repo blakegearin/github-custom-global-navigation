@@ -5,7 +5,9 @@
   "main": "src/github-custom-global-navigation.user.js",
   "scripts": {
     "lint": "eslint src/github-custom-global-navigation.user.js",
-    "clean": "eslint --fix src/github-custom-global-navigation.user.js"
+    "clean": "eslint --fix src/github-custom-global-navigation.user.js",
+    "fix": "npm run clean && git add src/github-custom-global-navigation.user.js",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,7 @@
   "homepage": "https://github.com/blakegearin/github-custom-global-navigation#readme",
   "devDependencies": {
     "eslint": "^8.52.0",
-    "eslint-plugin-userscripts": "^0.4.0"
+    "eslint-plugin-userscripts": "^0.4.0",
+    "husky": "^8.0.3"
   }
 }
