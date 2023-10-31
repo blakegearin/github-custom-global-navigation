@@ -4316,7 +4316,7 @@
         type: 'checkbox',
         default: false,
       },
-      light_sidebars_right_canCloseSidebar: {
+      light_avatar_canCloseSidebar: {
         label: 'Can close sidebar',
         type: 'checkbox',
         default: false,
@@ -4834,7 +4834,7 @@
         type: 'checkbox',
         default: false,
       },
-      dark_sidebars_right_canCloseSidebar: {
+      dark_avatar_canCloseSidebar: {
         label: 'Can close sidebar',
         type: 'checkbox',
         default: false,
