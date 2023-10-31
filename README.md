@@ -58,6 +58,8 @@ This aims to deliver an experience as close to the style  March 2023 as reasonab
 
 ![dark header](img/old_school_dark.png)
 
+**Note:** Marketplace and Explore will be added soon, or you can go custom and have the option to _not_ add those back in.
+
 ### Accessability
 
 Accessibility is important. GitHub [agrees](https://accessibility.github.com).
