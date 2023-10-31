@@ -25,7 +25,7 @@
   const VERBOSE = 4;
   const TRACE = 5;
 
-  const CURRENT_LOG_LEVEL = QUIET;
+  let CURRENT_LOG_LEVEL = QUIET;
 
   const USERSCRIPT_NAME = 'GitHub Custom Global Navigation';
 
@@ -40,7 +40,7 @@
     console.error(`${USERSCRIPT_NAME}: ${message}`);
   }
 
-  log(QUIET, 'Running');
+  log(TRACE, 'Starting');
 
   function updateHeader() {
     log(DEBUG, 'updateHeader()');
@@ -1823,6 +1823,10 @@
   function gmcInitialized() {
     log(DEBUG, 'gmcInitialized()');
 
+    updateLogLevel();
+
+    log(QUIET, 'Running');
+
     GMC.css.basic = '';
     window.addEventListener('load', () => {
       startObserving();
@@ -1932,6 +1936,16 @@
     applyCustomizations(true);
   }
 
+  function updateLogLevel() {
+    CURRENT_LOG_LEVEL = {
+      'silent': SILENT,
+      'quiet': QUIET,
+      'debug': DEBUG,
+      'verbose': VERBOSE,
+      'trace': TRACE,
+    }[GMC.get('log_level')];
+  }
+
   function gmcSaved() {
     log(DEBUG, 'gmcSaved()');
 
@@ -1943,6 +1957,8 @@
       () => gmcSaved.style.display = 'none',
       2750,
     );
+
+    updateLogLevel();
 
     switch (GMC.get('on_save')) {
       case 'refresh tab':
@@ -4896,6 +4912,18 @@
           'close sidebar',
         ],
         default: 'do nothing',
+      },
+      log_level: {
+        label: 'Log level',
+        type: 'select',
+        options: [
+          'silent',
+          'quiet',
+          'debug',
+          'verbose',
+          'trace',
+        ],
+        default: 'quiet',
       },
       clear_custom_config: {
         label: 'Clear Custom',
