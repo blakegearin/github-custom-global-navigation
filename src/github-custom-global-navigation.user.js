@@ -36,8 +36,9 @@
     if (variable) console.log(variable);
   }
 
-  function logError(message) {
+  function logError(message, variable = null) {
     console.error(`${USERSCRIPT_NAME}: ${message}`);
+    if (variable) console.log(variable);
   }
 
   log(TRACE, 'Starting');
@@ -215,6 +216,11 @@
     }
 
     topDiv.setAttribute('id', elementSelector.id);
+
+    if (elementConfig.remove) {
+      HEADER_STYLE.textContent += cssHideElement(createId(elementSelector.id));
+      return;
+    }
 
     if (elementConfig.alignLeft) {
       const response = cloneAndLeftAlignElement(createId(topDivSelector), topDivSelector);
@@ -1090,6 +1096,12 @@
     const elementConfig = CONFIG[configKey];
     const elementSelector = SELECTORS[configKey];
 
+    if (elementConfig.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.topDiv);
+
+      return;
+    }
+
     if (elementConfig.size !== '') {
       HEADER_STYLE.textContent += `
         ${elementSelector.img}
@@ -1683,12 +1695,26 @@
   }
 
   function createId(string) {
+    log(DEBUG, 'createId()');
+
     if (string.startsWith('#')) return string;
+
+    if (string.startsWith('.')) {
+      logError(`Attempted to create an id from a class: "${string}"`);
+      return;
+    }
+
+    if (string.startsWith('[')) {
+      logError(`Attempted to create an id from an attribute selector: "${string}"`);
+      return;
+    }
 
     return `#${string}`;
   }
 
   function cssHideElement(elementSelector) {
+    log(DEBUG, 'cssHideElement()');
+
     return `
       ${elementSelector}
       {
@@ -1708,6 +1734,72 @@
     log(DEBUG, 'escapeRegExp()');
 
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function compareObjects(firstObject, secondObject, firstName, secondName) {
+    log(DEBUG, 'compareObjects()');
+
+    if (typeof firstObject !== 'object' || typeof secondObject !== 'object') {
+      return 'Invalid input. Please provide valid objects.';
+    }
+
+    const differences = [];
+
+    function findKeyDifferences(obj1, obj2, path = '') {
+      const keys1 = Object.keys(obj1);
+      const keys2 = Object.keys(obj2);
+
+      keys1.forEach(key => {
+        const nestedPath = path ? `${path}.${key}` : key;
+        if (!keys2.includes(key)) {
+          differences.push(`Found "${nestedPath}" in ${firstName} but not in ${secondName}`);
+        } else if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
+          findKeyDifferences(obj1[key], obj2[key], nestedPath);
+        }
+      });
+
+      keys2.forEach(key => {
+        const nestedPath = path ? `${path}.${key}` : key;
+        if (!keys1.includes(key)) {
+          differences.push(`Found "${nestedPath}" in ${secondName} but not in ${firstName}`);
+        }
+      });
+    }
+
+    findKeyDifferences(firstObject, secondObject);
+    return differences.length > 0 ? differences : [];
+  }
+
+  function checkConfigConsistency(configs) {
+    log(DEBUG, 'checkConfigConsistency()');
+
+    const lightDarkDifference = compareObjects(
+      configs.happyMedium.light,
+      configs.happyMedium.dark,
+      'Happy Medium Light',
+      'Happy Medium Dark',
+    );
+
+    if (lightDarkDifference.length > 0) {
+      logError('lightDarkDifference', lightDarkDifference);
+
+      return false;
+    }
+
+    const typeDifference = compareObjects(
+      configs.happyMedium,
+      configs.oldSchool,
+      'Happy Medium',
+      'Old School',
+    );
+
+    if (typeDifference.length > 0) {
+      logError('typeDifference', typeDifference);
+
+      return false;
+    }
+
+    return true;
   }
 
   function updateSelectors() {
@@ -2250,13 +2342,13 @@
       #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
       #gmc-frame .config_var[id*='logo_remove_var'],
       #gmc-frame .config_var[id*='pageTitle_remove_var'],
-      #gmc-frame .config_var[id*='search_backgroundColor_var'],
+      #gmc-frame .config_var[id*='search_remove_var'],
       #gmc-frame .config_var[id*='divider_remove_var'],
       #gmc-frame .config_var[id*='create_remove_var'],
       #gmc-frame .config_var[id*='issues_remove_var'],
       #gmc-frame .config_var[id*='pullRequests_remove_var'],
       #gmc-frame .config_var[id*='notifications_remove_var'],
-      #gmc-frame .config_var[id*='avatar_size_var'],
+      #gmc-frame .config_var[id*='avatar_remove_var'],
       #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
       #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
       #gmc-frame .config_var[id*='sidebars_backdrop_color_var'],
@@ -2611,13 +2703,13 @@
         #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
         #gmc-frame .config_var[id*='logo_remove_var'],
         #gmc-frame .config_var[id*='pageTitle_remove_var'],
-        #gmc-frame .config_var[id*='search_backgroundColor_var'],
+        #gmc-frame .config_var[id*='search_remove_var'],
         #gmc-frame .config_var[id*='divider_remove_var'],
         #gmc-frame .config_var[id*='create_remove_var'],
         #gmc-frame .config_var[id*='issues_remove_var'],
         #gmc-frame .config_var[id*='pullRequests_remove_var'],
         #gmc-frame .config_var[id*='notifications_remove_var'],
-        #gmc-frame .config_var[id*='avatar_size_var'],
+        #gmc-frame .config_var[id*='avatar_remove_var'],
         #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
         #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
         #gmc-frame .config_var[id*='sidebars_backdrop_color_var'],
@@ -2758,13 +2850,13 @@
         #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
         #gmc-frame .config_var[id*='logo_remove_var'],
         #gmc-frame .config_var[id*='pageTitle_remove_var'],
-        #gmc-frame .config_var[id*='search_backgroundColor_var'],
+        #gmc-frame .config_var[id*='search_remove_var'],
         #gmc-frame .config_var[id*='divider_remove_var'],
         #gmc-frame .config_var[id*='create_remove_var'],
         #gmc-frame .config_var[id*='issues_remove_var'],
         #gmc-frame .config_var[id*='pullRequests_remove_var'],
         #gmc-frame .config_var[id*='notifications_remove_var'],
-        #gmc-frame .config_var[id*='avatar_size_var'],
+        #gmc-frame .config_var[id*='avatar_remove_var'],
         #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
         #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
         #gmc-frame .config_var[id*='sidebars_backdrop_color_var'],
@@ -3127,6 +3219,7 @@
           },
         },
         search: {
+          remove: false,
           backgroundColor: '',
           borderColor: '',
           boxShadow: '',
@@ -3242,6 +3335,7 @@
           },
         },
         avatar: {
+          remove: false,
           size: '',
           dropdownIcon: false,
           canCloseSidebar: true,
@@ -3318,6 +3412,7 @@
           },
         },
         search: {
+          remove: false,
           backgroundColor: '',
           borderColor: '',
           boxShadow: '',
@@ -3433,6 +3528,7 @@
           },
         },
         avatar: {
+          remove: false,
           size: '',
           dropdownIcon: false,
           canCloseSidebar: true,
@@ -3511,6 +3607,7 @@
           },
         },
         search: {
+          remove: false,
           backgroundColor: '#494D54',
           borderColor: '#30363d',
           boxShadow: 'none',
@@ -3626,6 +3723,7 @@
           },
         },
         avatar: {
+          remove: true,
           size: '24px',
           dropdownIcon: true,
           canCloseSidebar: true,
@@ -3702,6 +3800,7 @@
           },
         },
         search: {
+          remove: false,
           backgroundColor: '#0E1217',
           borderColor: '#30363d',
           boxShadow: 'none',
@@ -3817,6 +3916,7 @@
           },
         },
         avatar: {
+          remove: false,
           size: '24px',
           dropdownIcon: true,
           canCloseSidebar: true,
@@ -3876,6 +3976,9 @@
       },
     },
   };
+
+  // For testing purposes
+  // if (!checkConfigConsistency(configs)) return;
 
   let OBSERVER = new MutationObserver(observeAndModify);
 
@@ -3971,8 +4074,13 @@
         type: 'text',
         default: '',
       },
+      light_search_remove: {
+        label: '<h3>Search</h3><div class="gmc-label">Remove</div>',
+        type: 'checkbox',
+        default: false,
+      },
       light_search_backgroundColor: {
-        label: '<h3>Search</h3><div class="gmc-label">Background color</div>',
+        label: 'Background color',
         type: 'text',
         default: '',
       },
@@ -4306,8 +4414,13 @@
         type: 'checkbox',
         default: false,
       },
+      light_avatar_remove: {
+        label: '<h3>Avatar</h3><div class="gmc-label">Remove</div>',
+        type: 'checkbox',
+        default: false,
+      },
       light_avatar_size: {
-        label: '<h3>Avatar</h3><div class="gmc-label">Size</div>',
+        label: 'Size',
         type: 'text',
         default: '',
       },
@@ -4489,8 +4602,13 @@
         type: 'text',
         default: '',
       },
+      dark_search_remove: {
+        label: '<h3>Search</h3><div class="gmc-label">Remove</div>',
+        type: 'checkbox',
+        default: false,
+      },
       dark_search_backgroundColor: {
-        label: '<h3>Search</h3><div class="gmc-label">Background color</div>',
+        label: 'Background color',
         type: 'text',
         default: '',
       },
@@ -4824,8 +4942,13 @@
         type: 'checkbox',
         default: false,
       },
+      dark_avatar_remove: {
+        label: '<h3>Avatar</h3><div class="gmc-label">Remove/div>',
+        type: 'checkbox',
+        default: false,
+      },
       dark_avatar_size: {
-        label: '<h3>Avatar</h3><div class="gmc-label">Size</div>',
+        label: 'Size',
         type: 'text',
         default: '',
       },
