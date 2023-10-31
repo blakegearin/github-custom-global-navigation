@@ -221,6 +221,16 @@
 
       if (response.length == 0) return;
 
+      // Also need to hide button due to it showing up on larger screen widths
+      HEADER_STYLE.textContent += cssHideElement(`${createId(topDivSelector)} ${elementSelector.input}`);
+
+      HEADER_STYLE.textContent += `
+        ${createId(topDivSelector)}
+        {
+          flex-grow: 1 !important;
+        }
+      `;
+
       const [cloneId, _cloneElement] = response;
 
       topDivSelector = createId(cloneId);
@@ -270,9 +280,28 @@
       HEADER_STYLE.textContent += `
         @media (min-width: 1012px)
         {
+          ${topDivSelector},
           ${elementSelector.input}
           {
             width: ${elementConfig.width} !important
+          }
+        }
+
+        @media (min-width: 768px)
+        {
+          ${topDivSelector},
+          ${elementSelector.input}
+          {
+            --feed-sidebar: 320px;
+          }
+        }
+
+        @media (min-width: 1400px)
+        {
+          ${topDivSelector},
+          ${elementSelector.input}
+          {
+            --feed-sidebar: 336px;
           }
         }
       `;
@@ -388,22 +417,6 @@
         ${elementSelector.placeholderSpan}
         {
           width: 100% !important;
-        }
-
-        @media (min-width: 768px)
-        {
-          ${elementSelector.input}
-          {
-            --feed-sidebar: 320px;
-          }
-        }
-
-        @media (min-width: 1400px)
-        {
-          ${elementSelector.input}
-          {
-            --feed-sidebar: 336px;
-          }
         }
       `;
 
@@ -672,12 +685,7 @@
 
       return;
     } else if (!elementConfig.tooltip) {
-      HEADER_STYLE.textContent += `
-        ${createId(tooltipElement.id)}
-        {
-          display: none !important
-        }
-      `;
+      HEADER_STYLE.textContent += cssHideElement(createId(tooltipElement.id));
     }
 
     const topDiv = HEADER.querySelector(elementSelector.topDiv);
@@ -1174,7 +1182,7 @@
 
     if (elementConfig.backgroundColor !== '') {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.header.localBar}
+        ${SELECTORS.header.localBar.topDiv}
         {
           background-color: ${elementConfig.backgroundColor} !important;
           box-shadow: inset 0 calc(var(--borderWidth-thin, 1px)*-1) var(--color-border-default) !important;
@@ -1182,9 +1190,15 @@
       `;
     }
 
-    if (elementConfig.center) {
+    if (elementConfig.alignCenter) {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.header.localBar} nav
+        ${SELECTORS.header.localBar.underlineNavActions}
+        {
+          display: initial !important;
+          padding-right: 0px !important;
+        }
+
+        ${SELECTORS.header.localBar.topDiv} nav
         {
           max-width: 1280px;
           margin-right: auto;
@@ -1192,7 +1206,7 @@
         }
 
         @media (min-width: 768px) {
-          ${SELECTORS.header.localBar} nav
+          ${SELECTORS.header.localBar.topDiv} nav
           {
             padding-right: var(--base-size-24, 24px) !important;
             padding-left: var(--base-size-24, 24px) !important;
@@ -1200,7 +1214,7 @@
         }
 
         @media (min-width: 1012px) {
-          ${SELECTORS.header.localBar} nav
+          ${SELECTORS.header.localBar.topDiv} nav
           {
             padding-right: var(--base-size-32, 32px) !important;
             padding-left: var(--base-size-32, 32px) !important;
@@ -1220,8 +1234,8 @@
 
     if (elementConfig.links.color !== '') {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.header.localBar} a,
-        ${SELECTORS.header.localBar} a span
+        ${SELECTORS.header.localBar.topDiv} a,
+        ${SELECTORS.header.localBar.topDiv} a span
         {
           color: ${elementConfig.links.color} !important;
         }
@@ -1237,11 +1251,25 @@
     const elementConfig = CONFIG[configKey];
     const elementSelector = SELECTORS[configKey];
 
-    if (elementConfig.backdropColor !== '') {
+    if (elementConfig.backdrop.color !== '') {
       HEADER_STYLE.textContent += `
         ${elementSelector.backdrop}
         {
-          background-color: ${CONFIG.sidebars.backdropColor} !important;
+          background-color: ${CONFIG.sidebars.backdrop.color} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.backdrop.pointerEvents !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.backdrop}
+        {
+          pointer-events: ${CONFIG.sidebars.backdrop.pointerEvents} !important;
+        }
+
+        ${elementSelector.backdrop} > *
+        {
+          pointer-events: initial !important;
         }
       `;
     }
@@ -1261,7 +1289,6 @@
         {
           border-top-right-radius: var(--borderRadius-large, 0.75rem) !important;
           border-bottom-right-radius: var(--borderRadius-large, 0.75rem) !important;
-          max-height: 85vh !important;
         }
 
         ${elementSelector.right.navParentDiv}
@@ -1279,6 +1306,15 @@
     if (elementConfig.right.preload) {
       HEADER.querySelector(elementSelector.right.backdrop).remove();
       HEADER.querySelector(SELECTORS.avatar.button).click();
+    }
+
+    if (elementConfig.right.maxHeight) {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.right.modalDialog}
+        {
+          max-height: ${elementConfig.right.maxHeight} !important;
+        }
+      `;
     }
   }
 
@@ -1355,7 +1391,7 @@
       `;
     }
 
-    if (elementConfig.center) {
+    if (elementConfig.alignCenter) {
       HEADER_STYLE.textContent += `
         .${REPOSITORY_HEADER_CLASS}
         {
@@ -1750,6 +1786,9 @@
           recursivelyGenerateCustomConfig(obj[key], customObj[key], themePrefix, currentKey);
         } else {
           const gmcKey = `${themePrefix}_${currentKey.replace(/\./g, '_')}`;
+
+          log(VERBOSE, 'gmcKey', gmcKey);
+
           customObj[key] = GMC.get(gmcKey);
         }
       }
@@ -2162,7 +2201,7 @@
       #gmc-frame .config_var[id*='avatar_size_var'],
       #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
       #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
-      #gmc-frame .config_var[id*='sidebars_backdropColor_var'],
+      #gmc-frame .config_var[id*='sidebars_backdrop_color_var'],
       #gmc-frame .config_var[id*='repositoryHeader_import_var'],
       #gmc-frame .config_var[id*='flipCreateInbox_var'],
       #gmc-frame .config_var[id*='flipIssuesPullRequests_var']
@@ -2523,7 +2562,7 @@
         #gmc-frame .config_var[id*='avatar_size_var'],
         #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
         #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
-        #gmc-frame .config_var[id*='sidebars_backdropColor_var'],
+        #gmc-frame .config_var[id*='sidebars_backdrop_color_var'],
         #gmc-frame .config_var[id*='repositoryHeader_import_var'],
         #gmc-frame .config_var[id*='flipCreateInbox_var'],
         #gmc-frame .config_var[id*='flipIssuesPullRequests_var']
@@ -2670,7 +2709,7 @@
         #gmc-frame .config_var[id*='avatar_size_var'],
         #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
         #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
-        #gmc-frame .config_var[id*='sidebars_backdropColor_var'],
+        #gmc-frame .config_var[id*='sidebars_backdrop_color_var'],
         #gmc-frame .config_var[id*='repositoryHeader_import_var'],
         #gmc-frame .config_var[id*='flipCreateInbox_var'],
         #gmc-frame .config_var[id*='flipIssuesPullRequests_var']
@@ -2816,7 +2855,7 @@
       return 'break';
     } else {
       if (CONFIG.avatar.dropdownIcon) insertAvatarDropdown();
-      if (CONFIG.sidebars.right.floatUnderneath) updateAvatarButton();
+      if (CONFIG.avatar.canCloseSidebar) updateAvatarButton();
 
       if (CONFIG.repositoryHeader.import) {
         // When starting in a repository tab like Issues, the proper repository header
@@ -2918,7 +2957,10 @@
       self: 'header.AppHeader',
       actionsDiv: '.AppHeader-actions',
       globalBar: '.AppHeader-globalBar',
-      localBar: '.AppHeader-localBar',
+      localBar: {
+        topDiv: '.AppHeader-localBar',
+        underlineNavActions: '.UnderlineNav-actions'
+      },
       leftAligned: '.AppHeader-globalBar-start',
       rightAligned: '.AppHeader-globalBar-end',
       style: 'customHeaderStyle',
@@ -3141,6 +3183,7 @@
         avatar: {
           size: '',
           dropdownIcon: false,
+          canCloseSidebar: true,
         },
         globalBar: {
           boxShadowColor: '',
@@ -3153,7 +3196,7 @@
         },
         localBar: {
           backgroundColor: '#F6F8FA',
-          center: false,
+          alignCenter: false,
           boxShadow: {
             consistentColor: true,
           },
@@ -3162,15 +3205,20 @@
           },
         },
         sidebars: {
-          backdropColor: 'transparent',
+          backdrop: {
+            color: 'transparent',
+            pointerEvents: 'none',
+          },
           right: {
-            floatUnderneath: true,
             preload: true,
+            floatUnderneath: true,
+            maxHeight: '',
+            margin: '',
           },
         },
         repositoryHeader: {
           import: true,
-          center: false,
+          alignCenter: false,
           removePageTitle: true,
           backgroundColor: '#F6F8FA',
           avatar: {
@@ -3323,6 +3371,7 @@
         avatar: {
           size: '',
           dropdownIcon: false,
+          canCloseSidebar: true,
         },
         globalBar: {
           boxShadowColor: '',
@@ -3335,7 +3384,7 @@
         },
         localBar: {
           backgroundColor: '#02040A',
-          center: false,
+          alignCenter: false,
           boxShadow: {
             consistentColor: true,
           },
@@ -3344,15 +3393,19 @@
           },
         },
         sidebars: {
-          backdropColor: 'transparent',
+          backdrop: {
+            color: 'transparent',
+            pointerEvents: 'none',
+          },
           right: {
-            floatUnderneath: true,
             preload: true,
+            floatUnderneath: false,
+            maxHeight: '',
           },
         },
         repositoryHeader: {
           import: true,
-          center: false,
+          alignCenter: false,
           removePageTitle: true,
           backgroundColor: '#02040A',
           avatar: {
@@ -3507,6 +3560,7 @@
         avatar: {
           size: '24px',
           dropdownIcon: true,
+          canCloseSidebar: true,
         },
         globalBar: {
           boxShadowColor: '#21262D',
@@ -3519,7 +3573,7 @@
         },
         localBar: {
           backgroundColor: '#FAFBFD',
-          center: true,
+          alignCenter: true,
           boxShadow: {
             consistentColor: true,
           },
@@ -3528,15 +3582,19 @@
           },
         },
         sidebars: {
-          backdropColor: oldSchoolHoverBackgroundColor,
+          backdrop: {
+            color: oldSchoolHoverBackgroundColor,
+            pointerEvents: 'none',
+          },
           right: {
-            floatUnderneath: true,
             preload: true,
+            floatUnderneath: true,
+            maxHeight: '50vh',
           }
         },
         repositoryHeader: {
           import: true,
-          center: true,
+          alignCenter: true,
           removePageTitle: true,
           backgroundColor: '#FAFBFD',
           avatar: {
@@ -3689,6 +3747,7 @@
         avatar: {
           size: '24px',
           dropdownIcon: true,
+          canCloseSidebar: true,
         },
         globalBar: {
           boxShadowColor: '#21262D',
@@ -3701,7 +3760,7 @@
         },
         localBar: {
           backgroundColor: '#0D1117',
-          center: true,
+          alignCenter: true,
           boxShadow: {
             consistentColor: true,
           },
@@ -3710,15 +3769,19 @@
           },
         },
         sidebars: {
-          backdropColor: oldSchoolHoverBackgroundColor,
+          backdrop: {
+            color: oldSchoolHoverBackgroundColor,
+            pointerEvents: 'none',
+          },
           right: {
-            floatUnderneath: true,
             preload: true,
+            floatUnderneath: true,
+            maxHeight: '50vh',
           }
         },
         repositoryHeader: {
           import: true,
-          center: true,
+          alignCenter: true,
           removePageTitle: true,
           backgroundColor: '#0D1116',
           avatar: {
@@ -3753,7 +3816,6 @@
         </a>
       </small>
     `,
-    center: false,
     events: {
       init: gmcInitialized,
       open: gmcOpened,
@@ -4178,6 +4240,11 @@
         type: 'checkbox',
         default: false,
       },
+      light_sidebars_right_canCloseSidebar: {
+        label: 'Can close sidebar',
+        type: 'checkbox',
+        default: false,
+      },
       light_globalBar_boxShadowColor: {
         label: '<h3>Global bar</h3><div class="gmc-label">Box shadow color</div>',
         type: 'text',
@@ -4198,8 +4265,8 @@
         type: 'text',
         default: '',
       },
-      light_localBar_center: {
-        label: 'Center',
+      light_localBar_alignCenter: {
+        label: 'Align center',
         type: 'checkbox',
         default: false,
       },
@@ -4213,8 +4280,13 @@
         type: 'text',
         default: '',
       },
-      light_sidebars_backdropColor: {
+      light_sidebars_backdrop_color: {
         label: '<h3>Sidebars</h3><div class="gmc-label">Backdrop color</div>',
+        type: 'text',
+        default: '',
+      },
+      light_sidebars_backdrop_pointerEvents: {
+        label: 'Backdrop pointer events',
         type: 'text',
         default: '',
       },
@@ -4228,13 +4300,18 @@
         type: 'checkbox',
         default: false,
       },
+      light_sidebars_right_maxHeight: {
+        label: 'Right max height',
+        type: 'text',
+        default: '',
+      },
       light_repositoryHeader_import: {
         label: '<h3>Repository header</h3><div class="gmc-label">Import</div>',
         type: 'checkbox',
         default: false,
       },
-      light_repositoryHeader_center: {
-        label: 'Center',
+      light_repositoryHeader_alignCenter: {
+        label: 'Align center',
         type: 'checkbox',
         default: false,
       },
@@ -4671,6 +4748,11 @@
         type: 'checkbox',
         default: false,
       },
+      dark_sidebars_right_canCloseSidebar: {
+        label: 'Can close sidebar',
+        type: 'checkbox',
+        default: false,
+      },
       dark_globalBar_boxShadowColor: {
         label: '<h3>Global bar</h3><div class="gmc-label">Box shadow color</div>',
         type: 'text',
@@ -4691,8 +4773,8 @@
         type: 'text',
         default: '',
       },
-      dark_localBar_center: {
-        label: 'Center',
+      dark_localBar_alignCenter: {
+        label: 'Align center',
         type: 'checkbox',
         default: false,
       },
@@ -4706,8 +4788,13 @@
         type: 'text',
         default: '',
       },
-      dark_sidebars_backdropColor: {
+      dark_sidebars_backdrop_color: {
         label: '<h3>Sidebars</h3><div class="gmc-label">Backdrop color</div>',
+        type: 'text',
+        default: '',
+      },
+      dark_sidebars_backdrop_pointerEvents: {
+        label: 'Backdrop pointer events',
         type: 'text',
         default: '',
       },
@@ -4721,13 +4808,18 @@
         type: 'checkbox',
         default: false,
       },
+      dark_sidebars_right_maxHeight: {
+        label: 'Right max height',
+        type: 'text',
+        default: '',
+      },
       dark_repositoryHeader_import: {
         label: '<h3>Repository header</h3><div class="gmc-label">Import</div>',
         type: 'checkbox',
         default: false,
       },
-      dark_repositoryHeader_center: {
-        label: 'Center',
+      dark_repositoryHeader_alignCenter: {
+        label: 'Align enter',
         type: 'checkbox',
         default: false,
       },
