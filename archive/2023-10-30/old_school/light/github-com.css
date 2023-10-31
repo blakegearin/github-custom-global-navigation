@@ -1,0 +1,398 @@
+@media (max-width: 767.98px) {
+  action-menu {
+    display: none !important;
+  }
+}
+
+header.AppHeader {
+  background-color: #161c20 !important;
+}
+
+.AppHeader-globalBar-start deferred-side-panel {
+  display: none !important;
+}
+
+.AppHeader-logo svg path {
+  fill: #e6edf3 !important;
+}
+
+#custom-page-title {
+  display: none !important;
+}
+
+#search-div {
+  display: none !important;
+}
+
+#search-div-clone {
+  display: initial !important;
+}
+
+#search-div .search-input {
+  display: none !important;
+}
+
+#search-div {
+  flex-grow: 1 !important;
+}
+
+#search-div-clone {
+  flex: 0 1 auto !important;
+  justify-content: flex-start !important;
+}
+
+@media (min-width: 1012px) {
+  #search-div-clone,
+  .search-input {
+    width: calc(var(--feed-sidebar) - 67px) !important;
+  }
+}
+
+@media (min-width: 768px) {
+  #search-div-clone,
+  .search-input {
+    --feed-sidebar: 320px;
+  }
+}
+
+@media (min-width: 1400px) {
+  #search-div-clone,
+  .search-input {
+    --feed-sidebar: 336px;
+  }
+}
+
+#AppHeader-commandPalette-button {
+  display: none !important;
+}
+
+#qb-input-query {
+  color: #b3b3b5 !important;
+}
+
+[data-target="qbsearch-input.inputButton"] {
+  background-color: #494d54 !important;
+}
+
+.search-input button {
+  border-color: #30363d !important;
+}
+
+[data-target="qbsearch-input.inputButton"] {
+  box-shadow: none !important;
+}
+
+.AppHeader-search-control label {
+  display: none !important;
+}
+
+[data-target="qbsearch-input.queryBuilderContainer"] {
+  width: 450px !important;
+}
+
+#qb-input-query {
+  width: 100% !important;
+}
+
+.AppHeader-search-control .overflow-hidden {
+  display: flex !important;
+}
+
+[data-target="qbsearch-input.inputButton"] {
+  padding-inline-start: 8px !important;
+}
+
+.AppHeader-actions::before {
+  content: none !important;
+}
+
+#tooltip-222c83bd-40f9-409c-8fde-202558bc1741 {
+  display: none !important;
+}
+
+#issues-div {
+  display: none !important;
+}
+
+#issues-flip-div-clone {
+  display: initial !important;
+}
+
+#issues-svg {
+  display: none !important;
+}
+
+#issues-text-content-span {
+  color: #f0f6fc !important;
+}
+
+#issues-flip-div-clone a {
+  border: none !important;
+}
+
+#issues-flip-div-clone a {
+  box-shadow: none !important;
+}
+
+#issues-flip-div-clone a:hover {
+  background-color: transparent !important;
+}
+
+#issues-flip-div-clone a span:hover {
+  color: #ffffffb3 !important;
+}
+
+#tooltip-d58f0750-ef4b-4dae-aa8c-0bef1eb95b58 {
+  display: none !important;
+}
+
+#pullRequests-div {
+  display: none !important;
+}
+
+#pullRequests-flip-div-clone {
+  display: initial !important;
+}
+
+#pullRequests-svg {
+  display: none !important;
+}
+
+#pullRequests-text-content-span {
+  color: #f0f6fc !important;
+}
+
+#pullRequests-flip-div-clone a {
+  border: none !important;
+}
+
+#pullRequests-flip-div-clone a {
+  box-shadow: none !important;
+}
+
+#pullRequests-flip-div-clone a:hover {
+  background-color: transparent !important;
+}
+
+#pullRequests-flip-div-clone a span:hover {
+  color: #ffffffb3 !important;
+}
+
+#issues-div-clone {
+  display: none !important;
+}
+
+#pullRequests-div-clone {
+  display: none !important;
+}
+
+#issues-flip-div-clone,
+#pullRequests-flip-div-clone {
+  display: initial !important;
+}
+
+#tooltip-36e6ec0d-aaed-407d-9e4e-ce792e88fb2c {
+  display: none !important;
+}
+
+#global-create-menu-button .Button-visual.Button-leadingVisual {
+  color: #f0f6fc !important;
+}
+
+#global-create-menu-button:hover .Button-visual.Button-leadingVisual svg path {
+  fill: #ffffffb3 !important;
+}
+
+#global-create-menu-button .Button-visual.Button-leadingVisual {
+  margin-right: 0px !important;
+}
+
+#global-create-menu-button .Button-label {
+  grid-area: initial !important;
+}
+
+#global-create-menu-button .Button-label {
+  color: #f0f6fc !important;
+}
+
+#global-create-menu-button:hover .Button-label svg path {
+  fill: #ffffffb3 !important;
+}
+
+#global-create-menu-button {
+  border: none !important;
+}
+
+#global-create-menu-button {
+  box-shadow: none !important;
+}
+
+#global-create-menu-button:hover {
+  background-color: transparent !important;
+}
+
+#tooltip-ec066f98-753e-4cc5-a62d-cfefeaea4e0a {
+  display: none !important;
+}
+
+.AppHeader-button.AppHeader-button--hasIndicator::before {
+  background: #2f81f7 !important;
+}
+
+.AppHeader-button.AppHeader-button--hasIndicator::before {
+  box-shadow: 0 0 0 calc(var(--base-size-4, 4px) / 2) #161c20 !important;
+}
+
+#inbox-svg {
+  display: none !important;
+}
+
+#bell-svg {
+  display: initial !important;
+}
+
+#bell-svg path {
+  fill: #f0f6fc !important;
+}
+
+#custom-notifications-flip-clone a:hover svg path {
+  fill: #ffffffb3 !important;
+}
+
+#custom-notifications-flip-clone a {
+  border: none !important;
+}
+
+#custom-notifications-flip-clone a {
+  box-shadow: none !important;
+}
+
+.AppHeader-button.AppHeader-button--hasIndicator::before {
+  top: 5px !important;
+  left: 18px !important;
+}
+
+#custom-notifications-flip-clone a:hover {
+  background-color: transparent !important;
+}
+
+#create-div {
+  display: none !important;
+}
+
+#custom-notifications {
+  display: none !important;
+}
+
+#create-div-flip-clone,
+#custom-notifications-flip-clone {
+  display: initial !important;
+}
+
+.AppHeader-user button img.avatar {
+  height: 24px !important;
+  width: 24px !important;
+}
+
+.AppHeader-user {
+  background-color: transparent !important;
+}
+
+#avatar-dropdown {
+  display: initial !important;
+  fill: #ffffff;
+  height: 16px;
+  width: 16px;
+  margin-bottom: 1.5px;
+}
+
+.AppHeader-user button:hover #avatar-dropdown path {
+  fill: #ffffffb3 !important;
+}
+
+.AppHeader-user button {
+  gap: 0px !important;
+}
+
+.AppHeader-globalBar {
+  box-shadow: inset 0 calc(var(--borderWidth-thin, 1px) * -1) #21262d !important;
+}
+
+.AppHeader-globalBar-end {
+  gap: 2px !important;
+}
+
+.AppHeader-globalBar-start {
+  gap: 0.75rem !important;
+}
+
+.AppHeader-localBar {
+  background-color: #fafbfd !important;
+  box-shadow: inset 0 calc(var(--borderWidth-thin, 1px) * -1) var(--color-border-default) !important;
+}
+
+.UnderlineNav-actions {
+  display: initial !important;
+  padding-right: 0px !important;
+}
+
+.AppHeader-localBar nav {
+  max-width: 1280px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .AppHeader-localBar nav {
+    padding-right: var(--base-size-24, 24px) !important;
+    padding-left: var(--base-size-24, 24px) !important;
+  }
+}
+
+@media (min-width: 1012px) {
+  .AppHeader-localBar nav {
+    padding-right: var(--base-size-32, 32px) !important;
+    padding-left: var(--base-size-32, 32px) !important;
+  }
+}
+
+.UnderlineNav {
+  box-shadow: none !important;
+}
+
+.Overlay-backdrop--side {
+  background-color: transparent !important;
+}
+
+.Overlay-backdrop--side {
+  pointer-events: none !important;
+}
+
+.Overlay-backdrop--side > * {
+  pointer-events: initial !important;
+}
+
+.AppHeader-user .Overlay-backdrop--side {
+  padding-top: 10px !important;
+  padding-right: 15px !important;
+  border-top-right-radius: 6px !important;
+  bottom: initial !important;
+  top: initial !important;
+}
+
+.AppHeader-user modal-dialog {
+  border-top-right-radius: var(--borderRadius-large, 0.75rem) !important;
+  border-bottom-right-radius: var(--borderRadius-large, 0.75rem) !important;
+}
+
+.AppHeader-user modal-dialog div.Overlay-body > div {
+  margin-bottom: 0px !important;
+}
+
+.AppHeader-user modal-dialog nav {
+  padding-bottom: 0px !important;
+}
+
+.AppHeader-user modal-dialog {
+  max-height: 50vh !important;
+}

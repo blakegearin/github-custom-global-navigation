@@ -1,0 +1,229 @@
+.customizedRepositoryHeader .border-bottom.mx-xl-5 {
+  display: none !important;
+}
+
+.customizedRepositoryHeader {
+  background-color: #f6f8fa !important;
+}
+
+.customizedRepositoryHeader nav[role="navigation"] a:hover {
+  color: var(--color-accent-fg) !important;
+}
+
+.customizedRepositoryHeader nav[role="navigation"] a:hover {
+  background-color: transparent !important;
+}
+
+.customizedRepositoryHeader nav[role="navigation"] a:hover {
+  text-decoration: underline !important;
+}
+
+.customizedRepositoryHeader {
+  flex: auto !important;
+}
+
+#repository-details-container {
+  display: flex;
+  align-items: center;
+}
+
+.AppHeader-context {
+  flex: 0 1 auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+}
+
+@media (min-width: 768px) {
+  .AppHeader-context .AppHeader-context-compact {
+    display: none !important;
+  }
+}
+
+.AppHeader-context .AppHeader-context-full {
+  display: inline-flex !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.AppHeader-context .AppHeader-context-full ul {
+  display: flex;
+  flex-direction: row;
+}
+
+.AppHeader-context .AppHeader-context-full li:first-child {
+  flex: 0 100 max-content;
+}
+
+.AppHeader-context .AppHeader-context-full li {
+  display: inline-grid;
+  grid-auto-flow: column;
+  align-items: center;
+  flex: 0 99999 auto;
+}
+
+.AppHeader-context .AppHeader-context-full ul,
+.AppHeader .AppHeader-globalBar .AppHeader-context .AppHeader-context-full li {
+  list-style: none;
+}
+
+.AppHeader-context .AppHeader-context-item {
+  display: flex;
+  align-items: center;
+  min-width: 3ch;
+  line-height: var(--text-body-lineHeight-medium, 1.4285714286);
+  text-decoration: none !important;
+  border-radius: var(--borderRadius-medium, 6px);
+  padding-inline: var(--control-medium-paddingInline-condensed, 8px);
+  padding-block: var(--control-medium-paddingBlock, 6px);
+}
+
+.AppHeader-context .AppHeader-context-full li:last-child .AppHeader-context-item {
+  font-weight: var(--base-text-weight-semibold, 600);
+}
+
+.AppHeader-context .AppHeader-context-item-separator {
+  color: var(--fgColor-muted, var(--color-fg-muted));
+  white-space: nowrap;
+}
+
+.AppHeader-globalBar {
+  padding: 16px !important;
+}
+
+#custom-page-title {
+  display: none !important;
+}
+
+@media (min-width: 1012px) {
+  .search-input {
+    width: auto !important;
+  }
+
+  .AppHeader-globalBar-start {
+    flex: 0 1 auto !important;
+  }
+
+  .AppHeader-globalBar-end {
+    flex: 1 1 auto !important;
+    justify-content: space-between !important;
+  }
+
+  #search-div {
+    display: block !important;
+  }
+
+  .AppHeader-search-whenRegular {
+    max-width: none !important;
+  }
+}
+
+.AppHeader-actions::before {
+  content: none !important;
+}
+
+#tooltip-7a85ca70-5736-46d3-a3a1-b903654b8751 {
+  display: none !important;
+}
+
+#tooltip-322c5041-db00-48c1-afab-49d7f5c37655 {
+  display: none !important;
+}
+
+#issues-div {
+  display: none !important;
+}
+
+#pullRequests-div {
+  display: none !important;
+}
+
+#issues-flip-div-clone,
+#pullRequests-flip-div-clone {
+  display: initial !important;
+}
+
+#tooltip-702c6118-0335-497d-a047-80ecd1fff0f9 {
+  display: none !important;
+}
+
+#global-create-menu-button .Button-visual.Button-leadingVisual {
+  margin-right: 0.25rem !important;
+}
+
+#global-create-menu-button {
+  font-size: var(--text-body-size-medium, 0.875rem) !important;
+  font-weight: var(--base-text-weight-medium, 500) !important;
+}
+
+#global-create-menu-button .Button-label {
+  grid-area: initial !important;
+}
+
+#tooltip-a95a7387-27d3-4839-b961-450c5ec6e93f {
+  display: none !important;
+}
+
+#inbox-svg {
+  display: none !important;
+}
+
+#bell-svg {
+  display: initial !important;
+}
+
+#custom-notifications a {
+  padding-left: 9px !important;
+  padding-right: 9px !important;
+  width: auto !important;
+  text-decoration: none !important;
+  display: flex !important;
+}
+
+.AppHeader-button.AppHeader-button--hasIndicator::before {
+  top: 5px !important;
+  left: 18px !important;
+}
+
+.AppHeader-localBar {
+  background-color: #f6f8fa !important;
+  box-shadow: inset 0 calc(var(--borderWidth-thin, 1px) * -1) var(--color-border-default) !important;
+}
+
+.UnderlineNav {
+  box-shadow: none !important;
+}
+
+.Overlay-backdrop--side {
+  background-color: transparent !important;
+}
+
+.Overlay-backdrop--side {
+  pointer-events: none !important;
+}
+
+.Overlay-backdrop--side > * {
+  pointer-events: initial !important;
+}
+
+.AppHeader-user .Overlay-backdrop--side {
+  padding-top: 10px !important;
+  padding-right: 15px !important;
+  border-top-right-radius: 6px !important;
+  bottom: initial !important;
+  top: initial !important;
+}
+
+.AppHeader-user modal-dialog {
+  border-top-right-radius: var(--borderRadius-large, 0.75rem) !important;
+  border-bottom-right-radius: var(--borderRadius-large, 0.75rem) !important;
+}
+
+.AppHeader-user modal-dialog div.Overlay-body > div {
+  margin-bottom: 0px !important;
+}
+
+.AppHeader-user modal-dialog nav {
+  padding-bottom: 0px !important;
+}

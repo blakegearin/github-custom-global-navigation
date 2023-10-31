@@ -1,0 +1,131 @@
+@media (min-width: 1012px) {
+  .search-input {
+    width: auto !important;
+  }
+
+  .AppHeader-globalBar-start {
+    flex: 0 1 auto !important;
+  }
+
+  .AppHeader-globalBar-end {
+    flex: 1 1 auto !important;
+    justify-content: space-between !important;
+  }
+
+  #search-div {
+    display: block !important;
+  }
+
+  .AppHeader-search-whenRegular {
+    max-width: none !important;
+  }
+}
+
+.AppHeader-actions::before {
+  content: none !important;
+}
+
+#tooltip-6a42fb51-abf5-4603-a8b1-dca5a2d2b8d8 {
+  display: none !important;
+}
+
+#tooltip-ff8e4973-5ecd-4582-8e46-a1370e67c569 {
+  display: none !important;
+}
+
+#issues-div {
+  display: none !important;
+}
+
+#pullRequests-div {
+  display: none !important;
+}
+
+#issues-flip-div-clone,
+#pullRequests-flip-div-clone {
+  display: initial !important;
+}
+
+#tooltip-dc17057e-e266-4518-babd-bd0a13439602 {
+  display: none !important;
+}
+
+#global-create-menu-button .Button-visual.Button-leadingVisual {
+  margin-right: 0.25rem !important;
+}
+
+#global-create-menu-button {
+  font-size: var(--text-body-size-medium, 0.875rem) !important;
+  font-weight: var(--base-text-weight-medium, 500) !important;
+}
+
+#global-create-menu-button .Button-label {
+  grid-area: initial !important;
+}
+
+#tooltip-77a6aa0c-270b-4a71-a9ca-33d8fe8f8b15 {
+  display: none !important;
+}
+
+#inbox-svg {
+  display: none !important;
+}
+
+#bell-svg {
+  display: initial !important;
+}
+
+#custom-notifications a {
+  padding-left: 9px !important;
+  padding-right: 9px !important;
+  width: auto !important;
+  text-decoration: none !important;
+  display: flex !important;
+}
+
+.AppHeader-button.AppHeader-button--hasIndicator::before {
+  top: 5px !important;
+  left: 18px !important;
+}
+
+.AppHeader-localBar {
+  background-color: #f6f8fa !important;
+  box-shadow: inset 0 calc(var(--borderWidth-thin, 1px) * -1) var(--color-border-default) !important;
+}
+
+.UnderlineNav {
+  box-shadow: none !important;
+}
+
+.Overlay-backdrop--side {
+  background-color: transparent !important;
+}
+
+.Overlay-backdrop--side {
+  pointer-events: none !important;
+}
+
+.Overlay-backdrop--side > * {
+  pointer-events: initial !important;
+}
+
+.AppHeader-user .Overlay-backdrop--side {
+  padding-top: 10px !important;
+  padding-right: 15px !important;
+  border-top-right-radius: 6px !important;
+  bottom: initial !important;
+  top: initial !important;
+}
+
+.AppHeader-user modal-dialog {
+  border-top-right-radius: var(--borderRadius-large, 0.75rem) !important;
+  border-bottom-right-radius: var(--borderRadius-large, 0.75rem) !important;
+}
+
+.AppHeader-user modal-dialog div.Overlay-body > div {
+  margin-bottom: 0px !important;
+}
+
+.AppHeader-user modal-dialog nav {
+  padding-bottom: 0px !important;
+}

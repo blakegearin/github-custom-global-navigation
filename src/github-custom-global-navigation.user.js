@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         GitHub Custom Global Navigation
-// @namespace    https://github.com/blakegearin/github-custom-global-naviation
+// @namespace    https://github.com/blakegearin/github-custom-global-navigation
 // @version      1.0.0
 // @description  Customize GitHub's new global navigation
 // @author       Blake Gearin
@@ -9,8 +9,8 @@
 // @grant        GM.getValue
 // @grant        GM.setValue
 // @license      MIT
-// @icon         https://raw.githubusercontent.com/blakegearin/github-custom-global-naviation/main/img/logo.svg
-// @supportURL   https://github.com/blakegearin/github-custom-global-naviation/issues
+// @icon         https://raw.githubusercontent.com/blakegearin/github-custom-global-navigation/main/img/logo.svg
+// @supportURL   https://github.com/blakegearin/github-custom-global-navigation/issues
 // ==/UserScript==
 
 /*global GM_config*/
@@ -1424,26 +1424,40 @@
       `;
     }
 
-    let linkColor, linkHoverColor, linkHoverBackgroundColor, linkHoverTextDecoration;
-
     if (elementConfig.link.color !== '') {
-      linkColor = `color: ${elementConfig.link.color} !important;`;
-    }
-
-    if (elementConfig.link.color !== '') {
-      linkColor = `color: ${elementConfig.link.color} !important;`;
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.repositoryHeader.links}
+        {
+          color: ${elementConfig.link.color} !important;
+        }
+      `;
     }
 
     if (elementConfig.link.hover.color !== '') {
-      linkHoverColor = `color: ${elementConfig.link.hover.color} !important;`;
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.repositoryHeader.links}:hover
+        {
+          color: ${elementConfig.link.hover.color} !important;
+        }
+      `;
     }
 
     if (elementConfig.link.hover.backgroundColor !== '') {
-      linkHoverBackgroundColor = `background-color: ${elementConfig.link.hover.backgroundColor} !important;`;
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.repositoryHeader.links}:hover
+        {
+          background-color: ${elementConfig.link.hover.backgroundColor} !important;
+        }
+      `;
     }
 
     if (elementConfig.link.hover.textDecoration !== '') {
-      linkHoverTextDecoration = `text-decoration: ${elementConfig.link.hover.textDecoration} !important;`;
+      HEADER_STYLE.textContent += `
+        ${SELECTORS.repositoryHeader.links}:hover
+        {
+          text-decoration: ${elementConfig.link.hover.textDecoration} !important;
+        }
+      `;
     }
 
     HEADER_STYLE.textContent += `
@@ -1456,18 +1470,6 @@
       {
         display: flex;
         align-items: center;
-      }
-
-      ${SELECTORS.repositoryHeader.links}
-      {
-        ${linkColor}
-      }
-
-      ${SELECTORS.repositoryHeader.links}:hover
-      {
-        ${linkHoverColor}
-        ${linkHoverBackgroundColor}
-        ${linkHoverTextDecoration}
       }
 
       ${SELECTORS.pageTitle.topDiv}
@@ -1752,7 +1754,7 @@
       const newSvg = document.createElement('img');
       newSvg.setAttribute('height', '16px');
       newSvg.setAttribute('width', '16px');
-      newSvg.src = `https://raw.githubusercontent.com/blakegearin/github-custom-global-naviation/main/img/${THEME}_logo.svg`;
+      newSvg.src = `https://raw.githubusercontent.com/blakegearin/github-custom-global-navigation/main/img/${THEME}_logo.svg`;
 
       oldSvg.parentNode.replaceChild(newSvg, oldSvg);
 
@@ -3830,7 +3832,7 @@
             Configuration Type
             <small>
               <a
-                href="https://github.com/blakegearin/github-custom-global-naviation#configurations"
+                href="https://github.com/blakegearin/github-custom-global-navigation#configurations"
                 target="_blank"
               >
                 learn more

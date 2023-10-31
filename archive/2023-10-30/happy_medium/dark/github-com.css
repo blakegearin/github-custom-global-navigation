@@ -1,0 +1,110 @@
+@media (min-width: 1012px) {
+  .search-input {
+    width: auto !important;
+  }
+
+  .AppHeader-globalBar-start {
+    flex: 0 1 auto !important;
+  }
+
+  .AppHeader-globalBar-end {
+    flex: 1 1 auto !important;
+    justify-content: space-between !important;
+  }
+
+  #search-div {
+    display: block !important;
+  }
+
+  .AppHeader-search-whenRegular {
+    max-width: none !important;
+  }
+}
+
+.AppHeader-actions::before {
+  content: none !important;
+}
+
+#tooltip-3bd18354-24b1-4ce4-b965-4fdd20739db4 {
+  display: none !important;
+}
+
+#tooltip-b8d5c60c-6ff5-4e87-9d00-7ea64b88eef7 {
+  display: none !important;
+}
+
+#issues-div {
+  display: none !important;
+}
+
+#pullRequests-div {
+  display: none !important;
+}
+
+#issues-flip-div-clone,
+#pullRequests-flip-div-clone {
+  display: initial !important;
+}
+
+#tooltip-827813f9-bb5e-47b5-92b6-9e91a524e3c4 {
+  display: none !important;
+}
+
+#global-create-menu-button .Button-visual.Button-leadingVisual {
+  margin-right: 0.25rem !important;
+}
+
+#global-create-menu-button {
+  font-size: var(--text-body-size-medium, 0.875rem) !important;
+  font-weight: var(--base-text-weight-medium, 500) !important;
+}
+
+#global-create-menu-button .Button-label {
+  grid-area: initial !important;
+}
+
+#tooltip-b00df4c2-73fa-49c1-97c8-c19e95db0b05 {
+  display: none !important;
+}
+
+#inbox-svg {
+  display: none !important;
+}
+
+#bell-svg {
+  display: initial !important;
+}
+
+#custom-notifications a {
+  padding-left: 9px !important;
+  padding-right: 9px !important;
+  width: auto !important;
+  text-decoration: none !important;
+  display: flex !important;
+}
+
+.AppHeader-button.AppHeader-button--hasIndicator::before {
+  top: 5px !important;
+  left: 18px !important;
+}
+
+.AppHeader-localBar {
+  background-color: #02040a !important;
+  box-shadow: inset 0 calc(var(--borderWidth-thin, 1px) * -1) var(--color-border-default) !important;
+}
+
+.UnderlineNav {
+  box-shadow: none !important;
+}
+
+.Overlay-backdrop--side {
+  background-color: transparent !important;
+}
+
+.Overlay-backdrop--side {
+  pointer-events: none !important;
+}
+
+.Overlay-backdrop--side > * {
+  pointer-events: initial !important;
+}
