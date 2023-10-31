@@ -9,7 +9,7 @@
 // @grant        GM.getValue
 // @grant        GM.setValue
 // @license      MIT
-// @icon         https://raw.githubusercontent.com/blakegearin/github-custom-global-navigation/main/img/logo.svg
+// @icon         https://raw.githubusercontent.com/blakegearin/github-custom-global-navigation/main/img/white_logo.svg
 // @supportURL   https://github.com/blakegearin/github-custom-global-navigation/issues
 // ==/UserScript==
 

@@ -22,8 +22,8 @@ This is a [userscript](https://openuserjs.org/about/Userscript-Beginners-HOWTO) 
 ## Usage
 
 1. Install a userscript manager like [Tampermonkey](https://www.tampermonkey.net), [Violentmonkey](https://violentmonkey.github.io), or [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
-1. Go to this userscript's [GreasyFork page](https://greasyfork.org/en/scripts/477926-github-custom-global-navigation)
-1. Click "Install this script"
+1. Go to [GreasyFork](https://greasyfork.org/en/scripts/478687-github-custom-global-navigation) or [OpenUserJS](https://openuserjs.org/scripts/blakegearin/GitHub_Custom_Global_Navigation)
+1. Click the install button
 1. The userscript will open in your userscript manager where you can install it
 1. Once installed, click your avatar in the top right to open the sidebar
 1. "Customize global navigation" will be listed underneath the regular "Settings" option
