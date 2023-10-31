@@ -1274,6 +1274,11 @@
       `;
     }
 
+    if (elementConfig.left.preload) {
+      HEADER.querySelector(elementSelector.left.backdrop).remove();
+      HEADER.querySelector(`${SELECTORS.hamburgerButton} button`).click();
+    }
+
     if (elementConfig.right.floatUnderneath) {
       HEADER_STYLE.textContent += `
         ${elementSelector.right.backdrop}
@@ -3080,6 +3085,9 @@
     },
     sidebars: {
       backdrop: '.Overlay-backdrop--side',
+      left: {
+        backdrop: '.Overlay-backdrop--placement-left.Overlay-backdrop--side',
+      },
       right: {
         backdrop: '.AppHeader-user .Overlay-backdrop--side',
         topDiv: '.AppHeader-user .Overlay-backdrop--placement-right',
@@ -3262,9 +3270,12 @@
             color: 'transparent',
             pointerEvents: 'none',
           },
+          left: {
+            preload: true,
+          },
           right: {
             preload: true,
-            floatUnderneath: true,
+            floatUnderneath: false,
             width: '',
             maxHeight: '',
           },
@@ -3449,6 +3460,9 @@
           backdrop: {
             color: 'transparent',
             pointerEvents: 'none',
+          },
+          left: {
+            preload: true,
           },
           right: {
             preload: true,
@@ -3640,6 +3654,9 @@
             color: oldSchoolHoverBackgroundColor,
             pointerEvents: 'none',
           },
+          left: {
+            preload: true,
+          },
           right: {
             preload: true,
             floatUnderneath: true,
@@ -3827,6 +3844,9 @@
           backdrop: {
             color: oldSchoolHoverBackgroundColor,
             pointerEvents: 'none',
+          },
+          left: {
+            preload: true,
           },
           right: {
             preload: true,
@@ -4346,6 +4366,11 @@
         type: 'text',
         default: '',
       },
+      light_sidebars_left_preload: {
+        label: 'Left preload',
+        type: 'checkbox',
+        default: false,
+      },
       light_sidebars_right_preload: {
         label: 'Right preload',
         type: 'checkbox',
@@ -4858,6 +4883,11 @@
         label: 'Backdrop pointer events',
         type: 'text',
         default: '',
+      },
+      dark_sidebars_left_preload: {
+        label: 'Left preload',
+        type: 'checkbox',
+        default: false,
       },
       dark_sidebars_right_preload: {
         label: 'Right preload',
