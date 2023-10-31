@@ -4,14 +4,14 @@ Community contributions are welcome, despite experience level. If you'd like to 
 
 ## Bug Reports & Feature Requests
 
-If you find a bug or have a feature request, search on the [Issues page](https://github.com/blakegearin/github-custom-global-naviation/issues) to check if it's already been added.
+If you find a bug or have a feature request, search on the [Issues page](https://github.com/blakegearin/github-custom-global-navigation/issues) to check if it's already been added.
 
    - If there is...
 
      - 👍 the original post
      - if you have additional details feel free to add a comment
 
-   - If there isn't, feel free to create a [new issue](https://github.com/blakegearin/github-custom-global-naviation/issues/new)
+   - If there isn't, feel free to create a [new issue](https://github.com/blakegearin/github-custom-global-navigation/issues/new)
 
      - if it's a bug report related to responsive design, please indicate what width(s) are impacted
 

@@ -104,7 +104,7 @@ In October 2023, GitHub initiated a [public rollout](https://github.blog/changel
   - [Gist](https://gist.github.com/)
   - [YouTube](https://www.youtube.com) <sup><a href="https://www.youtube.com/watch?v=ULsLaA__Xe8">[1]</a></sup><sup><a href="https://www.youtube.com/watch?v=v_1iqtOnUMg">[2]</a></sup><sup><a href="https://youtu.be/jG4Vs81kMlc">[3]</a></sup>
 
-  - If you have video sources that show Old School user navigation around the website (or better yet, some HTML), please contribute to [this thread](https://github.com/blakegearin/github-custom-global-naviation/issues/1)
+  - If you have video sources that show Old School user navigation around the website (or better yet, some HTML), please contribute to [this thread](https://github.com/blakegearin/github-custom-global-navigation/issues/1)
 
 - Menu
 
