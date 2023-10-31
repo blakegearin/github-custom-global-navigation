@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Custom Global Navigation
 // @namespace    https://github.com/blakegearin/github-custom-global-navigation
-// @version      1.1.0-RC
+// @version      1.1.0
 // @description  Customize GitHub's new global navigation
 // @author       Blake Gearin
 // @match        *://github.com/*
