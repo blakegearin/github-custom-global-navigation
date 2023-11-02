@@ -29,11 +29,11 @@
 
   const USERSCRIPT_NAME = 'GitHub Custom Global Navigation';
 
-  function log(level, message, variable = null) {
+  function log(level, message, variable = -1) {
     if (CURRENT_LOG_LEVEL < level) return;
 
     console.log(`${USERSCRIPT_NAME}: ${message}`);
-    if (variable) console.log(variable);
+    if (variable !== -1) console.log(variable);
   }
 
   function logError(message, variable = null) {
@@ -111,17 +111,20 @@
   function updateLogo() {
     log(DEBUG, 'updateLogo()');
 
-    const elementConfig = CONFIG.logo;
+    const configKey = 'logo';
+
+    const elementConfig = CONFIG[configKey];
+    const elementSelector = SELECTORS[configKey];
 
     if (elementConfig.remove) {
-      HEADER_STYLE.textContent += cssHideElement(SELECTORS.logo.topDiv);
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.topDiv);
     }
 
-    const logo = HEADER.querySelector(SELECTORS.logo.svg);
+    const logo = HEADER.querySelector(elementSelector.svg);
 
     if (elementConfig.color !== '') {
       HEADER_STYLE.textContent += `
-        ${SELECTORS.logo.svg} path
+        ${elementSelector.svg} path
         {
           fill: ${elementConfig.color} !important;
         }
@@ -500,7 +503,10 @@
 
       if (!elementConfig.tooltip) cloneElement.querySelector('tool-tip').remove();
 
-      elementSelector.id = createId(cloneId);
+      topDivSelector = createId(cloneId);
+      elementSelector[CONFIG_NAME] = {
+        leftAlignedId: cloneId
+      };
       link = cloneElement.querySelector('a');
     }
 
@@ -552,7 +558,7 @@
 
     if (!elementConfig.border) {
       HEADER_STYLE.textContent += `
-        ${elementSelector.id} a
+        ${topDivSelector} a
         {
           border: none !important;
         }
@@ -561,7 +567,7 @@
 
     if (elementConfig.boxShadow !== '') {
       HEADER_STYLE.textContent += `
-      ${elementSelector.id} a
+      ${topDivSelector} a
         {
           box-shadow: ${elementConfig.boxShadow} !important;
         }
@@ -570,7 +576,7 @@
 
     if (elementConfig.hover.backgroundColor !== '') {
       HEADER_STYLE.textContent += `
-        ${elementSelector.id} a:hover
+        ${topDivSelector} a:hover
         {
           background-color: ${elementConfig.hover.backgroundColor} !important;
         }
@@ -579,14 +585,14 @@
 
     if (elementConfig.hover.color !== '') {
       HEADER_STYLE.textContent += `
-        ${elementSelector.id} a span:hover
+        ${topDivSelector} a span:hover
         {
           color: ${elementConfig.hover.color} !important;
         }
       `;
     }
 
-    log(DEBUG, `Updates applied to link ${configKey}: `, link);
+    log(DEBUG, `Updates applied to link ${configKey}`, link);
   }
 
   function cloneAndFlipElements(firstElementSelector, secondElementSelector, firstElementId, secondElementId) {
@@ -631,6 +637,7 @@
     HEADER_STYLE.textContent += cssHideElement(firstElementSelector);
     HEADER_STYLE.textContent += cssHideElement(secondElementSelector);
 
+    log(VERBOSE, `#${firstElementCloneId}, #${secondElementCloneId}`);
     HEADER_STYLE.textContent += `
       #${firstElementCloneId},
       #${secondElementCloneId}
@@ -651,17 +658,34 @@
       firstElement.parentNode.insertBefore(secondElementClone, firstElement.nextElementSibling);
     }
 
+    if (firstElementSelector.includes('clone')) {
+      firstElement.remove();
+    }
+
+    if (secondElementSelector.includes('clone')) {
+      secondElement.remove();
+    }
+
+    NEW_ELEMENTS.push(firstElementClone);
+    NEW_ELEMENTS.push(secondElementClone);
+
     return [firstElementClone, secondElementClone];
   }
 
   function flipIssuesPullRequests() {
     log(DEBUG, 'flipIssuesPullRequest()');
 
+    const issuesId = SELECTORS.issues[CONFIG_NAME]?.leftAlignedId || SELECTORS.issues.id;
+    log(VERBOSE, 'issuesId', issuesId);
+
+    const pullRequestsId = SELECTORS.pullRequests[CONFIG_NAME]?.leftAlignedId || SELECTORS.pullRequests.id;
+    log(VERBOSE, 'pullRequestsId', pullRequestsId);
+
     cloneAndFlipElements(
-      createId(SELECTORS.issues.id),
-      createId(SELECTORS.pullRequests.id),
-      'issues-flip-div',
-      'pullRequests-flip-div'
+      createId(issuesId),
+      createId(pullRequestsId),
+      `${issuesId}-flip-div`,
+      `${pullRequestsId}-flip-div`
     );
   }
 
@@ -1286,9 +1310,11 @@
       `;
     }
 
-    if (elementConfig.left.preload) {
+    if (elementConfig.left.preload && !LEFT_SIDEBAR_PRELOADED) {
       HEADER.querySelector(elementSelector.left.backdrop).remove();
       HEADER.querySelector(`${SELECTORS.hamburgerButton} button`).click();
+
+      LEFT_SIDEBAR_PRELOADED = true;
     }
 
     if (elementConfig.right.floatUnderneath) {
@@ -1320,9 +1346,11 @@
       `;
     }
 
-    if (elementConfig.right.preload) {
+    if (elementConfig.right.preload && !RIGHT_SIDEBAR_PRELOADED) {
       HEADER.querySelector(elementSelector.right.backdrop).remove();
       HEADER.querySelector(SELECTORS.avatar.button).click();
+
+      RIGHT_SIDEBAR_PRELOADED = true;
     }
 
     if (elementConfig.right.maxHeight) {
@@ -1683,6 +1711,8 @@
 
     leftAlignedDiv.appendChild(elementClone);
 
+    NEW_ELEMENTS.push(elementClone);
+
     return [elementCloneId, elementClone];
   }
 
@@ -1695,7 +1725,7 @@
   }
 
   function createId(string) {
-    log(DEBUG, 'createId()');
+    log(TRACE, 'createId()');
 
     if (string.startsWith('#')) return string;
 
@@ -1713,7 +1743,7 @@
   }
 
   function cssHideElement(elementSelector) {
-    log(DEBUG, 'cssHideElement()');
+    log(TRACE, 'cssHideElement()');
 
     return `
       ${elementSelector}
@@ -2060,11 +2090,6 @@
   }
 
   function gmcRunScript() {
-    modifyThenObserve(() => {
-      document.querySelector(createId(SELECTORS.header.style))?.remove();
-      HEADER_STYLE.textContent = '';
-    });
-
     applyCustomizations(true);
   }
 
@@ -2950,6 +2975,8 @@
   function applyCustomizations(refresh = false) {
     log(DEBUG, 'applyCustomizations()');
 
+    log(DEBUG, 'refresh', refresh);
+
     HEADER = document.querySelector(SELECTORS.header.self);
 
     if (!HEADER) return 'continue';
@@ -2963,27 +2990,42 @@
 
     featurePreviewButton.addEventListener('click', waitForFeaturePreviewButton);
 
-    const configName = {
+    CONFIG_NAME = {
       'Off': 'off',
       'Happy Medium': 'happyMedium',
       'Old School': 'oldSchool',
       'Custom': 'custom',
     }[GMC.get('type')];
 
-    if (configName === 'off') return 'break';
+    if (CONFIG_NAME === 'off') return 'break';
 
-    if (configName === 'custom') configs.custom = generateCustomConfig();
+    if (CONFIG_NAME === 'custom') configs.custom = generateCustomConfig();
 
-    CONFIG = configs[configName][THEME];
+    CONFIG = configs[CONFIG_NAME][THEME];
 
     log(VERBOSE, 'CONFIG', CONFIG);
 
     const headerSuccessFlag = 'customizedHeader';
 
-    if (!document.getElementById(headerSuccessFlag) || refresh) {
+    const foundHeaderSuccessFlag = document.getElementById(headerSuccessFlag);
+    log(DEBUG, 'foundHeaderSuccessFlag', foundHeaderSuccessFlag);
+
+    const configurationApplied = HEADER.classList.contains(CONFIG_NAME);
+
+    if (!configurationApplied && (foundHeaderSuccessFlag == null || refresh)) {
       updateSelectors();
 
-      if (configName === 'oldSchool') {
+      if (refresh) {
+        modifyThenObserve(() => {
+          document.querySelector(createId(SELECTORS.header.style))?.remove();
+          HEADER_STYLE.textContent = '';
+
+          HEADER.classList.remove(OLD_CONFIG_NAME);
+          NEW_ELEMENTS.forEach((element) => element.remove());
+        });
+      }
+
+      if (CONFIG_NAME === 'oldSchool') {
         HEADER_STYLE.textContent += `
           @media (max-width: 767.98px)
           {
@@ -2999,6 +3041,9 @@
       updateHeader();
 
       HEADER.setAttribute('id', headerSuccessFlag);
+      HEADER.classList.add(CONFIG_NAME);
+
+      OLD_CONFIG_NAME = CONFIG_NAME;
 
       log(QUIET, 'Complete');
 
@@ -3083,6 +3128,8 @@
 
       const outcome = applyCustomizations();
 
+      log(DEBUG, 'outcome', outcome);
+
       if (outcome === 'continue') continue;
       if (outcome === 'break') break;
     }
@@ -3096,10 +3143,15 @@
   const MAX_HEADER_UPDATES = 100;
 
   let CONFIG;
+  let CONFIG_NAME;
+  let OLD_CONFIG_NAME;
   let HEADER;
-  let HEADER_STYLE = document.createElement('style');
 
+  let HEADER_STYLE = document.createElement('style');
   let THEME = 'light';
+  let NEW_ELEMENTS = [];
+  let LEFT_SIDEBAR_PRELOADED = false;
+  let RIGHT_SIDEBAR_PRELOADED = false;
   let IDLE_MUTATION_COUNT = 0;
   let HEADER_UPDATES_COUNT = 0;
   let SELECTORS = {
@@ -3147,12 +3199,10 @@
     },
     issues: {
       id: 'issues-div',
-      topDiv: '#issues-div',
       textContent: 'issues-text-content-span',
     },
     pullRequests: {
       id: 'pullRequests-div',
-      topDiv: '#pullRequests-div',
       textContent: 'pullRequests-text-content-span',
     },
     notifications: {
