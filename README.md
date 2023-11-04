@@ -28,13 +28,13 @@ This is a [userscript](https://openuserjs.org/about/Userscript-Beginners-HOWTO) 
 1. Once installed, click your avatar in the top right to open the sidebar
 1. "Customize global navigation" will be listed underneath the regular "Settings" option
 
-    <img
-      height="40%"
-      width="40%"
-      src="img/menu_option.png"
-      alt="menu option for 'Customize global navigation'"
-      title="GitHub Custom Global Navigation logo"
-    />
+   <img
+    height="40%"
+    width="40%"
+    src="img/menu_option.png"
+    alt="menu option for 'Customize global navigation'"
+    title="GitHub Custom Global Navigation logo"
+   />
 
 ## Documentation
 
@@ -57,8 +57,6 @@ This aims to deliver an experience as close to the style  March 2023 as reasonab
 ![light header](img/old_school_light.png)
 
 ![dark header](img/old_school_dark.png)
-
-**Note:** Marketplace and Explore will be added soon, or you can go custom and have the option to _not_ add those back in.
 
 ### Accessability
 
