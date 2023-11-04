@@ -37,6 +37,10 @@
       {
         "varsIgnorePattern": "^_"
       }
+    ],
+    "eqeqeq": [
+      "error",
+      "always"
     ]
   }
 }

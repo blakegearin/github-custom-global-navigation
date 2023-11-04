@@ -234,7 +234,7 @@
     if (elementConfig.alignLeft) {
       const response = cloneAndLeftAlignElement(createId(topDivSelector), topDivSelector);
 
-      if (response.length == 0) return;
+      if (response.length === 0) return;
 
       // Also need to hide button due to it showing up on larger screen widths
       HEADER_STYLE.textContent += cssHideElement(`${createId(topDivSelector)} ${elementSelector.input}`);
@@ -503,7 +503,7 @@
     if (elementConfig.alignLeft) {
       const response = cloneAndLeftAlignElement(createId(elementSelector.id), elementSelector.id);
 
-      if (response.length == 0) return;
+      if (response.length === 0) return;
 
       const [cloneId, cloneElement] = response;
 
@@ -3105,7 +3105,7 @@
 
     const configurationApplied = HEADER.classList.contains(CONFIG_NAME);
 
-    if (!configurationApplied && (foundHeaderSuccessFlag == null || refresh)) {
+    if (!configurationApplied && (foundHeaderSuccessFlag === null || refresh)) {
       updateSelectors();
 
       if (refresh) {
