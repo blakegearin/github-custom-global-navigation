@@ -65,8 +65,14 @@
 
     if (CONFIG.divider.remove) removeDivider();
 
+    if (CONFIG.marketplace.add) createMarketplaceLink();
+    if (CONFIG.explore.add) createExploreLink();
+
     updateLink('issues');
     updateLink('pullRequests');
+
+    if (CONFIG.marketplace.add) updateLink('marketplace');
+    if (CONFIG.explore.add) updateLink('explore');
 
     if (CONFIG.flipIssuesPullRequests) flipIssuesPullRequests();
 
@@ -505,7 +511,7 @@
 
       topDivSelector = createId(cloneId);
       elementSelector[CONFIG_NAME] = {
-        leftAlignedId: cloneId
+        leftAlignedId: cloneId,
       };
       link = cloneElement.querySelector('a');
     }
@@ -522,7 +528,7 @@
       const svgId = `${configKey}-svg`;
       const svg = link.querySelector('svg');
 
-      if (!svg) logError(`Selector '${configKey}' not found`);
+      if (!svg) logError(`Selector '${configKey} svg' not found`);
 
       svg.setAttribute('id', svgId);
 
@@ -685,8 +691,84 @@
       createId(issuesId),
       createId(pullRequestsId),
       `${issuesId}-flip-div`,
-      `${pullRequestsId}-flip-div`
+      `${pullRequestsId}-flip-div`,
     );
+  }
+
+  function createOldLink(configKey, svgString) {
+    const pullRequestsLink = HEADER.querySelector(SELECTORS.pullRequests.link);
+
+    if (!pullRequestsLink) {
+      logError(`Selector '${SELECTORS.pullRequests.link}' not found`);
+      return;
+    }
+
+    const pullRequestsTopDiv = pullRequestsLink.parentNode;
+    const clonedTopDiv = pullRequestsTopDiv.cloneNode(true);
+
+    clonedTopDiv.setAttribute('id', SELECTORS[configKey].id);
+
+    const oldSvg = clonedTopDiv.querySelector('svg');
+
+    const parser = new DOMParser();
+    const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
+    const newSvg = svgDoc.documentElement;
+
+    oldSvg.parentNode.replaceChild(newSvg, oldSvg);
+
+    const buttonId = `icon-button-${configKey}`;
+    const ariaId = `tooltip-${configKey}`;
+
+    const link = clonedTopDiv.querySelector('a');
+    link.setAttribute('href', `/${configKey}`);
+    link.setAttribute('id', buttonId);
+    link.setAttribute('aria-labelledby', ariaId);
+    link.removeAttribute('data-analytics-event');
+
+    link.querySelector('span')?.remove();
+
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    const tooltip = clonedTopDiv.querySelector('tool-tip');
+    tooltip.textContent = capitalizeFirstLetter(configKey);
+    tooltip.setAttribute('id', ariaId);
+    tooltip.setAttribute('for', buttonId);
+
+    SELECTORS.toolTips[configKey] = tooltip;
+
+    if (pullRequestsTopDiv.nextSibling === null) {
+      pullRequestsTopDiv.parentNode.appendChild(clonedTopDiv);
+    } else {
+      pullRequestsTopDiv.parentNode.insertBefore(clonedTopDiv, pullRequestsTopDiv.nextSibling);
+    }
+
+    NEW_ELEMENTS.push(clonedTopDiv);
+  }
+
+  function createMarketplaceLink() {
+    log(DEBUG, 'createMarketplaceLink()');
+
+    const svgString = `
+      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-gift">
+        <path d="M2 2.75A2.75 2.75 0 0 1 4.75 0c.983 0 1.873.42 2.57 1.232.268.318.497.668.68 1.042.183-.375.411-.725.68-1.044C9.376.42 10.266 0 11.25 0a2.75 2.75 0 0 1 2.45 4h.55c.966 0 1.75.784 1.75 1.75v2c0 .698-.409 1.301-1 1.582v4.918A1.75 1.75 0 0 1 13.25 16H2.75A1.75 1.75 0 0 1 1 14.25V9.332C.409 9.05 0 8.448 0 7.75v-2C0 4.784.784 4 1.75 4h.55c-.192-.375-.3-.8-.3-1.25ZM7.25 9.5H2.5v4.75c0 .138.112.25.25.25h4.5Zm1.5 0v5h4.5a.25.25 0 0 0 .25-.25V9.5Zm0-4V8h5.5a.25.25 0 0 0 .25-.25v-2a.25.25 0 0 0-.25-.25Zm-7 0a.25.25 0 0 0-.25.25v2c0 .138.112.25.25.25h5.5V5.5h-5.5Zm3-4a1.25 1.25 0 0 0 0 2.5h2.309c-.233-.818-.542-1.401-.878-1.793-.43-.502-.915-.707-1.431-.707ZM8.941 4h2.309a1.25 1.25 0 0 0 0-2.5c-.516 0-1 .205-1.43.707-.337.392-.646.975-.879 1.793Z"></path>
+      </svg>
+    `;
+
+    createOldLink('marketplace', svgString);
+  }
+
+  function createExploreLink() {
+    log(DEBUG, 'createExploreLink()');
+
+    const svgString = `
+      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-telescope">
+        <path d="M14.184 1.143v-.001l1.422 2.464a1.75 1.75 0 0 1-.757 2.451L3.104 11.713a1.75 1.75 0 0 1-2.275-.702l-.447-.775a1.75 1.75 0 0 1 .53-2.32L11.682.573a1.748 1.748 0 0 1 2.502.57Zm-4.709 9.32h-.001l2.644 3.863a.75.75 0 1 1-1.238.848l-1.881-2.75v2.826a.75.75 0 0 1-1.5 0v-2.826l-1.881 2.75a.75.75 0 1 1-1.238-.848l2.049-2.992a.746.746 0 0 1 .293-.253l1.809-.87a.749.749 0 0 1 .944.252ZM9.436 3.92h-.001l-4.97 3.39.942 1.63 5.42-2.61Zm3.091-2.108h.001l-1.85 1.26 1.505 2.605 2.016-.97a.247.247 0 0 0 .13-.151.247.247 0 0 0-.022-.199l-1.422-2.464a.253.253 0 0 0-.161-.119.254.254 0 0 0-.197.038ZM1.756 9.157a.25.25 0 0 0-.075.33l.447.775a.25.25 0 0 0 .325.1l1.598-.769-.83-1.436-1.465 1Z"></path>
+      </svg>
+    `;
+
+    createOldLink('explore', svgString);
   }
 
   function updateCreateNewButton() {
@@ -1312,7 +1394,11 @@
 
     if (elementConfig.left.preload && !LEFT_SIDEBAR_PRELOADED) {
       HEADER.querySelector(elementSelector.left.backdrop).remove();
-      HEADER.querySelector(`${SELECTORS.hamburgerButton} button`).click();
+
+      window.addEventListener('load', () => {
+        HEADER.querySelector(`${SELECTORS.hamburgerButton} button`).click();
+        log(INFO, 'Left sidebar preloaded');
+      });
 
       LEFT_SIDEBAR_PRELOADED = true;
     }
@@ -1348,7 +1434,11 @@
 
     if (elementConfig.right.preload && !RIGHT_SIDEBAR_PRELOADED) {
       HEADER.querySelector(elementSelector.right.backdrop).remove();
-      HEADER.querySelector(SELECTORS.avatar.button).click();
+
+      window.addEventListener('load', () => {
+        HEADER.querySelector(SELECTORS.avatar.button).click();
+        log(INFO, 'Right sidebar preloaded');
+      });
 
       RIGHT_SIDEBAR_PRELOADED = true;
     }
@@ -1396,18 +1486,15 @@
     }
 
     if (repositoryHeader.hidden) {
-      log(DEBUG, `${SELECTORS[configKey].id} is hidden`);
+      log(VERBOSE, `Selector '${SELECTORS[configKey].id}' is hidden`);
 
       if (!HEADER.querySelector(SELECTORS.pageTitle.separator)) {
-        logError(`Selector '${SELECTORS.pageTitle.separator}' not found`);
-        log(INFO, 'Not creating a repository header');
+        log(INFO, `Selector '${SELECTORS.pageTitle.separator}' not found, not creating a repository header`);
 
         return;
       }
 
       // A repo tab other than Code is being loaded for the first time
-      if (!CONFIG.pageTitle.remove) return;
-
       const pageTitle = HEADER.querySelector(SELECTORS.pageTitle.topDiv);
 
       if (!pageTitle) {
@@ -1416,8 +1503,8 @@
       }
 
       const repositoryHeaderElement = document.createElement('div');
-      repositoryHeaderElement.id = TEMP_REPOSITORY_HEADER_FLAG;
-      repositoryHeaderElement.classList.add('pt-3', 'mb-2', REPOSITORY_HEADER_CLASS);
+      repositoryHeaderElement.setAttribute('id', TEMP_REPOSITORY_HEADER_FLAG);
+      repositoryHeaderElement.classList.add(REPOSITORY_HEADER_CLASS, 'pt-3', 'mb-2', 'px-md-4');
 
       const clonedPageTitle = pageTitle.cloneNode(true);
       repositoryHeaderElement.appendChild(clonedPageTitle);
@@ -1425,11 +1512,21 @@
       topRepositoryHeaderElement.appendChild(repositoryHeaderElement);
       insertNewGlobalBar(topRepositoryHeaderElement);
     } else if (HEADER.querySelector(createId(TEMP_REPOSITORY_HEADER_FLAG))) {
+      log(VERBOSE, `Selector '${createId(TEMP_REPOSITORY_HEADER_FLAG)}' found`);
+
       // The Code tab is being loaded from another tab which has a temporary header
-      HEADER_STYLE.textContent += cssHideElement(createId(TEMP_REPOSITORY_HEADER_FLAG));
+      const tempRepositoryHeader = HEADER.querySelector(createId(TEMP_REPOSITORY_HEADER_FLAG));
+
+      NEW_ELEMENTS = NEW_ELEMENTS.filter(element => element !== tempRepositoryHeader);
+      tempRepositoryHeader.remove();
 
       insertPermanentRepositoryHeader(topRepositoryHeaderElement, repositoryHeader);
     } else {
+      log(
+        VERBOSE,
+        `${SELECTORS[configKey].id} is hidden and selector '${createId(TEMP_REPOSITORY_HEADER_FLAG)}' not found`,
+      );
+
       // The Code tab being loaded for the first time
       insertPermanentRepositoryHeader(topRepositoryHeaderElement, repositoryHeader);
     }
@@ -1619,6 +1716,8 @@
     insertNewGlobalBar(topRepositoryHeaderElement);
 
     clonedRepositoryHeader.firstElementChild.classList.remove('container-xl', 'px-lg-5');
+
+    NEW_ELEMENTS.push(clonedRepositoryHeader);
   }
 
   function updateRepositoryHeaderName() {
@@ -1646,16 +1745,29 @@
     const ownerImg = document.querySelector(SELECTORS.repositoryHeader.ownerImg);
 
     if (!ownerImg) {
-      logError(`Selector '${SELECTORS.repositoryHeader.ownerImg}' not found`);
+      log(INFO, `Selector '${SELECTORS.repositoryHeader.ownerImg}' not found`);
       return;
     }
 
     const clonedPageTitle = pageTitle.cloneNode(true);
     clonedPageTitle.style.display = '';
 
+    const pageTitleId = `${REPOSITORY_HEADER_CLASS}_pageTitle`;
+    clonedPageTitle.setAttribute('id', pageTitleId);
+    clonedPageTitle.querySelector('img')?.remove();
+
+    HEADER_STYLE.textContent += `
+      ${createId(pageTitleId)}
+      {
+        display: initial !important;
+      }
+    `;
+
     clonedPageTitle.querySelectorAll('svg').forEach(svg => svg.remove());
+    clonedPageTitle.querySelectorAll('a[href$="/stargazers"]').forEach(link => link.remove());
 
     ownerImg.parentNode.insertBefore(clonedPageTitle, ownerImg.nextSibling);
+    NEW_ELEMENTS.push(clonedPageTitle);
 
     if (elementConfig.avatar.remove) {
       ownerImg.remove();
@@ -1800,6 +1912,7 @@
     return differences.length > 0 ? differences : [];
   }
 
+  // eslint-disable-next-line no-unused-vars
   function checkConfigConsistency(configs) {
     log(DEBUG, 'checkConfigConsistency()');
 
@@ -1838,22 +1951,22 @@
     const toolTips = Array.from(HEADER.querySelectorAll('tool-tip'));
     SELECTORS.toolTips = {
       create: toolTips.find(
-        tooltip => tooltip.textContent.includes('Create new')
+        tooltip => tooltip.textContent.includes('Create new'),
       ),
       pullRequests: toolTips.find(
-        tooltip => tooltip.textContent.includes('Pull requests')
+        tooltip => tooltip.textContent.includes('Pull requests'),
       ),
       issues: toolTips.find(
-        tooltip => tooltip.textContent.includes('Issues')
+        tooltip => tooltip.textContent.includes('Issues'),
       ),
       notifications: toolTips.find(
-        tooltip => tooltip.getAttribute('data-target') === 'notification-indicator.tooltip'
+        tooltip => tooltip.getAttribute('data-target') === 'notification-indicator.tooltip',
       ),
     };
   }
 
   function waitForFeaturePreviewButton() {
-    log(DEBUG, 'waitForFeaturePreviewButton()');
+    log(VERBOSE, 'waitForFeaturePreviewButton()');
 
     if (!HEADER) return;
 
@@ -1951,9 +2064,12 @@
         } else {
           const gmcKey = `${themePrefix}_${currentKey.replace(/\./g, '_')}`;
 
-          log(VERBOSE, 'gmcKey', gmcKey);
-
-          customObj[key] = GMC.get(gmcKey);
+          if (gmcKey in GMC.fields) {
+            customObj[key] = GMC.get(gmcKey);
+          } else {
+            logError(`GMC field not found for key: ${gmcKey}`);
+            return;
+          }
         }
       }
     }
@@ -1990,9 +2106,8 @@
     log(QUIET, 'Running');
 
     GMC.css.basic = '';
-    window.addEventListener('load', () => {
-      startObserving();
-    });
+
+    startObserving();
   }
 
   function gmcAddSavedSpan(div) {
@@ -2206,6 +2321,32 @@
   function gmcBuildStyle() {
     log(DEBUG, 'gmcBuildStyle()');
 
+    const headerIdPartials = [
+      'hamburgerButton_remove_var',
+      'logo_remove_var',
+      'pageTitle_remove_var',
+      'search_remove_var',
+      'divider_remove_var',
+      'create_remove_var',
+      'issues_remove_var',
+      'pullRequests_remove_var',
+      'marketplace_add_var',
+      'explore_add_var',
+      'notifications_remove_var',
+      'light_avatar_remove_var',
+      'dark_avatar_remove_var',
+      'globalBar_boxShadowColor_var',
+      'localBar_backgroundColor_var',
+      'sidebars_backdrop_color_var',
+      'repositoryHeader_import_var',
+      'flipCreateInbox_var',
+      'flipIssuesPullRequests_var',
+    ];
+
+    const sectionSelectors = headerIdPartials
+      .map(varName => `#gmc-frame .config_var[id*='${varName}']`)
+      .join(',\n');
+
     const gmcFrameStyle = document.createElement('style');
     gmcFrameStyle.textContent += `
       /* Modal */
@@ -2363,23 +2504,7 @@
         display: flex;
       }
 
-      #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
-      #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
-      #gmc-frame .config_var[id*='logo_remove_var'],
-      #gmc-frame .config_var[id*='pageTitle_remove_var'],
-      #gmc-frame .config_var[id*='search_remove_var'],
-      #gmc-frame .config_var[id*='divider_remove_var'],
-      #gmc-frame .config_var[id*='create_remove_var'],
-      #gmc-frame .config_var[id*='issues_remove_var'],
-      #gmc-frame .config_var[id*='pullRequests_remove_var'],
-      #gmc-frame .config_var[id*='notifications_remove_var'],
-      #gmc-frame .config_var[id*='avatar_remove_var'],
-      #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
-      #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
-      #gmc-frame .config_var[id*='sidebars_backdrop_color_var'],
-      #gmc-frame .config_var[id*='repositoryHeader_import_var'],
-      #gmc-frame .config_var[id*='flipCreateInbox_var'],
-      #gmc-frame .config_var[id*='flipIssuesPullRequests_var']
+      ${sectionSelectors}
       {
         display: flow;
         padding-top: 1rem;
@@ -2724,23 +2849,7 @@
           border-bottom: 1px solid #D0D7DE;
         }
 
-        #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
-        #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
-        #gmc-frame .config_var[id*='logo_remove_var'],
-        #gmc-frame .config_var[id*='pageTitle_remove_var'],
-        #gmc-frame .config_var[id*='search_remove_var'],
-        #gmc-frame .config_var[id*='divider_remove_var'],
-        #gmc-frame .config_var[id*='create_remove_var'],
-        #gmc-frame .config_var[id*='issues_remove_var'],
-        #gmc-frame .config_var[id*='pullRequests_remove_var'],
-        #gmc-frame .config_var[id*='notifications_remove_var'],
-        #gmc-frame .config_var[id*='avatar_remove_var'],
-        #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
-        #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
-        #gmc-frame .config_var[id*='sidebars_backdrop_color_var'],
-        #gmc-frame .config_var[id*='repositoryHeader_import_var'],
-        #gmc-frame .config_var[id*='flipCreateInbox_var'],
-        #gmc-frame .config_var[id*='flipIssuesPullRequests_var']
+        ${sectionSelectors}
         {
           border-top: 1px solid #D0D7DE;
         }
@@ -2871,23 +2980,7 @@
           border-bottom: 1px solid #30363D;
         }
 
-        #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
-        #gmc-frame .config_var[id*='hamburgerButton_remove_var'],
-        #gmc-frame .config_var[id*='logo_remove_var'],
-        #gmc-frame .config_var[id*='pageTitle_remove_var'],
-        #gmc-frame .config_var[id*='search_remove_var'],
-        #gmc-frame .config_var[id*='divider_remove_var'],
-        #gmc-frame .config_var[id*='create_remove_var'],
-        #gmc-frame .config_var[id*='issues_remove_var'],
-        #gmc-frame .config_var[id*='pullRequests_remove_var'],
-        #gmc-frame .config_var[id*='notifications_remove_var'],
-        #gmc-frame .config_var[id*='avatar_remove_var'],
-        #gmc-frame .config_var[id*='globalBar_boxShadowColor_var'],
-        #gmc-frame .config_var[id*='localBar_backgroundColor_var'],
-        #gmc-frame .config_var[id*='sidebars_backdrop_color_var'],
-        #gmc-frame .config_var[id*='repositoryHeader_import_var'],
-        #gmc-frame .config_var[id*='flipCreateInbox_var'],
-        #gmc-frame .config_var[id*='flipIssuesPullRequests_var']
+        ${sectionSelectors}
         {
           border-top: 1px solid #30363D;
         }
@@ -2963,7 +3056,7 @@
     body.appendChild(gmcDiv);
 
     const gmcFrameDiv = document.createElement('div');
-    gmcFrameDiv.id = 'gmc-frame';
+    gmcFrameDiv.setAttribute('id', 'gmc-frame');
 
     gmcDiv.appendChild(gmcFrameDiv);
 
@@ -3069,6 +3162,7 @@
           const updated = importRepositoryHeader();
 
           if (updated) {
+            HEADER_UPDATES_COUNT++;
             log(QUIET, 'Repository header updated');
           } else {
             IDLE_MUTATION_COUNT++;
@@ -3161,7 +3255,7 @@
       globalBar: '.AppHeader-globalBar',
       localBar: {
         topDiv: '.AppHeader-localBar',
-        underlineNavActions: '.UnderlineNav-actions'
+        underlineNavActions: '.UnderlineNav-actions',
       },
       leftAligned: '.AppHeader-globalBar-start',
       rightAligned: '.AppHeader-globalBar-end',
@@ -3203,13 +3297,26 @@
     },
     pullRequests: {
       id: 'pullRequests-div',
+      link: '.AppHeader-globalBar-end .AppHeader-actions a[href="/pulls"]',
       textContent: 'pullRequests-text-content-span',
+    },
+    marketplace: {
+      id: 'marketplace-div',
+      topDiv: '#marketplace-div',
+      link: '.AppHeader-globalBar-end .AppHeader-actions a[href="/marketplace"]',
+      textContent: 'marketplace-text-content-span',
+    },
+    explore: {
+      id: 'explore-div',
+      topDiv: '#explore-div',
+      link: '.AppHeader-globalBar-end .AppHeader-actions a[href="/explore"]',
+      textContent: 'explore-text-content-span',
     },
     notifications: {
       id: 'custom-notifications',
       indicator: 'notification-indicator',
       dot: '.AppHeader-button.AppHeader-button--hasIndicator::before',
-      textContent: 'textContent-text-content-spa'
+      textContent: 'textContent-text-content-spa',
     },
     avatar: {
       topDiv: '.AppHeader-user',
@@ -3238,10 +3345,10 @@
         navParentDiv: '.AppHeader-user modal-dialog div.Overlay-body > div',
         nav: '.AppHeader-user modal-dialog nav',
       },
-    }
+    },
   };
 
-  HEADER_STYLE.id = SELECTORS.header.style;
+  HEADER_STYLE.setAttribute('id', SELECTORS.header.style);
 
   setTheme();
 
@@ -3307,7 +3414,7 @@
             marginRight: '0.25rem',
             hover: {
               color: '',
-            }
+            },
           },
           text: {
             content: 'Create',
@@ -3360,6 +3467,44 @@
             color: '',
           },
         },
+        marketplace: {
+          add: false,
+          border: false,
+          tooltip: false,
+          alignLeft: false,
+          boxShadow: '',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Marketplace',
+            color: '',
+          },
+          hover: {
+            backgroundColor: '',
+            color: '',
+          },
+        },
+        explore: {
+          add: false,
+          border: false,
+          tooltip: false,
+          alignLeft: false,
+          boxShadow: '',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Explore',
+            color: '',
+          },
+          hover: {
+            backgroundColor: '',
+            color: '',
+          },
+        },
         notifications: {
           remove: false,
           border: true,
@@ -3371,7 +3516,7 @@
             color: '',
             hover: {
               color: '',
-            }
+            },
           },
           text: {
             content: 'Inbox',
@@ -3500,7 +3645,7 @@
             marginRight: '0.25rem',
             hover: {
               color: '',
-            }
+            },
           },
           text: {
             content: 'Create',
@@ -3553,6 +3698,44 @@
             color: '',
           },
         },
+        marketplace: {
+          add: false,
+          border: false,
+          tooltip: false,
+          alignLeft: false,
+          boxShadow: '',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Marketplace',
+            color: '',
+          },
+          hover: {
+            backgroundColor: '',
+            color: '',
+          },
+        },
+        explore: {
+          add: false,
+          border: false,
+          tooltip: false,
+          alignLeft: false,
+          boxShadow: '',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Explore',
+            color: '',
+          },
+          hover: {
+            backgroundColor: '',
+            color: '',
+          },
+        },
         notifications: {
           remove: false,
           border: true,
@@ -3564,7 +3747,7 @@
             color: '',
             hover: {
               color: '',
-            }
+            },
           },
           text: {
             content: 'Inbox',
@@ -3748,6 +3931,44 @@
             color: oldSchoolHoverColor,
           },
         },
+        marketplace: {
+          add: true,
+          border: false,
+          tooltip: false,
+          alignLeft: true,
+          boxShadow: 'none',
+          icon: {
+            remove: true,
+            color: '',
+          },
+          text: {
+            content: 'Marketplace',
+            color: oldSchoolColor,
+          },
+          hover: {
+            backgroundColor: oldSchoolHoverBackgroundColor,
+            color: oldSchoolHoverColor,
+          },
+        },
+        explore: {
+          add: true,
+          border: false,
+          tooltip: false,
+          alignLeft: true,
+          boxShadow: 'none',
+          icon: {
+            remove: true,
+            color: '',
+          },
+          text: {
+            content: 'Explore',
+            color: oldSchoolColor,
+          },
+          hover: {
+            backgroundColor: oldSchoolHoverBackgroundColor,
+            color: oldSchoolHoverColor,
+          },
+        },
         notifications: {
           remove: false,
           border: false,
@@ -3759,7 +3980,7 @@
             color: oldSchoolColor,
             hover: {
               color: oldSchoolHoverColor,
-            }
+            },
           },
           text: {
             content: '',
@@ -3773,7 +3994,7 @@
           },
         },
         avatar: {
-          remove: true,
+          remove: false,
           size: '24px',
           dropdownIcon: true,
           canCloseSidebar: true,
@@ -3810,7 +4031,7 @@
             floatUnderneath: true,
             width: '',
             maxHeight: '50vh',
-          }
+          },
         },
         repositoryHeader: {
           import: true,
@@ -3941,6 +4162,44 @@
             color: oldSchoolHoverColor,
           },
         },
+        marketplace: {
+          add: true,
+          border: false,
+          tooltip: false,
+          alignLeft: true,
+          boxShadow: 'none',
+          icon: {
+            remove: true,
+            color: '',
+          },
+          text: {
+            content: 'Marketplace',
+            color: oldSchoolColor,
+          },
+          hover: {
+            backgroundColor: oldSchoolHoverBackgroundColor,
+            color: oldSchoolHoverColor,
+          },
+        },
+        explore: {
+          add: true,
+          border: false,
+          tooltip: false,
+          alignLeft: true,
+          boxShadow: 'none',
+          icon: {
+            remove: true,
+            color: '',
+          },
+          text: {
+            content: 'Explore',
+            color: oldSchoolColor,
+          },
+          hover: {
+            backgroundColor: oldSchoolHoverBackgroundColor,
+            color: oldSchoolHoverColor,
+          },
+        },
         notifications: {
           remove: false,
           border: false,
@@ -3952,7 +4211,7 @@
             color: oldSchoolColor,
             hover: {
               color: oldSchoolHoverColor,
-            }
+            },
           },
           text: {
             content: '',
@@ -4003,7 +4262,7 @@
             floatUnderneath: true,
             width: '',
             maxHeight: '50vh',
-          }
+          },
         },
         repositoryHeader: {
           import: true,
@@ -4385,6 +4644,116 @@
         default: '',
       },
       light_pullRequests_hover_color: {
+        label: 'Hover color',
+        type: 'text',
+        default: '',
+      },
+      light_marketplace_add: {
+        label: '<h3>Marketplace</h3><div class="gmc-label">Add</div>',
+        type: 'checkbox',
+        default: false,
+      },
+      light_marketplace_border: {
+        label: 'Border',
+        type: 'checkbox',
+        default: true,
+      },
+      light_marketplace_tooltip: {
+        label: 'Tooltip',
+        type: 'checkbox',
+        default: true,
+      },
+      light_marketplace_alignLeft: {
+        label: 'Align left',
+        type: 'checkbox',
+        default: false,
+      },
+      light_marketplace_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
+      },
+      light_marketplace_icon_remove: {
+        label: 'Icon remove',
+        type: 'checkbox',
+        default: false,
+      },
+      light_marketplace_icon_color: {
+        label: 'Icon color',
+        type: 'text',
+        default: '',
+      },
+      light_marketplace_text_content: {
+        label: 'Text content',
+        type: 'text',
+        default: '',
+      },
+      light_marketplace_text_color: {
+        label: 'Text color',
+        type: 'text',
+        default: '',
+      },
+      light_marketplace_hover_backgroundColor: {
+        label: 'Hover background color',
+        type: 'text',
+        default: '',
+      },
+      light_marketplace_hover_color: {
+        label: 'Hover color',
+        type: 'text',
+        default: '',
+      },
+      light_explore_add: {
+        label: '<h3>Explore</h3><div class="gmc-label">Add</div>',
+        type: 'checkbox',
+        default: false,
+      },
+      light_explore_border: {
+        label: 'Border',
+        type: 'checkbox',
+        default: true,
+      },
+      light_explore_tooltip: {
+        label: 'Tooltip',
+        type: 'checkbox',
+        default: true,
+      },
+      light_explore_alignLeft: {
+        label: 'Align left',
+        type: 'checkbox',
+        default: false,
+      },
+      light_explore_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
+      },
+      light_explore_icon_remove: {
+        label: 'Icon remove',
+        type: 'checkbox',
+        default: false,
+      },
+      light_explore_icon_color: {
+        label: 'Icon color',
+        type: 'text',
+        default: '',
+      },
+      light_explore_text_content: {
+        label: 'Text content',
+        type: 'text',
+        default: '',
+      },
+      light_explore_text_color: {
+        label: 'Text color',
+        type: 'text',
+        default: '',
+      },
+      light_explore_hover_backgroundColor: {
+        label: 'Hover background color',
+        type: 'text',
+        default: '',
+      },
+      light_explore_hover_color: {
         label: 'Hover color',
         type: 'text',
         default: '',
@@ -4917,6 +5286,116 @@
         type: 'text',
         default: '',
       },
+      dark_marketplace_add: {
+        label: '<h3>Marketplace</h3><div class="gmc-label">Add</div>',
+        type: 'checkbox',
+        default: false,
+      },
+      dark_marketplace_border: {
+        label: 'Border',
+        type: 'checkbox',
+        default: true,
+      },
+      dark_marketplace_tooltip: {
+        label: 'Tooltip',
+        type: 'checkbox',
+        default: true,
+      },
+      dark_marketplace_alignLeft: {
+        label: 'Align left',
+        type: 'checkbox',
+        default: false,
+      },
+      dark_marketplace_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
+      },
+      dark_marketplace_icon_remove: {
+        label: 'Icon remove',
+        type: 'checkbox',
+        default: false,
+      },
+      dark_marketplace_icon_color: {
+        label: 'Icon color',
+        type: 'text',
+        default: '',
+      },
+      dark_marketplace_text_content: {
+        label: 'Text content',
+        type: 'text',
+        default: '',
+      },
+      dark_marketplace_text_color: {
+        label: 'Text color',
+        type: 'text',
+        default: '',
+      },
+      dark_marketplace_hover_backgroundColor: {
+        label: 'Hover background color',
+        type: 'text',
+        default: '',
+      },
+      dark_marketplace_hover_color: {
+        label: 'Hover color',
+        type: 'text',
+        default: '',
+      },
+      dark_explore_add: {
+        label: '<h3>Explore</h3><div class="gmc-label">Add</div>',
+        type: 'checkbox',
+        default: false,
+      },
+      dark_explore_border: {
+        label: 'Border',
+        type: 'checkbox',
+        default: true,
+      },
+      dark_explore_tooltip: {
+        label: 'Tooltip',
+        type: 'checkbox',
+        default: true,
+      },
+      dark_explore_alignLeft: {
+        label: 'Align left',
+        type: 'checkbox',
+        default: false,
+      },
+      dark_explore_boxShadow: {
+        label: 'Box shadow',
+        type: 'text',
+        default: '',
+      },
+      dark_explore_icon_remove: {
+        label: 'Icon remove',
+        type: 'checkbox',
+        default: false,
+      },
+      dark_explore_icon_color: {
+        label: 'Icon color',
+        type: 'text',
+        default: '',
+      },
+      dark_explore_text_content: {
+        label: 'Text content',
+        type: 'text',
+        default: '',
+      },
+      dark_explore_text_color: {
+        label: 'Text color',
+        type: 'text',
+        default: '',
+      },
+      dark_explore_hover_backgroundColor: {
+        label: 'Hover background color',
+        type: 'text',
+        default: '',
+      },
+      dark_explore_hover_color: {
+        label: 'Hover color',
+        type: 'text',
+        default: '',
+      },
       dark_notifications_remove: {
         label: '<h3>Notifications button</h3><div class="gmc-label">Remove</div>',
         type: 'checkbox',
@@ -4993,7 +5472,7 @@
         default: false,
       },
       dark_avatar_remove: {
-        label: '<h3>Avatar</h3><div class="gmc-label">Remove/div>',
+        label: '<h3>Avatar</h3><div class="gmc-label">Remove</div>',
         type: 'checkbox',
         default: false,
       },

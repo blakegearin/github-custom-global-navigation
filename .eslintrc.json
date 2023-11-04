@@ -28,6 +28,10 @@
       "error",
       "always"
     ],
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ],
     "no-unused-vars" : [
       1,
       {
