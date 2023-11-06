@@ -46,6 +46,27 @@
   function updateHeader() {
     log(DEBUG, 'updateHeader()');
 
+    if (CONFIG.leftSidebar.preload && !LEFT_SIDEBAR_PRELOADED) {
+      HEADER.querySelector(SELECTORS.leftSidebar.backdrop).remove();
+
+      window.addEventListener('load', () => {
+        HEADER.querySelector(`${SELECTORS.hamburgerButton} button`).click();
+        log(INFO, 'Left sidebar preloaded');
+      });
+
+      LEFT_SIDEBAR_PRELOADED = true;
+    }
+
+    if (CONFIG.rightSidebar.preload && !RIGHT_SIDEBAR_PRELOADED) {
+      HEADER.querySelector(SELECTORS.rightSidebar.backdrop).remove();
+
+      window.addEventListener('load', () => {
+        HEADER.querySelector(SELECTORS.avatar.button).click();
+      });
+
+      RIGHT_SIDEBAR_PRELOADED = true;
+    }
+
     if (CONFIG.backgroundColor !== '') {
       HEADER_STYLE.textContent += `
         ${SELECTORS.header.self}
@@ -152,6 +173,15 @@
       }
 
       oldSvg.parentNode.replaceChild(newSvg, oldSvg);
+    }
+
+    if (elementConfig.marginRight !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.topDiv}
+        {
+          margin-right: ${elementConfig.marginRight} !important;
+        }
+      `;
     }
   }
 
@@ -1160,7 +1190,7 @@
   function updateAvatarButton() {
     log(DEBUG, 'updateAvatarButton()');
 
-    const elementSelector = SELECTORS.sidebars.right;
+    const elementSelector = SELECTORS.rightSidebar;
     const topDivSelector = elementSelector.topDiv;
 
     const topDiv = HEADER.querySelector(topDivSelector);
@@ -1361,104 +1391,506 @@
     }
   }
 
-  function updateSidebars() {
-    log(DEBUG, 'updateSidebars()');
+  function addUserscriptMenuItem(featurePreviewSearch, liElementId) {
+    const featurePreviewButton = featurePreviewSearch[0];
+    const featurePreviewLi = featurePreviewButton.parentNode;
 
-    const configKey = 'sidebars';
+    const newLiElement = featurePreviewLi.cloneNode(true);
+    newLiElement.setAttribute('id', liElementId);
+    newLiElement.removeAttribute('data-targets');
+
+    const newButton = newLiElement.querySelector('button');
+    newButton.removeAttribute('id');
+    newButton.removeAttribute('data-analytics-event');
+    newButton.removeAttribute('data-show-dialog-id');
+    newButton.removeAttribute('data-view-component');
+    newButton.onclick = () => {
+      GMC.open();
+
+      if (GMC.get('on_open') === 'close sidebar') HEADER.querySelector(SELECTORS.rightSidebar.closeButton)?.click();
+    };
+
+    const textElement = newLiElement.querySelector('.ActionListItem-label');
+    textElement.textContent = GMC.get('menu_item_title');
+
+    const oldSvg = newLiElement.querySelector('svg');
+
+    const menuItemIcon = GMC.get('menu_item_icon');
+    if (menuItemIcon === 'logo') {
+      const newSvg = document.createElement('img');
+      newSvg.setAttribute('height', '16px');
+      newSvg.setAttribute('width', '16px');
+      newSvg.src = `https://raw.githubusercontent.com/blakegearin/github-custom-global-navigation/main/img/${THEME}_logo.svg`;
+
+      oldSvg.parentNode.replaceChild(newSvg, oldSvg);
+    } else {
+      let svgString;
+
+      if (menuItemIcon === 'cog') {
+        svgString = `
+          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-gear">
+            <path d="M8 0a8.2 8.2 0 0 1 .701.031C9.444.095 9.99.645 10.16 1.29l.288 1.107c.018.066.079.158.212.224.231.114.454.243.668.386.123.082.233.09.299.071l1.103-.303c.644-.176 1.392.021 1.82.63.27.385.506.792.704 1.218.315.675.111 1.422-.364 1.891l-.814.806c-.049.048-.098.147-.088.294.016.257.016.515 0 .772-.01.147.038.246.088.294l.814.806c.475.469.679 1.216.364 1.891a7.977 7.977 0 0 1-.704 1.217c-.428.61-1.176.807-1.82.63l-1.102-.302c-.067-.019-.177-.011-.3.071a5.909 5.909 0 0 1-.668.386c-.133.066-.194.158-.211.224l-.29 1.106c-.168.646-.715 1.196-1.458 1.26a8.006 8.006 0 0 1-1.402 0c-.743-.064-1.289-.614-1.458-1.26l-.289-1.106c-.018-.066-.079-.158-.212-.224a5.738 5.738 0 0 1-.668-.386c-.123-.082-.233-.09-.299-.071l-1.103.303c-.644.176-1.392-.021-1.82-.63a8.12 8.12 0 0 1-.704-1.218c-.315-.675-.111-1.422.363-1.891l.815-.806c.05-.048.098-.147.088-.294a6.214 6.214 0 0 1 0-.772c.01-.147-.038-.246-.088-.294l-.815-.806C.635 6.045.431 5.298.746 4.623a7.92 7.92 0 0 1 .704-1.217c.428-.61 1.176-.807 1.82-.63l1.102.302c.067.019.177.011.3-.071.214-.143.437-.272.668-.386.133-.066.194-.158.211-.224l.29-1.106C6.009.645 6.556.095 7.299.03 7.53.01 7.764 0 8 0Zm-.571 1.525c-.036.003-.108.036-.137.146l-.289 1.105c-.147.561-.549.967-.998 1.189-.173.086-.34.183-.5.29-.417.278-.97.423-1.529.27l-1.103-.303c-.109-.03-.175.016-.195.045-.22.312-.412.644-.573.99-.014.031-.021.11.059.19l.815.806c.411.406.562.957.53 1.456a4.709 4.709 0 0 0 0 .582c.032.499-.119 1.05-.53 1.456l-.815.806c-.081.08-.073.159-.059.19.162.346.353.677.573.989.02.03.085.076.195.046l1.102-.303c.56-.153 1.113-.008 1.53.27.161.107.328.204.501.29.447.222.85.629.997 1.189l.289 1.105c.029.109.101.143.137.146a6.6 6.6 0 0 0 1.142 0c.036-.003.108-.036.137-.146l.289-1.105c.147-.561.549-.967.998-1.189.173-.086.34-.183.5-.29.417-.278.97-.423 1.529-.27l1.103.303c.109.029.175-.016.195-.045.22-.313.411-.644.573-.99.014-.031.021-.11-.059-.19l-.815-.806c-.411-.406-.562-.957-.53-1.456a4.709 4.709 0 0 0 0-.582c-.032-.499.119-1.05.53-1.456l.815-.806c.081-.08.073-.159.059-.19a6.464 6.464 0 0 0-.573-.989c-.02-.03-.085-.076-.195-.046l-1.102.303c-.56.153-1.113.008-1.53-.27a4.44 4.44 0 0 0-.501-.29c-.447-.222-.85-.629-.997-1.189l-.289-1.105c-.029-.11-.101-.143-.137-.146a6.6 6.6 0 0 0-1.142 0ZM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM9.5 8a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 9.5 8Z"></path>
+          </svg>
+        `;
+      } else if (menuItemIcon === 'compass') {
+        svgString = `
+          <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+            <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+            <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm306.7 69.1L162.4 380.6c-19.4 7.5-38.5-11.6-31-31l55.5-144.3c3.3-8.5 9.9-15.1 18.4-18.4l144.3-55.5c19.4-7.5 38.5 11.6 31 31L325.1 306.7c-3.2 8.5-9.9 15.1-18.4 18.4zM288 256a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/>
+          </svg>
+        `;
+      }
+
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
+      const newSvg = svgDoc.documentElement;
+
+      oldSvg.parentNode.replaceChild(newSvg, oldSvg);
+    }
+
+    const parentUl = featurePreviewLi.parentNode;
+    const settingsLi = HEADER.querySelector('a[href="/settings/profile"]').parentNode;
+
+    parentUl.insertBefore(newLiElement, settingsLi.nextSibling);
+
+    const divider = featurePreviewLi.parentNode.querySelector('.ActionList-sectionDivider');
+    const newDivider = divider.cloneNode(true);
+
+    parentUl.insertBefore(newDivider, settingsLi.nextSibling);
+  }
+
+  // function waitForRightSidebarLoad() {
+  //   log(SILENT, 'waitForRightSidebarLoad()');
+
+  //   const configKey = 'rightSidebar';
+  //   const elementSelector = SELECTORS[configKey];
+
+  //   if (HEADER.querySelector(elementSelector.backdrop)) {
+  //     log(INFO, 'Right sidebar preloaded');
+  //     updateLoadedRightSidebar();
+  //   } else {
+  //     setTimeout(waitForRightSidebarLoad, 100);
+  //   }
+  // }
+
+  function updateLoadedRightSidebar(featurePreviewSearch, liElementId) {
+    log(SILENT, 'updateLoadedRightSidebar()');
+
+    addUserscriptMenuItem(featurePreviewSearch, liElementId);
+
+    const configKey = 'rightSidebar';
 
     const elementConfig = CONFIG[configKey];
     const elementSelector = SELECTORS[configKey];
 
-    if (elementConfig.backdrop.color !== '') {
+    let statusLi;
+
+    const statusId = 'edit-status-li';
+
+    function setStatusId(statusLi) {
+      if (statusLi) return;
+
+      statusLi = HEADER.querySelector(elementSelector.status.li);
+
+      if (!statusLi) {
+        logError(`Selector '${elementSelector.status.li}' not found`);
+
+        return;
+      }
+
+      statusLi.setAttribute('id', statusId);
+    }
+
+    if (elementConfig.status.margin !== '') {
+      setStatusId(statusLi);
+
       HEADER_STYLE.textContent += `
-        ${elementSelector.backdrop}
+        ${createId(statusId)}
         {
-          background-color: ${CONFIG.sidebars.backdrop.color} !important;
+          margin: ${elementConfig.status.margin} !important;
         }
       `;
     }
 
-    if (elementConfig.backdrop.pointerEvents !== '') {
+    if (elementConfig.status.paddingLeft !== '') {
+      setStatusId(statusLi);
+
       HEADER_STYLE.textContent += `
-        ${elementSelector.backdrop}
+        ${createId(statusId)}
         {
-          pointer-events: ${CONFIG.sidebars.backdrop.pointerEvents} !important;
+          padding-left: ${elementConfig.status.paddingLeft} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.status.border !== '') {
+      setStatusId(statusLi);
+
+      HEADER_STYLE.textContent += `
+        ${createId(statusId)}
+        {
+          border: ${elementConfig.status.border} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.status.borderRadius !== '') {
+      setStatusId(statusLi);
+
+      HEADER_STYLE.textContent += `
+        ${createId(statusId)}
+        {
+          border-radius: ${elementConfig.status.borderRadius} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.status.icon.remove) {
+      setStatusId(statusLi);
+
+      HEADER_STYLE.textContent += cssHideElement(`${createId(statusId)} ${elementSelector.status.emoji}`);
+    } else {
+      HEADER_STYLE.textContent += `
+        ${createId(statusId)} ${elementSelector.status.emoji}
+        {
+          display: block !important;
+        }
+      `;
+    }
+
+    if (elementConfig.changeToSignedInAs) {
+      const avatar = HEADER.querySelector(elementSelector.avatar);
+
+      const accountTopDiv = avatar.nextElementSibling;
+
+      const accountSpans = accountTopDiv.querySelectorAll('div > span');
+
+      if (accountSpans.length !== 2) {
+        logError(`Selector '${elementSelector.avatar} div > span' not found`);
+        return;
+      }
+
+      const [usernameSpan, nameSpan] = accountSpans;
+
+      const nameSpanClone = nameSpan.cloneNode(true);
+      nameSpanClone.textContent = 'Signed in as';
+
+      const accountNameId = 'account-name-span';
+      nameSpan.setAttribute('id', accountNameId);
+
+      HEADER_STYLE.textContent += cssHideElement(createId(accountNameId));
+
+      nameSpan.parentNode.insertBefore(nameSpanClone, usernameSpan);
+
+      NEW_ELEMENTS.push(nameSpanClone);
+
+      const usernameNameId = 'account-username-span';
+      usernameSpan.setAttribute('id', usernameNameId);
+
+      HEADER_STYLE.textContent += `
+        ${createId(usernameNameId)}
+        {
+          margin-top: 4px !important;
+        }
+      `;
+    }
+
+    const dividers = HEADER.querySelectorAll(elementSelector.dividers);
+
+    if (!dividers) {
+      logError(`Selector '${elementSelector.dividers}' not found`);
+
+      return;
+    }
+
+    const hiddenDividerClass = 'right-sidebar-hidden-divider';
+
+    dividers.forEach((divider, index) => {
+      if (elementConfig.removeDividers[index]) divider.classList.add(hiddenDividerClass);
+    });
+
+    HEADER_STYLE.textContent += `
+      .${hiddenDividerClass}
+      {
+        display: none !important;
+      }
+    `;
+
+    if (elementConfig.addTopDivider) {
+      const divider = HEADER.querySelector(elementSelector.dividers);
+
+      if (!divider) {
+        logError(`Selector '${elementSelector.dividers}' not found`);
+
+        return;
+      }
+
+      statusLi = HEADER.querySelector(elementSelector.status.li);
+
+      if (!statusLi) {
+        logError(`Selector '${elementSelector.status.li}' not found`);
+
+        return;
+      }
+
+      const dividerClone = divider.cloneNode(true);
+
+      statusLi.parentNode.insertBefore(dividerClone, statusLi);
+
+      NEW_ELEMENTS.push(dividerClone);
+    }
+  }
+
+  function updateSidebars() {
+    log(DEBUG, 'updateSidebars()');
+
+    let configKey = 'sidebarBackdrops';
+
+    let elementConfig = CONFIG[configKey];
+    let elementSelector = SELECTORS[configKey];
+
+    if (elementConfig.color !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector}
+        {
+          background-color: ${elementConfig.color} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.pointerEvents !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector}
+        {
+          pointer-events: ${elementConfig.pointerEvents} !important;
         }
 
-        ${elementSelector.backdrop} > *
+        ${elementSelector} > *
         {
           pointer-events: initial !important;
         }
       `;
     }
 
-    if (elementConfig.left.preload && !LEFT_SIDEBAR_PRELOADED) {
-      HEADER.querySelector(elementSelector.left.backdrop).remove();
+    configKey = 'rightSidebar';
+    elementConfig = CONFIG[configKey];
+    elementSelector = SELECTORS[configKey];
 
-      window.addEventListener('load', () => {
-        HEADER.querySelector(`${SELECTORS.hamburgerButton} button`).click();
-        log(INFO, 'Left sidebar preloaded');
-      });
-
-      LEFT_SIDEBAR_PRELOADED = true;
-    }
-
-    if (elementConfig.right.floatUnderneath) {
+    if (elementConfig.floatUnderneath) {
       HEADER_STYLE.textContent += `
-        ${elementSelector.right.backdrop}
+        ${elementSelector.backdrop}
         {
-          padding-top: 10px !important;
-          padding-right: 15px !important;
-          border-top-right-radius: 6px !important;
-          bottom: initial !important;
-          top: initial !important;
+          position: absolute;
+          top: 40px !important;
+          align-items: flex-start !important;
         }
 
-        ${elementSelector.right.modalDialog}
+        ${elementSelector.modalDialog}
         {
           border-top-right-radius: var(--borderRadius-large, 0.75rem) !important;
           border-bottom-right-radius: var(--borderRadius-large, 0.75rem) !important;
         }
 
-        ${elementSelector.right.navParentDiv}
-        {
-          margin-bottom: 0px !important;
-        }
-
-        ${elementSelector.right.nav}
+        ${elementSelector.nav}
         {
           padding-bottom: 0px !important;
         }
       `;
     }
 
-    if (elementConfig.right.preload && !RIGHT_SIDEBAR_PRELOADED) {
-      HEADER.querySelector(elementSelector.right.backdrop).remove();
-
-      window.addEventListener('load', () => {
-        HEADER.querySelector(SELECTORS.avatar.button).click();
-        log(INFO, 'Right sidebar preloaded');
-      });
-
-      RIGHT_SIDEBAR_PRELOADED = true;
-    }
-
-    if (elementConfig.right.maxHeight) {
+    if (elementConfig.addCalloutArrow) {
       HEADER_STYLE.textContent += `
-        ${elementSelector.right.modalDialog}
+      ${elementSelector.modalDialog}:after
         {
-          max-height: ${elementConfig.right.maxHeight} !important;
+          content: "";
+          position: absolute;
+          margin-top: -8px;
+          margin-right: 20px;
+          border-left: 8px solid transparent;
+          border-right: 8px solid transparent;
+          border-bottom: 8px solid ${elementConfig.dividerColor || 'var(--color-action-list-item-inline-divider)'};
+          right: 0px;
         }
       `;
     }
 
-    if (elementConfig.right.width !== '') {
+    if (elementConfig.width !== '') {
       HEADER_STYLE.textContent += `
-        ${elementSelector.right.modalDialog}.Overlay.Overlay--size-small-portrait
+        ${elementSelector.modalDialog}.Overlay.Overlay--size-small-portrait
         {
-          --overlay-width: ${elementConfig.right.width};
+          --overlay-width: ${elementConfig.width};
         }
       `;
+    }
+
+    if (elementConfig.height !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.modalDialog}.Overlay.Overlay--size-small-portrait
+        {
+          height: ${elementConfig.height} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.maxHeight !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.modalDialog}
+        {
+          max-height: ${elementConfig.maxHeight} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.borderRadius !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.modalDialog}
+        {
+          border-radius: ${elementConfig.borderRadius} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.animation !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.modalDialog}
+        {
+          animation: ${elementConfig.animation} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.body.padding !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.body}
+        {
+          padding: ${elementConfig.body.padding} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.body.marginBottom !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.body}
+        {
+          margin-bottom: ${elementConfig.body.marginBottom} !important;
+        }
+
+        ${elementSelector.body} > div
+        {
+          margin-bottom: 0px !important;
+        }
+      `;
+    }
+
+    if (elementConfig.nav.padding !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.nav}
+        {
+          padding: ${elementConfig.nav.padding} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.nav.items.leftPadding !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.navItems}
+        {
+          padding-left: ${elementConfig.nav.items.leftPadding} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.nav.items.borderRadius !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.navItems}
+        {
+          border-radius: ${elementConfig.nav.items.borderRadius} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.nav.items.hover.backgroundColor !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.navItems}:hover:not(.ActionList-sectionDivider)
+        {
+          background-color: ${elementConfig.nav.items.hover.backgroundColor} !important;
+        }
+
+        /* "Add account" is a nav instead of an li, so it needs extra styling to avoid a double highlight */
+        ${elementSelector.navItems} > nav-list > ul > li:hover
+        {
+          background-color: initial !important;
+        }
+      `;
+    }
+
+    if (elementConfig.nav.items.hover.color !== '') {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.navItems}:hover *
+        {
+          color: ${elementConfig.nav.items.hover.color} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.dividerColor) {
+      HEADER_STYLE.textContent += `
+        ${elementSelector.dividers}
+        {
+          background: ${elementConfig.dividerColor} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.avatar.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.avatar);
+    }
+
+    if (elementConfig.closeButton.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.closeButtonDiv);
+
+      HEADER_STYLE.textContent += `
+        ${elementSelector.titleWrap} div
+        {
+          margin-left: 0px !important;
+        }
+      `;
+    }
+
+    if (elementConfig.icons.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.icons);
+    }
+
+    if (elementConfig.addAccount.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.addAccount);
+    }
+
+    if (elementConfig.yourOrganizations.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.yourOrganizations);
+    }
+
+    if (elementConfig.yourEnterprises.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.yourEnterprises);
+    }
+
+    if (elementConfig.yourSponsors.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.yourSponsors);
+    }
+
+    if (elementConfig.tryEnterprise.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.tryEnterprise);
+    }
+
+    if (elementConfig.copilot.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.copilot);
+    }
+
+    if (elementConfig.githubDocs.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.githubDocs);
+    }
+
+    if (elementConfig.githubSupport.remove) {
+      HEADER_STYLE.textContent += cssHideElement(elementSelector.githubSupport);
     }
   }
 
@@ -1913,12 +2345,12 @@
   }
 
   // eslint-disable-next-line no-unused-vars
-  function checkConfigConsistency(configs) {
+  function checkConfigConsistency() {
     log(DEBUG, 'checkConfigConsistency()');
 
     const lightDarkDifference = compareObjects(
-      configs.happyMedium.light,
-      configs.happyMedium.dark,
+      CONFIGS.happyMedium.light,
+      CONFIGS.happyMedium.dark,
       'Happy Medium Light',
       'Happy Medium Dark',
     );
@@ -1930,8 +2362,8 @@
     }
 
     const typeDifference = compareObjects(
-      configs.happyMedium,
-      configs.oldSchool,
+      CONFIGS.happyMedium,
+      CONFIGS.oldSchool,
       'Happy Medium',
       'Old School',
     );
@@ -1977,71 +2409,7 @@
     const featurePreviewSearch = HEADER.querySelectorAll('[data-analytics-event*="FEATURE_PREVIEW"]');
 
     if (featurePreviewSearch.length === 1) {
-      const featurePreviewButton = featurePreviewSearch[0];
-      const featurePreviewLi = featurePreviewButton.parentNode;
-
-      const newLiElement = featurePreviewLi.cloneNode(true);
-      newLiElement.setAttribute('id', liElementId);
-      newLiElement.removeAttribute('data-targets');
-
-      const newButton = newLiElement.querySelector('button');
-      newButton.removeAttribute('id');
-      newButton.removeAttribute('data-analytics-event');
-      newButton.removeAttribute('data-show-dialog-id');
-      newButton.removeAttribute('data-view-component');
-      newButton.onclick = () => {
-        GMC.open();
-
-        if (GMC.get('on_open') === 'close sidebar') HEADER.querySelector(SELECTORS.sidebars.right.closeButton)?.click();
-      };
-
-      const textElement = newLiElement.querySelector('.ActionListItem-label');
-      textElement.textContent = GMC.get('menu_item_title');
-
-      const oldSvg = newLiElement.querySelector('svg');
-
-      const menuItemIcon = GMC.get('menu_item_icon');
-      if (menuItemIcon === 'logo') {
-        const newSvg = document.createElement('img');
-        newSvg.setAttribute('height', '16px');
-        newSvg.setAttribute('width', '16px');
-        newSvg.src = `https://raw.githubusercontent.com/blakegearin/github-custom-global-navigation/main/img/${THEME}_logo.svg`;
-
-        oldSvg.parentNode.replaceChild(newSvg, oldSvg);
-      } else {
-        let svgString;
-
-        if (menuItemIcon === 'cog') {
-          svgString = `
-            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-gear">
-              <path d="M8 0a8.2 8.2 0 0 1 .701.031C9.444.095 9.99.645 10.16 1.29l.288 1.107c.018.066.079.158.212.224.231.114.454.243.668.386.123.082.233.09.299.071l1.103-.303c.644-.176 1.392.021 1.82.63.27.385.506.792.704 1.218.315.675.111 1.422-.364 1.891l-.814.806c-.049.048-.098.147-.088.294.016.257.016.515 0 .772-.01.147.038.246.088.294l.814.806c.475.469.679 1.216.364 1.891a7.977 7.977 0 0 1-.704 1.217c-.428.61-1.176.807-1.82.63l-1.102-.302c-.067-.019-.177-.011-.3.071a5.909 5.909 0 0 1-.668.386c-.133.066-.194.158-.211.224l-.29 1.106c-.168.646-.715 1.196-1.458 1.26a8.006 8.006 0 0 1-1.402 0c-.743-.064-1.289-.614-1.458-1.26l-.289-1.106c-.018-.066-.079-.158-.212-.224a5.738 5.738 0 0 1-.668-.386c-.123-.082-.233-.09-.299-.071l-1.103.303c-.644.176-1.392-.021-1.82-.63a8.12 8.12 0 0 1-.704-1.218c-.315-.675-.111-1.422.363-1.891l.815-.806c.05-.048.098-.147.088-.294a6.214 6.214 0 0 1 0-.772c.01-.147-.038-.246-.088-.294l-.815-.806C.635 6.045.431 5.298.746 4.623a7.92 7.92 0 0 1 .704-1.217c.428-.61 1.176-.807 1.82-.63l1.102.302c.067.019.177.011.3-.071.214-.143.437-.272.668-.386.133-.066.194-.158.211-.224l.29-1.106C6.009.645 6.556.095 7.299.03 7.53.01 7.764 0 8 0Zm-.571 1.525c-.036.003-.108.036-.137.146l-.289 1.105c-.147.561-.549.967-.998 1.189-.173.086-.34.183-.5.29-.417.278-.97.423-1.529.27l-1.103-.303c-.109-.03-.175.016-.195.045-.22.312-.412.644-.573.99-.014.031-.021.11.059.19l.815.806c.411.406.562.957.53 1.456a4.709 4.709 0 0 0 0 .582c.032.499-.119 1.05-.53 1.456l-.815.806c-.081.08-.073.159-.059.19.162.346.353.677.573.989.02.03.085.076.195.046l1.102-.303c.56-.153 1.113-.008 1.53.27.161.107.328.204.501.29.447.222.85.629.997 1.189l.289 1.105c.029.109.101.143.137.146a6.6 6.6 0 0 0 1.142 0c.036-.003.108-.036.137-.146l.289-1.105c.147-.561.549-.967.998-1.189.173-.086.34-.183.5-.29.417-.278.97-.423 1.529-.27l1.103.303c.109.029.175-.016.195-.045.22-.313.411-.644.573-.99.014-.031.021-.11-.059-.19l-.815-.806c-.411-.406-.562-.957-.53-1.456a4.709 4.709 0 0 0 0-.582c-.032-.499.119-1.05.53-1.456l.815-.806c.081-.08.073-.159.059-.19a6.464 6.464 0 0 0-.573-.989c-.02-.03-.085-.076-.195-.046l-1.102.303c-.56.153-1.113.008-1.53-.27a4.44 4.44 0 0 0-.501-.29c-.447-.222-.85-.629-.997-1.189l-.289-1.105c-.029-.11-.101-.143-.137-.146a6.6 6.6 0 0 0-1.142 0ZM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM9.5 8a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 9.5 8Z"></path>
-            </svg>
-          `;
-        } else if (menuItemIcon === 'compass') {
-          svgString = `
-            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-              <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-              <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm306.7 69.1L162.4 380.6c-19.4 7.5-38.5-11.6-31-31l55.5-144.3c3.3-8.5 9.9-15.1 18.4-18.4l144.3-55.5c19.4-7.5 38.5 11.6 31 31L325.1 306.7c-3.2 8.5-9.9 15.1-18.4 18.4zM288 256a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/>
-            </svg>
-          `;
-        }
-
-        const parser = new DOMParser();
-        const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
-        const newSvg = svgDoc.documentElement;
-
-        oldSvg.parentNode.replaceChild(newSvg, oldSvg);
-      }
-
-      const parentUl = featurePreviewLi.parentNode;
-      const settingsLi = HEADER.querySelector('a[href="/settings/profile"]').parentNode;
-
-      parentUl.insertBefore(newLiElement, settingsLi.nextSibling);
-
-      const divider = featurePreviewLi.parentNode.querySelector('.ActionList-sectionDivider');
-      const newDivider = divider.cloneNode(true);
-
-      parentUl.insertBefore(newDivider, settingsLi.nextSibling);
+      updateLoadedRightSidebar(featurePreviewSearch, liElementId);
     } else {
       setTimeout(waitForFeaturePreviewButton, 100);
     }
@@ -2074,8 +2442,8 @@
       }
     }
 
-    recursivelyGenerateCustomConfig(configs.happyMedium.light, customConfig.light, 'light');
-    recursivelyGenerateCustomConfig(configs.happyMedium.dark, customConfig.dark, 'dark');
+    recursivelyGenerateCustomConfig(CONFIGS.happyMedium.light, customConfig.light, 'light');
+    recursivelyGenerateCustomConfig(CONFIGS.happyMedium.dark, customConfig.dark, 'dark');
 
     return customConfig;
   }
@@ -2302,7 +2670,7 @@
     const confirmed = confirm('Are you sure you want to overwrite your custom configuration with Happy Medium? This is irreversible.');
 
     if (confirmed) {
-      configsToGMC(configs.happyMedium);
+      configsToGMC(CONFIGS.happyMedium);
       GMC.save();
     }
   }
@@ -2313,7 +2681,7 @@
     const confirmed = confirm('Are you sure you want to overwrite your custom configuration with Old School? This is irreversible.');
 
     if (confirmed) {
-      configsToGMC(configs.oldSchool);
+      configsToGMC(CONFIGS.oldSchool);
       GMC.save();
     }
   }
@@ -3074,14 +3442,14 @@
 
     if (!HEADER) return 'continue';
 
-    const featurePreviewButton = document.querySelector(SELECTORS.avatar.button);
+    const avatarButton = document.querySelector(SELECTORS.avatar.button);
 
-    if (!featurePreviewButton) {
+    if (!avatarButton) {
       logError(`Selector ${SELECTORS.avatar.button} not found`);
       return 'break';
     }
 
-    featurePreviewButton.addEventListener('click', waitForFeaturePreviewButton);
+    avatarButton.addEventListener('click', waitForFeaturePreviewButton);
 
     CONFIG_NAME = {
       'Off': 'off',
@@ -3092,11 +3460,14 @@
 
     if (CONFIG_NAME === 'off') return 'break';
 
-    if (CONFIG_NAME === 'custom') configs.custom = generateCustomConfig();
+    if (CONFIG_NAME === 'custom') CONFIGS.custom = generateCustomConfig();
 
-    CONFIG = configs[CONFIG_NAME][THEME];
-
+    CONFIG = CONFIGS[CONFIG_NAME][THEME];
     log(VERBOSE, 'CONFIG', CONFIG);
+
+    if (GMC.get('menu_item_title') === '-1') {
+      GMC.set('menu_item_title', CONFIG.menuItemTitle || 'Custom global navigation');
+    }
 
     const headerSuccessFlag = 'customizedHeader';
 
@@ -3125,6 +3496,24 @@
             action-menu
             {
               display: none !important;
+            }
+          }
+
+          @media (min-width: 1012px)
+          {
+            ${SELECTORS.header.globalBar}
+            {
+              padding-right: var(--base-size-32, 32px) !important;
+              padding-left: var(--base-size-32, 32px) !important;
+            }
+          }
+
+          @media (min-width: 768px)
+          {
+            ${SELECTORS.header.globalBar}
+            {
+              padding-right: var(--base-size-24, 24px) !important;
+              padding-left: var(--base-size-24, 24px) !important;
             }
           }
         `;
@@ -3234,7 +3623,7 @@
   const TEMP_REPOSITORY_HEADER_FLAG = 'tempCustomizedRepositoryHeader';
   const REPOSITORY_HEADER_CLASS = 'customizedRepositoryHeader';
   const MAX_IDLE_MUTATIONS = 1000;
-  const MAX_HEADER_UPDATES = 100;
+  const MAX_HEADER_UPDATES = 10;
 
   let CONFIG;
   let CONFIG_NAME;
@@ -3332,19 +3721,37 @@
       details: '#repository-details-container',
       bottomBorder: `.${REPOSITORY_HEADER_CLASS} .border-bottom.mx-xl-5`,
     },
-    sidebars: {
-      backdrop: '.Overlay-backdrop--side',
-      left: {
-        backdrop: '.Overlay-backdrop--placement-left.Overlay-backdrop--side',
+    sidebarBackdrops: '.Overlay-backdrop--side',
+    leftSidebar: {
+      backdrop: '.Overlay-backdrop--placement-left.Overlay-backdrop--side',
+    },
+    rightSidebar: {
+      backdrop: '.AppHeader-user .Overlay-backdrop--side',
+      topDiv: '.AppHeader-user .Overlay-backdrop--placement-right',
+      modalDialog: '.AppHeader-user modal-dialog',
+      titleWrap: '.AppHeader-user modal-dialog .Overlay-titleWrap',
+      title: '.AppHeader-user modal-dialog div.Overlay-titleWrap',
+      closeButtonDiv: '.AppHeader-user modal-dialog .Overlay-headerContentWrap .Overlay-actionWrap',
+      closeButton: '.AppHeader-user modal-dialog .Overlay-closeButton.close-button',
+      avatar: '.AppHeader-user modal-dialog div.Overlay-titleWrap .AppHeader-logo',
+      body: '.AppHeader-user modal-dialog div.Overlay-body',
+      navParentDiv: '.AppHeader-user modal-dialog div.Overlay-body > div',
+      nav: '.AppHeader-user modal-dialog nav.ActionList',
+      navItems: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul > *',
+      icons: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul span.ActionListItem-visual',
+      dividers: '.AppHeader-user modal-dialog nav .ActionList-sectionDivider',
+      status: {
+        li: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul > li:nth-child(1)',
+        emoji: 'span.ActionListItem-visual',
       },
-      right: {
-        backdrop: '.AppHeader-user .Overlay-backdrop--side',
-        topDiv: '.AppHeader-user .Overlay-backdrop--placement-right',
-        modalDialog: '.AppHeader-user modal-dialog',
-        closeButton: '.AppHeader-user modal-dialog .Overlay-closeButton.close-button',
-        navParentDiv: '.AppHeader-user modal-dialog div.Overlay-body > div',
-        nav: '.AppHeader-user modal-dialog nav',
-      },
+      addAccount: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul > nav[aria-label="Switch Accounts"]',
+      yourOrganizations: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul a[href="/settings/organizations"]',
+      yourEnterprises: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul a[href="/settings/enterprises"]',
+      yourSponsors: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul a[href="/sponsors/accounts"]',
+      tryEnterprise: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul a[href^="/organizations/enterprise_plan"]',
+      copilot: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul a[href="/github-copilot/signup"]',
+      githubDocs: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul a[href="https://docs.github.com"]',
+      githubSupport: '.AppHeader-user modal-dialog nav.ActionList > nav-list > ul a[href="https://support.github.com"]',
     },
   };
 
@@ -3355,7 +3762,7 @@
   const oldSchoolColor = '#F0F6FC';
   const oldSchoolHoverColor = '#FFFFFFB3';
   const oldSchoolHoverBackgroundColor = 'transparent';
-  let configs = {
+  let CONFIGS = {
     happyMedium: {
       light: {
         backgroundColor: '',
@@ -3554,21 +3961,34 @@
             color: '',
           },
         },
-        sidebars: {
-          backdrop: {
-            color: 'transparent',
-            pointerEvents: 'none',
-          },
-          left: {
-            preload: true,
-          },
-          right: {
-            preload: true,
-            floatUnderneath: false,
-            width: '',
-            maxHeight: '',
-          },
+        sidebarBackdrops: {
+          color: 'transparent',
+          pointerEvents: 'none',
         },
+        leftSidebar: {
+          preload: true,
+        },
+        rightSidebar: {
+          preload: true,
+          floatUnderneath: false,
+          width: '',
+          maxHeight: '',
+        },
+        // sidebars: {
+        //   backdrop: {
+        //     color: 'transparent',
+        //     pointerEvents: 'none',
+        //   },
+        //   left: {
+        //     preload: true,
+        //   },
+        //   right: {
+        //     preload: true,
+        //     floatUnderneath: false,
+        //     width: '',
+        //     maxHeight: '',
+        //   },
+        // },
         repositoryHeader: {
           import: true,
           alignCenter: false,
@@ -3785,21 +4205,34 @@
             color: '',
           },
         },
-        sidebars: {
-          backdrop: {
-            color: 'transparent',
-            pointerEvents: 'none',
-          },
-          left: {
-            preload: true,
-          },
-          right: {
-            preload: true,
-            floatUnderneath: false,
-            width: '',
-            maxHeight: '',
-          },
+        sidebarBackdrops: {
+          color: 'transparent',
+          pointerEvents: 'none',
         },
+        leftSidebar: {
+          preload: true,
+        },
+        rightSidebar: {
+          preload: true,
+          floatUnderneath: false,
+          width: '',
+          maxHeight: '',
+        },
+        // sidebars: {
+        //   backdrop: {
+        //     color: 'transparent',
+        //     pointerEvents: 'none',
+        //   },
+        //   left: {
+        //     preload: true,
+        //   },
+        //   right: {
+        //     preload: true,
+        //     floatUnderneath: false,
+        //     width: '',
+        //     maxHeight: '',
+        //   },
+        // },
         repositoryHeader: {
           import: true,
           alignCenter: false,
@@ -3822,7 +4255,7 @@
     },
     oldSchool: {
       light: {
-        backgroundColor: '#161C20',
+        backgroundColor: '#24292f',
         hamburgerButton: {
           remove: true,
         },
@@ -3830,6 +4263,7 @@
           remove: false,
           color: '#e6edf3',
           customSvg: '',
+          marginRight: '16px',
         },
         pageTitle: {
           remove: true,
@@ -3841,8 +4275,8 @@
         },
         search: {
           remove: false,
-          backgroundColor: '#494D54',
-          borderColor: '#30363d',
+          backgroundColor: 'transparent',
+          borderColor: '#57606a',
           boxShadow: 'none',
           alignLeft: true,
           width: 'calc(var(--feed-sidebar) - 67px)',
@@ -3851,7 +4285,7 @@
             right: '',
           },
           magnifyingGlassIcon: {
-            remove: true,
+            remove: false,
           },
           placeholder: {
             text: 'Search or jump to...',
@@ -3995,14 +4429,14 @@
         },
         avatar: {
           remove: false,
-          size: '24px',
+          size: '20px',
           dropdownIcon: true,
           canCloseSidebar: true,
         },
         globalBar: {
           boxShadowColor: '#21262D',
           leftAligned: {
-            gap: '0.75rem',
+            gap: '0rem',
           },
           rightAligned: {
             gap: '2px',
@@ -4018,19 +4452,89 @@
             color: '',
           },
         },
-        sidebars: {
-          backdrop: {
-            color: oldSchoolHoverBackgroundColor,
-            pointerEvents: 'none',
+        sidebarBackdrops: {
+          color: oldSchoolHoverBackgroundColor,
+          pointerEvents: 'none',
+        },
+        leftSidebar: {
+          preload: true,
+        },
+        rightSidebar: {
+          preload: true,
+          floatUnderneath: true,
+          changeToSignedInAs: true,
+          addCalloutArrow: true,
+          addTopDivider: true,
+          width: '172px',
+          height: 'auto',
+          maxHeight: '',
+          borderRadius: '0.5rem',
+          animation: 'none',
+          dividerColor: '',
+          body: {
+            padding: '0px',
+            marginBottom: '0.5rem',
           },
-          left: {
-            preload: true,
+          status: {
+            margin: '0px 14px',
+            paddingLeft: '0px',
+            border: '1px solid #D0D7DE7A',
+            borderRadius: '6px',
+            icon: {
+              remove: false,
+            },
           },
-          right: {
-            preload: true,
-            floatUnderneath: true,
-            width: '',
-            maxHeight: '50vh',
+          nav: {
+            padding: '0px',
+            items: {
+              leftPadding: '0.5rem',
+              borderRadius: '0px',
+              hover: {
+                backgroundColor: '#0171DB',
+                color: '#FFFFFF',
+              },
+            },
+          },
+          removeDividers: {
+            0: false,
+            1: true,
+            2: false,
+            3: false,
+            4: true,
+            5: false,
+          },
+          avatar: {
+            remove: true,
+          },
+          closeButton: {
+            remove: true,
+          },
+          icons: {
+            remove: true,
+          },
+          addAccount: {
+            remove: true,
+          },
+          yourOrganizations: {
+            remove: false,
+          },
+          yourEnterprises: {
+            remove: true,
+          },
+          yourSponsors: {
+            remove: false,
+          },
+          tryEnterprise: {
+            remove: true,
+          },
+          copilot: {
+            remove: true,
+          },
+          githubDocs: {
+            remove: true,
+          },
+          githubSupport: {
+            remove: true,
           },
         },
         repositoryHeader: {
@@ -4051,6 +4555,7 @@
             },
           },
         },
+        menuItemTitle: 'Custom global nav',
       },
       dark: {
         backgroundColor: '#161C20',
@@ -4249,19 +4754,88 @@
             color: '#e6edf3',
           },
         },
-        sidebars: {
-          backdrop: {
-            color: oldSchoolHoverBackgroundColor,
-            pointerEvents: 'none',
+        sidebarBackdrops: {
+          color: oldSchoolHoverBackgroundColor,
+          pointerEvents: 'none',
+        },
+        leftSidebar: {
+          preload: true,
+        },
+        rightSidebar: {
+          preload: true,
+          floatUnderneath: true,
+          changeToSignedInAs: true,
+          addCalloutArrow: true,
+          addTopDivider: true,
+          width: '172px',
+          height: 'auto',
+          maxHeight: '',
+          borderRadius: '0.5rem',
+          animation: 'none',
+          dividerColor: '#30363d',
+          body: {
+            padding: '0px',
+            marginBottom: '0.5rem',
           },
-          left: {
-            preload: true,
+          status: {
+            margin: '0px 14px',
+            paddingLeft: '0px',
+            border: '1px solid #30363d',
+            borderRadius: '6px',
+            icon: {
+              remove: false,
+            },
           },
-          right: {
-            preload: true,
-            floatUnderneath: true,
-            width: '',
-            maxHeight: '50vh',
+          nav: {
+            padding: '0px',
+            items: {
+              leftPadding: '0.5rem',
+              borderRadius: '0px',
+              hover: {
+                backgroundColor: '#0171DB',
+              },
+            },
+          },
+          removeDividers: {
+            0: false,
+            1: true,
+            2: false,
+            3: false,
+            4: true,
+            5: false,
+          },
+          avatar: {
+            remove: true,
+          },
+          closeButton: {
+            remove: true,
+          },
+          icons: {
+            remove: true,
+          },
+          addAccount: {
+            remove: true,
+          },
+          yourOrganizations: {
+            remove: false,
+          },
+          yourEnterprises: {
+            remove: true,
+          },
+          yourSponsors: {
+            remove: false,
+          },
+          tryEnterprise: {
+            remove: true,
+          },
+          copilot: {
+            remove: true,
+          },
+          githubDocs: {
+            remove: true,
+          },
+          githubSupport: {
+            remove: true,
           },
         },
         repositoryHeader: {
@@ -4282,12 +4856,13 @@
             },
           },
         },
+        menuItemTitle: 'Custom global nav',
       },
     },
   };
 
   // For testing purposes
-  // if (!checkConfigConsistency(configs)) return;
+  // if (!checkConfigConsistency()) return;
 
   let OBSERVER = new MutationObserver(observeAndModify);
 
@@ -5646,7 +6221,7 @@
       menu_item_title: {
         label: 'Menu item title',
         type: 'text',
-        default: 'Custom global navigation',
+        default: '-1',
       },
       menu_item_icon: {
         label: 'Menu item icon',
