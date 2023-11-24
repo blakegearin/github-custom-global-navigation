@@ -477,26 +477,38 @@
   function updateLink(configKey) {
     log(DEBUG, 'updateLink()');
 
-    const tooltipElement = SELECTORS.toolTips[configKey];
-
-    if (!tooltipElement) {
-      logError(`Selector '${configKey}' not found`);
-      return;
-    }
-
-    let link = tooltipElement.previousElementSibling;
-
     const elementConfig = CONFIG[configKey];
     const elementSelector = SELECTORS[configKey];
 
-    let topDivSelector = `${configKey}-div`;
-    link.parentNode.setAttribute('id', topDivSelector);
+    let link;
+    const tooltipElement = SELECTORS.toolTips[configKey];
+
+    if (tooltipElement) {
+      link = tooltipElement.previousElementSibling;
+    } else {
+      log(DEBUG, `Tooltip for '${configKey}' not found`);
+
+      const linkId = createId(SELECTORS[configKey].id);
+      link = HEADER.querySelector(linkId);
+
+      if (!link) {
+        logError(`Selector '${linkId}' not found`);
+
+        return;
+      }
+    }
+
+    let linkSelector = elementSelector.id;
+    link.setAttribute('id', linkSelector);
+
 
     if (elementConfig.remove) {
-      HEADER_STYLE.textContent += cssHideElement(createId(topDivSelector));
+      HEADER_STYLE.textContent += cssHideElement(createId(configKey));
 
       return;
-    } else if (!elementConfig.tooltip) {
+    }
+
+    if (!elementConfig.tooltip && SELECTORS.toolTips[configKey]?.id) {
       HEADER_STYLE.textContent += cssHideElement(createId(SELECTORS.toolTips[configKey].id));
     }
 
@@ -507,20 +519,17 @@
 
       const [cloneId, cloneElement] = response;
 
-      if (!elementConfig.tooltip) cloneElement.querySelector('tool-tip').remove();
-
-      topDivSelector = createId(cloneId);
       elementSelector[CONFIG_NAME] = {
         leftAlignedId: cloneId,
       };
-      link = cloneElement.querySelector('a');
+      link = cloneElement;
+
+      linkSelector = createId(cloneId);
     }
 
     const padding = '7px';
     link.style.setProperty('padding-left', padding, 'important');
     link.style.setProperty('padding-right', padding, 'important');
-
-    link.style.setProperty('display', 'flex', 'important');
 
     let textContent = elementConfig.text.content;
 
@@ -528,7 +537,11 @@
       const svgId = `${configKey}-svg`;
       const svg = link.querySelector('svg');
 
-      if (!svg) logError(`Selector '${configKey} svg' not found`);
+      if (!svg) {
+        logError(`Selector '${configKey} svg' not found`);
+
+        return;
+      }
 
       svg.setAttribute('id', svgId);
 
@@ -564,7 +577,7 @@
 
     if (!elementConfig.border) {
       HEADER_STYLE.textContent += `
-        ${topDivSelector} a
+        ${linkSelector}
         {
           border: none !important;
         }
@@ -573,7 +586,7 @@
 
     if (elementConfig.boxShadow !== '') {
       HEADER_STYLE.textContent += `
-      ${topDivSelector} a
+        ${linkSelector}
         {
           box-shadow: ${elementConfig.boxShadow} !important;
         }
@@ -582,7 +595,7 @@
 
     if (elementConfig.hover.backgroundColor !== '') {
       HEADER_STYLE.textContent += `
-        ${topDivSelector} a:hover
+        ${linkSelector}:hover
         {
           background-color: ${elementConfig.hover.backgroundColor} !important;
         }
@@ -591,7 +604,7 @@
 
     if (elementConfig.hover.color !== '') {
       HEADER_STYLE.textContent += `
-        ${topDivSelector} a span:hover
+        ${linkSelector} span:hover
         {
           color: ${elementConfig.hover.color} !important;
         }
@@ -648,7 +661,7 @@
       #${firstElementCloneId},
       #${secondElementCloneId}
       {
-        display: initial !important;
+        display: flex !important;
       }
     `;
 
@@ -703,12 +716,12 @@
       return;
     }
 
-    const pullRequestsTopDiv = pullRequestsLink.parentNode;
-    const clonedTopDiv = pullRequestsTopDiv.cloneNode(true);
+    const clonedLink = pullRequestsLink.cloneNode(true);
 
-    clonedTopDiv.setAttribute('id', SELECTORS[configKey].id);
+    const linkId = SELECTORS[configKey].id;
+    clonedLink.setAttribute('id', linkId);
 
-    const oldSvg = clonedTopDiv.querySelector('svg');
+    const oldSvg = clonedLink.querySelector('svg');
 
     const parser = new DOMParser();
     const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
@@ -716,35 +729,17 @@
 
     oldSvg.parentNode.replaceChild(newSvg, oldSvg);
 
-    const buttonId = `icon-button-${configKey}`;
     const ariaId = `tooltip-${configKey}`;
 
-    const link = clonedTopDiv.querySelector('a');
-    link.setAttribute('href', `/${configKey}`);
-    link.setAttribute('id', buttonId);
-    link.setAttribute('aria-labelledby', ariaId);
-    link.removeAttribute('data-analytics-event');
+    clonedLink.setAttribute('href', `/${configKey}`);
+    clonedLink.setAttribute('aria-labelledby', ariaId);
+    clonedLink.removeAttribute('data-analytics-event');
 
-    link.querySelector('span')?.remove();
+    clonedLink.querySelector('span')?.remove();
 
-    function capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
+    pullRequestsLink.parentNode.appendChild(clonedLink);
 
-    const tooltip = clonedTopDiv.querySelector('tool-tip');
-    tooltip.textContent = capitalizeFirstLetter(configKey);
-    tooltip.setAttribute('id', ariaId);
-    tooltip.setAttribute('for', buttonId);
-
-    SELECTORS.toolTips[configKey] = tooltip;
-
-    if (pullRequestsTopDiv.nextSibling === null) {
-      pullRequestsTopDiv.parentNode.appendChild(clonedTopDiv);
-    } else {
-      pullRequestsTopDiv.parentNode.insertBefore(clonedTopDiv, pullRequestsTopDiv.nextSibling);
-    }
-
-    NEW_ELEMENTS.push(clonedTopDiv);
+    NEW_ELEMENTS.push(clonedLink);
   }
 
   function createMarketplaceLink() {
@@ -775,11 +770,11 @@
     log(DEBUG, 'updateCreateNewButton()');
 
     const configKey = 'create';
-    const tooltipElement = SELECTORS.toolTips[configKey];
     const elementSelector = SELECTORS[configKey];
+    const tooltipElement = SELECTORS.toolTips[configKey];
 
     if (!tooltipElement) {
-      logError(`Selector '${configKey}' not found`);
+      logError(`Selector '${SELECTORS.toolTips[configKey]}' not found`);
       return;
     }
 
@@ -1817,7 +1812,7 @@
     HEADER_STYLE.textContent += `
       ${createId(elementCloneId)}
       {
-        display: initial !important;
+        display: flex !important;
       }
     `;
 
@@ -3292,23 +3287,21 @@
       textContent: 'create-text-content-span',
     },
     issues: {
-      id: 'issues-div',
+      id: 'issues',
       textContent: 'issues-text-content-span',
     },
     pullRequests: {
-      id: 'pullRequests-div',
+      id: 'pullRequests',
       link: '.AppHeader-globalBar-end .AppHeader-actions a[href="/pulls"]',
       textContent: 'pullRequests-text-content-span',
     },
     marketplace: {
-      id: 'marketplace-div',
-      topDiv: '#marketplace-div',
+      id: 'marketplace',
       link: '.AppHeader-globalBar-end .AppHeader-actions a[href="/marketplace"]',
       textContent: 'marketplace-text-content-span',
     },
     explore: {
-      id: 'explore-div',
-      topDiv: '#explore-div',
+      id: 'explore',
       link: '.AppHeader-globalBar-end .AppHeader-actions a[href="/explore"]',
       textContent: 'explore-text-content-span',
     },
@@ -3470,7 +3463,6 @@
         marketplace: {
           add: false,
           border: false,
-          tooltip: false,
           alignLeft: false,
           boxShadow: '',
           icon: {
@@ -3489,7 +3481,6 @@
         explore: {
           add: false,
           border: false,
-          tooltip: false,
           alignLeft: false,
           boxShadow: '',
           icon: {
@@ -3701,7 +3692,6 @@
         marketplace: {
           add: false,
           border: false,
-          tooltip: false,
           alignLeft: false,
           boxShadow: '',
           icon: {
@@ -3720,7 +3710,6 @@
         explore: {
           add: false,
           border: false,
-          tooltip: false,
           alignLeft: false,
           boxShadow: '',
           icon: {
@@ -4165,7 +4154,6 @@
         marketplace: {
           add: true,
           border: false,
-          tooltip: false,
           alignLeft: true,
           boxShadow: 'none',
           icon: {
@@ -4184,7 +4172,6 @@
         explore: {
           add: true,
           border: false,
-          tooltip: false,
           alignLeft: true,
           boxShadow: 'none',
           icon: {
@@ -4658,11 +4645,6 @@
         type: 'checkbox',
         default: true,
       },
-      light_marketplace_tooltip: {
-        label: 'Tooltip',
-        type: 'checkbox',
-        default: true,
-      },
       light_marketplace_alignLeft: {
         label: 'Align left',
         type: 'checkbox',
@@ -4710,11 +4692,6 @@
       },
       light_explore_border: {
         label: 'Border',
-        type: 'checkbox',
-        default: true,
-      },
-      light_explore_tooltip: {
-        label: 'Tooltip',
         type: 'checkbox',
         default: true,
       },
@@ -5296,11 +5273,6 @@
         type: 'checkbox',
         default: true,
       },
-      dark_marketplace_tooltip: {
-        label: 'Tooltip',
-        type: 'checkbox',
-        default: true,
-      },
       dark_marketplace_alignLeft: {
         label: 'Align left',
         type: 'checkbox',
@@ -5348,11 +5320,6 @@
       },
       dark_explore_border: {
         label: 'Border',
-        type: 'checkbox',
-        default: true,
-      },
-      dark_explore_tooltip: {
-        label: 'Tooltip',
         type: 'checkbox',
         default: true,
       },
