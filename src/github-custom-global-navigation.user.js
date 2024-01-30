@@ -1386,20 +1386,6 @@
       `;
     }
 
-    if (elementConfig.backdrop.pointerEvents !== '') {
-      HEADER_STYLE.textContent += `
-        ${elementSelector.backdrop}
-        {
-          pointer-events: ${CONFIG.sidebars.backdrop.pointerEvents} !important;
-        }
-
-        ${elementSelector.backdrop} > *
-        {
-          pointer-events: initial !important;
-        }
-      `;
-    }
-
     if (elementConfig.left.preload && !LEFT_SIDEBAR_PRELOADED) {
       HEADER.querySelector(elementSelector.left.modalDialog).remove();
 
@@ -3333,7 +3319,7 @@
       bottomBorder: `.${REPOSITORY_HEADER_CLASS} .border-bottom.mx-xl-5`,
     },
     sidebars: {
-      backdrop: 'dialog.Overlay.SidePanel:-internal-dialog-in-top-layer::backdrop',
+      backdrop: 'dialog.Overlay.SidePanel::backdrop',
       left: {
         modalDialog: '.Overlay--placement-left',
       },
@@ -3554,7 +3540,6 @@
         sidebars: {
           backdrop: {
             color: 'transparent',
-            pointerEvents: 'none',
           },
           left: {
             preload: true,
@@ -3783,7 +3768,6 @@
         sidebars: {
           backdrop: {
             color: 'transparent',
-            pointerEvents: 'none',
           },
           left: {
             preload: true,
@@ -4016,7 +4000,6 @@
         sidebars: {
           backdrop: {
             color: oldSchoolHoverBackgroundColor,
-            pointerEvents: 'none',
           },
           left: {
             preload: true,
@@ -4245,7 +4228,6 @@
         sidebars: {
           backdrop: {
             color: oldSchoolHoverBackgroundColor,
-            pointerEvents: 'none',
           },
           left: {
             preload: true,
@@ -4876,11 +4858,6 @@
         type: 'text',
         default: '',
       },
-      light_sidebars_backdrop_pointerEvents: {
-        label: 'Backdrop pointer events',
-        type: 'text',
-        default: '',
-      },
       light_sidebars_left_preload: {
         label: 'Left preload',
         type: 'checkbox',
@@ -5501,11 +5478,6 @@
       },
       dark_sidebars_backdrop_color: {
         label: '<h3>Sidebars</h3><div class="gmc-label">Backdrop color</div>',
-        type: 'text',
-        default: '',
-      },
-      dark_sidebars_backdrop_pointerEvents: {
-        label: 'Backdrop pointer events',
         type: 'text',
         default: '',
       },
