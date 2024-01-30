@@ -1256,6 +1256,16 @@
       `${SELECTORS.create.id}-flip`,
       `${SELECTORS.notifications.id}-flip`,
     );
+
+    // The dynamic positioning logic of the overlay only seems to work on the original IDs,
+    // so must rename the originals elements to avoid a conflict.
+    const originalButtonId = `${SELECTORS.create.button}-old`.replace('#', '');
+    HEADER.querySelector(SELECTORS.create.button).setAttribute('id', originalButtonId);
+    SELECTORS.create.button = createId(originalButtonId);
+
+    const originalOverlayId = `${SELECTORS.create.overlay}-old`.replace('#', '');
+    HEADER.querySelector(SELECTORS.create.overlay).setAttribute('id', originalOverlayId);
+    SELECTORS.create.button = createId(originalOverlayId);
   }
 
   function updateGlobalBar() {
@@ -3285,6 +3295,7 @@
       id: 'create-div',
       topDiv: 'action-menu',
       button: '#global-create-menu-button',
+      overlay: '#global-create-menu-overlay',
       plusIcon: '#global-create-menu-button .Button-visual.Button-leadingVisual',
       dropdownIcon: '#global-create-menu-button .Button-label',
       textContent: 'create-text-content-span',
