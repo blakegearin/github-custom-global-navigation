@@ -1,6 +1,6 @@
 {
   "name": "github-custom-global-navigation",
-  "version": "1.3.1-RC",
+  "version": "1.3.1",
   "description": "Userscript for customizing GitHub's global navigation",
   "main": "src/github-custom-global-navigation.user.js",
   "scripts": {
