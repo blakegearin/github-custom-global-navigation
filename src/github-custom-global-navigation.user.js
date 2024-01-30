@@ -3328,10 +3328,10 @@
     sidebars: {
       backdrop: '.Overlay-backdrop--side',
       left: {
-        backdrop: '.Overlay-backdrop--placement-left.Overlay-backdrop--side',
+        backdrop: '.Overlay--placement-left',
       },
       right: {
-        backdrop: '.AppHeader-user .Overlay-backdrop--side',
+        backdrop: '.AppHeader-user .Overlay--placement-right',
         topDiv: '.AppHeader-user .Overlay-backdrop--placement-right',
         modalDialog: '.AppHeader-user modal-dialog',
         closeButton: '.AppHeader-user modal-dialog .Overlay-closeButton.close-button',
