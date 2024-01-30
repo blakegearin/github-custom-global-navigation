@@ -1381,7 +1381,7 @@
       HEADER_STYLE.textContent += `
         ${elementSelector.backdrop}
         {
-          background-color: ${CONFIG.sidebars.backdrop.color} !important;
+          background: ${CONFIG.sidebars.backdrop.color} !important;
         }
       `;
     }
@@ -1401,7 +1401,7 @@
     }
 
     if (elementConfig.left.preload && !LEFT_SIDEBAR_PRELOADED) {
-      HEADER.querySelector(elementSelector.left.backdrop).remove();
+      HEADER.querySelector(elementSelector.left.modalDialog).remove();
 
       window.addEventListener('load', () => {
         HEADER.querySelector(`${SELECTORS.hamburgerButton} button`).click();
@@ -1413,19 +1413,12 @@
 
     if (elementConfig.right.floatUnderneath) {
       HEADER_STYLE.textContent += `
-        ${elementSelector.right.backdrop}
-        {
-          padding-top: 10px !important;
-          padding-right: 15px !important;
-          border-top-right-radius: 6px !important;
-          bottom: initial !important;
-          top: initial !important;
-        }
-
         ${elementSelector.right.modalDialog}
         {
-          border-top-right-radius: var(--borderRadius-large, 0.75rem) !important;
-          border-bottom-right-radius: var(--borderRadius-large, 0.75rem) !important;
+          border-top-right-radius: 6px !important;
+          bottom: initial !important;
+          margin-top: 55px;
+          margin-right: 20px;
         }
 
         ${elementSelector.right.navParentDiv}
@@ -1441,7 +1434,7 @@
     }
 
     if (elementConfig.right.preload && !RIGHT_SIDEBAR_PRELOADED) {
-      HEADER.querySelector(elementSelector.right.backdrop).remove();
+      HEADER.querySelector(elementSelector.right.modalDialog).remove();
 
       window.addEventListener('load', () => {
         HEADER.querySelector(SELECTORS.avatar.button).click();
@@ -3340,17 +3333,16 @@
       bottomBorder: `.${REPOSITORY_HEADER_CLASS} .border-bottom.mx-xl-5`,
     },
     sidebars: {
-      backdrop: '.Overlay-backdrop--side',
+      backdrop: 'dialog.Overlay.SidePanel:-internal-dialog-in-top-layer::backdrop',
       left: {
-        backdrop: '.Overlay--placement-left',
+        modalDialog: '.Overlay--placement-left',
       },
       right: {
-        backdrop: '.AppHeader-user .Overlay--placement-right',
-        topDiv: '.AppHeader-user .Overlay-backdrop--placement-right',
-        modalDialog: '.AppHeader-user modal-dialog',
-        closeButton: '.AppHeader-user modal-dialog .Overlay-closeButton.close-button',
-        navParentDiv: '.AppHeader-user modal-dialog div.Overlay-body > div',
-        nav: '.AppHeader-user modal-dialog nav',
+        modalDialog: '.AppHeader-user .Overlay--placement-right',
+        backdrop: '.AppHeader-user .Overlay--placement-right ::backdrop',
+        closeButton: '.AppHeader-user .Overlay--placement-right .Overlay-closeButton.close-button',
+        navParentDiv: '.AppHeader-user .Overlay--placement-right div.Overlay-body > div',
+        nav: '.AppHeader-user .Overlay--placement-right nav',
       },
     },
   };
