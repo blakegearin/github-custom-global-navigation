@@ -781,11 +781,19 @@
       return;
     }
 
-    const button = HEADER.querySelector(elementSelector.button);
+    let button = HEADER.querySelector(elementSelector.button);
+    let oldButtonId = null;
 
     if (!button) {
       logError(`Selector '${elementSelector.button}' not found`);
-      return;
+
+      oldButtonId = `${elementSelector.button}-old`;
+      button = HEADER.querySelector(oldButtonId);
+
+      if (!button) {
+        logError(`Selector '${oldButtonId}' not found`);
+        return;
+      }
     }
 
     const elementConfig = CONFIG[configKey];
@@ -811,7 +819,7 @@
 
     if (elementConfig.plusIcon.remove) {
       HEADER_STYLE.textContent += `
-        ${elementSelector.button} ${elementSelector.plusIcon}
+        ${oldButtonId || elementSelector.button} ${elementSelector.plusIcon}
         {
           display: none !important
         }
@@ -1250,22 +1258,22 @@
   function flipCreateInbox() {
     log(DEBUG, 'flipCreateInbox()');
 
-    cloneAndFlipElements(
+    const response = cloneAndFlipElements(
       createId(SELECTORS.create.id),
       createId(SELECTORS.notifications.id),
       `${SELECTORS.create.id}-flip`,
       `${SELECTORS.notifications.id}-flip`,
     );
 
+    if (response.length === 0) return;
+
     // The dynamic positioning logic of the overlay only seems to work on the original IDs,
     // so must rename the originals elements to avoid a conflict.
     const originalButtonId = `${SELECTORS.create.button}-old`.replace('#', '');
     HEADER.querySelector(SELECTORS.create.button).setAttribute('id', originalButtonId);
-    SELECTORS.create.button = createId(originalButtonId);
 
     const originalOverlayId = `${SELECTORS.create.overlay}-old`.replace('#', '');
     HEADER.querySelector(SELECTORS.create.overlay).setAttribute('id', originalOverlayId);
-    SELECTORS.create.button = createId(originalOverlayId);
   }
 
   function updateGlobalBar() {
