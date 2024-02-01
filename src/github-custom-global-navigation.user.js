@@ -1075,7 +1075,7 @@
       let textContent = elementConfig.text.content;
 
       if (elementConfig.icon !== '') {
-        textContent = UNICODE_NON_BREAKING_SPACE + UNICODE_NON_BREAKING_SPACE + textContent;
+        textContent = UNICODE_NON_BREAKING_SPACE + textContent;
       }
 
       const spanElement = document.createElement('span');
