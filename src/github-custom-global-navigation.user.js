@@ -1409,7 +1409,8 @@
       HEADER_STYLE.textContent += `
         ${elementSelector.right.modalDialog}
         {
-          border-top-right-radius: 6px !important;
+          border-top-right-radius: 0.75rem !important;
+          border-bottom-right-radius: 0.75rem !important;
           bottom: initial !important;
           margin-top: 55px;
           margin-right: 20px;
