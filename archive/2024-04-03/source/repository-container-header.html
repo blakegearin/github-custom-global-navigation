@@ -1,0 +1,996 @@
+<div id="repository-container-header" class="pt-3 hide-full-screen" data-turbo-replace="">
+  <div class="d-flex flex-wrap flex-justify-end mb-3 container-xl px-3 px-md-4 px-lg-5" style="gap: 1rem;">
+    <div class="flex-auto min-width-0 width-fit mr-3">
+      <div id="repo-title-component" class="d-flex flex-wrap flex-items-center wb-break-word f3 text-normal">
+        <img class="avatar mr-2 d-none d-md-block" alt="Owner avatar" src="https://avatars.githubusercontent.com/u/210414?s=48&amp;v=4" width="24" height="24" />
+
+        <strong itemprop="name" class="mr-2 flex-self-stretch d-none d-md-block">
+          <a data-pjax="#repo-content-pjax-container" data-turbo-frame="repo-content-turbo-frame" class="color-fg-default" href="/ruby/debug">debug</a>
+        </strong>
+
+        <span></span><span class="Label Label--secondary v-align-middle mr-1 d-none d-md-block">Public</span>
+      </div>
+
+      <div class="d-none d-md-block"></div>
+    </div>
+
+    <div id="repository-details-container" data-turbo-replace="">
+      <ul class="pagehead-actions flex-shrink-0 d-none d-md-inline" style="padding: 2px 0;">
+        <li>
+          <notifications-list-subscription-form data-action="notifications-dialog-label-toggled:notifications-list-subscription-form#handleDialogLabelToggle" class="f5 position-relative" data-catalyst="">
+            <details class="details-reset details-overlay f5 position-relative" data-target="notifications-list-subscription-form.details" data-action="toggle:notifications-list-subscription-form#detailsToggled">
+              <summary
+                data-hydro-click='{"event_type":"repository.click","payload":{"target":"WATCH_BUTTON","repository_id":209731662,"originating_url":"https://github.com/notifications/209731662/watch_subscription?aria_id_prefix=repository-details&amp;button_block=false&amp;show_count=true","user_id":17950836}}'
+                data-hydro-click-hmac="3d6b0b3d2806f279ae8a0ed55ffafbfd940d117986b9120c8844d0fcfa1fee50"
+                data-ga-click="Repository, click Watch settings, action:notifications#watch_subscription"
+                aria-label="ruby/debug repository watch options"
+                id="repository-details-watch-button"
+                data-view-component="true"
+                class="btn-sm btn"
+                aria-haspopup="menu"
+                role="button"
+              >
+                <span data-menu-button="">
+                  <span hidden="" data-target="notifications-list-subscription-form.unwatchButtonCopy">
+                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-eye">
+                      <path
+                        d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"
+                      ></path>
+                    </svg>
+                    Unwatch
+                  </span>
+                  <span hidden="" data-target="notifications-list-subscription-form.stopIgnoringButtonCopy">
+                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-bell-slash">
+                      <path
+                        d="m4.182 4.31.016.011 10.104 7.316.013.01 1.375.996a.75.75 0 1 1-.88 1.214L13.626 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947V5.305L.31 3.357a.75.75 0 1 1 .88-1.214Zm7.373 7.19L4.5 6.391v1.556c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01c0 .005.002.009.005.012l.006.004.007.001ZM8 1.5c-.997 0-1.895.416-2.534 1.086A.75.75 0 1 1 4.38 1.55 5 5 0 0 1 13 5v2.373a.75.75 0 0 1-1.5 0V5A3.5 3.5 0 0 0 8 1.5ZM8 16a2 2 0 0 1-1.985-1.75c-.017-.137.097-.25.235-.25h3.5c.138 0 .252.113.235.25A2 2 0 0 1 8 16Z"
+                      ></path>
+                    </svg>
+                    Stop ignoring
+                  </span>
+                  <span data-target="notifications-list-subscription-form.watchButtonCopy">
+                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-eye">
+                      <path
+                        d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"
+                      ></path>
+                    </svg>
+                    Watch
+                  </span>
+                </span>
+                <span id="repo-notifications-counter" data-target="notifications-list-subscription-form.socialCount" data-pjax-replace="true" data-turbo-replace="true" title="43" data-view-component="true" class="Counter">43</span>
+                <span class="dropdown-caret"></span>
+              </summary>
+              <details-menu class="SelectMenu" role="menu" data-target="notifications-list-subscription-form.menu" data-focus-trap="active">
+                <span class="sentinel" tabindex="0" aria-hidden="true"></span>
+                <div class="SelectMenu-modal notifications-component-menu-modal">
+                  <header class="SelectMenu-header">
+                    <h3 class="SelectMenu-title">Notifications</h3>
+                    <button class="SelectMenu-closeButton" type="button" aria-label="Close menu" data-action="click:notifications-list-subscription-form#closeMenu">
+                      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+                        <path
+                          d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                        ></path>
+                      </svg>
+                    </button>
+                  </header>
+
+                  <div class="SelectMenu-list">
+                    <!-- '"` --><!-- </textarea></xmp> -->
+                    <form
+                      data-target="notifications-list-subscription-form.form"
+                      data-action="submit:notifications-list-subscription-form#submitForm"
+                      data-turbo="false"
+                      action="/notifications/subscribe"
+                      accept-charset="UTF-8"
+                      method="post"
+                    >
+                      <input type="hidden" name="authenticity_token" value="40xYro3laD2CAcGpniDKoqBu43w4mIFOBsmNasBr5rYE8O4YhpRvs4s3-HLsDUyTu0N05f7XCLIV_XnZB9Es7g" autocomplete="off" />
+
+                      <input type="hidden" name="repository_id" value="209731662" />
+
+                      <button type="submit" name="do" value="included" class="SelectMenu-item flex-items-start" role="menuitemradio" aria-checked="true" data-targets="notifications-list-subscription-form.subscriptionButtons">
+                        <span class="f5">
+                          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check SelectMenu-icon SelectMenu-icon--check">
+                            <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+                          </svg>
+                        </span>
+                        <div>
+                          <div class="f5 text-bold">
+                            Participating and @mentions
+                          </div>
+                          <div class="text-small color-fg-muted text-normal pb-1">
+                            Only receive notifications from this repository when participating or @mentioned.
+                          </div>
+                        </div>
+                      </button>
+
+                      <button type="submit" name="do" value="subscribed" class="SelectMenu-item flex-items-start" role="menuitemradio" aria-checked="false" data-targets="notifications-list-subscription-form.subscriptionButtons">
+                        <span class="f5">
+                          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check SelectMenu-icon SelectMenu-icon--check">
+                            <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+                          </svg>
+                        </span>
+                        <div>
+                          <div class="f5 text-bold">
+                            All Activity
+                          </div>
+                          <div class="text-small color-fg-muted text-normal pb-1">
+                            Notified of all notifications on this repository.
+                          </div>
+                        </div>
+                      </button>
+
+                      <button type="submit" name="do" value="ignore" class="SelectMenu-item flex-items-start" role="menuitemradio" aria-checked="false" data-targets="notifications-list-subscription-form.subscriptionButtons">
+                        <span class="f5">
+                          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check SelectMenu-icon SelectMenu-icon--check">
+                            <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+                          </svg>
+                        </span>
+                        <div>
+                          <div class="f5 text-bold">
+                            Ignore
+                          </div>
+                          <div class="text-small color-fg-muted text-normal pb-1">
+                            Never be notified.
+                          </div>
+                        </div>
+                      </button>
+                    </form>
+                    <button
+                      class="SelectMenu-item flex-items-start pr-3"
+                      type="button"
+                      role="menuitemradio"
+                      data-target="notifications-list-subscription-form.customButton"
+                      data-action="click:notifications-list-subscription-form#openCustomDialog"
+                      aria-haspopup="true"
+                      aria-checked="false"
+                    >
+                      <span class="f5">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check SelectMenu-icon SelectMenu-icon--check">
+                          <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+                        </svg>
+                      </span>
+                      <div>
+                        <div class="d-flex flex-items-start flex-justify-between">
+                          <div class="f5 text-bold">Custom</div>
+                          <div class="f5 pr-1">
+                            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-arrow-right">
+                              <path d="M8.22 2.97a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l2.97-2.97H3.75a.75.75 0 0 1 0-1.5h7.44L8.22 4.03a.75.75 0 0 1 0-1.06Z"></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div class="text-small color-fg-muted text-normal pb-1">
+                          Select events you want to be notified of in addition to participating and @mentions.
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+                <span class="sentinel" tabindex="0" aria-hidden="true"></span>
+              </details-menu>
+
+              <details-dialog class="notifications-component-dialog" data-target="notifications-list-subscription-form.customDialog" aria-label="Custom dialog" hidden="" role="dialog" aria-modal="true">
+                <div class="SelectMenu-modal notifications-component-dialog-modal overflow-visible">
+                  <!-- '"` --><!-- </textarea></xmp> -->
+                  <form
+                    data-target="notifications-list-subscription-form.customform"
+                    data-action="submit:notifications-list-subscription-form#submitCustomForm"
+                    data-turbo="false"
+                    action="/notifications/subscribe"
+                    accept-charset="UTF-8"
+                    method="post"
+                  >
+                    <input type="hidden" name="authenticity_token" value="eg-VbH9-HONKN931jeiCXMk3cS94BXGEKD1f-XTPs--dsyPadA8bbUMB5C7_xQRt0hrmtr5K-Hg7CatKs3V5tw" autocomplete="off" />
+
+                    <input type="hidden" name="repository_id" value="209731662" />
+
+                    <header class="d-sm-none SelectMenu-header pb-0 border-bottom-0 px-2 px-sm-3">
+                      <h1 class="f3 SelectMenu-title d-inline-flex">
+                        <button class="color-bg-default border-0 px-2 py-0 m-0 Link--secondary f5" aria-label="Return to menu" type="button" data-action="click:notifications-list-subscription-form#closeCustomDialog">
+                          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-arrow-left">
+                            <path d="M7.78 12.53a.75.75 0 0 1-1.06 0L2.47 8.28a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L4.81 7h7.44a.75.75 0 0 1 0 1.5H4.81l2.97 2.97a.75.75 0 0 1 0 1.06Z"></path>
+                          </svg>
+                        </button>
+                        Custom
+                      </h1>
+                    </header>
+
+                    <header class="d-none d-sm-flex flex-items-start pt-1">
+                      <button class="border-0 px-2 pt-1 m-0 Link--secondary f5" style="background-color: transparent;" aria-label="Return to menu" type="button" data-action="click:notifications-list-subscription-form#closeCustomDialog">
+                        <svg style="position: relative; left: 2px; top: 1px;" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-arrow-left">
+                          <path d="M7.78 12.53a.75.75 0 0 1-1.06 0L2.47 8.28a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L4.81 7h7.44a.75.75 0 0 1 0 1.5H4.81l2.97 2.97a.75.75 0 0 1 0 1.06Z"></path>
+                        </svg>
+                      </button>
+
+                      <h1 class="pt-1 pr-4 pb-0 pl-0 f5 text-bold">
+                        Custom
+                      </h1>
+                    </header>
+                    <fieldset>
+                      <legend>
+                        <div class="text-small color-fg-muted pt-0 pr-3 pb-3 pl-6 pl-sm-5 border-bottom mb-3">
+                          Select events you want to be notified of in addition to participating and @mentions.
+                        </div>
+                      </legend>
+                      <div data-target="notifications-list-subscription-form.labelInputs"></div>
+                      <div class="form-checkbox mr-3 ml-6 ml-sm-5 mb-2 mt-0">
+                        <label class="f5 text-normal">
+                          <input
+                            type="checkbox"
+                            name="thread_types[]"
+                            value="Issue"
+                            data-targets="notifications-list-subscription-form.threadTypeCheckboxes"
+                            data-action="change:notifications-list-subscription-form#threadTypeCheckboxesUpdated"
+                          />
+                          Issues
+                        </label>
+                      </div>
+                      <div class="form-checkbox mr-3 ml-6 ml-sm-5 mb-2 mt-0">
+                        <label class="f5 text-normal">
+                          <input
+                            type="checkbox"
+                            name="thread_types[]"
+                            value="PullRequest"
+                            data-targets="notifications-list-subscription-form.threadTypeCheckboxes"
+                            data-action="change:notifications-list-subscription-form#threadTypeCheckboxesUpdated"
+                          />
+                          Pull requests
+                        </label>
+                      </div>
+                      <div class="form-checkbox mr-3 ml-6 ml-sm-5 mb-2 mt-0">
+                        <label class="f5 text-normal">
+                          <input
+                            type="checkbox"
+                            name="thread_types[]"
+                            value="Release"
+                            data-targets="notifications-list-subscription-form.threadTypeCheckboxes"
+                            data-action="change:notifications-list-subscription-form#threadTypeCheckboxesUpdated"
+                          />
+                          Releases
+                        </label>
+                      </div>
+                      <div class="form-checkbox mr-3 ml-6 ml-sm-5 mb-2 mt-0">
+                        <label class="f5 text-normal">
+                          <input
+                            type="checkbox"
+                            name="thread_types[]"
+                            value="Discussion"
+                            data-targets="notifications-list-subscription-form.threadTypeCheckboxes"
+                            data-action="change:notifications-list-subscription-form#threadTypeCheckboxesUpdated"
+                          />
+                          Discussions
+                        </label>
+                      </div>
+                      <div class="form-checkbox mr-3 ml-6 ml-sm-5 mb-2 mt-0">
+                        <label class="f5 text-normal">
+                          <input
+                            type="checkbox"
+                            name="thread_types[]"
+                            value="SecurityAlert"
+                            data-targets="notifications-list-subscription-form.threadTypeCheckboxes"
+                            data-action="change:notifications-list-subscription-form#threadTypeCheckboxesUpdated"
+                          />
+                          Security alerts
+                        </label>
+                      </div>
+                    </fieldset>
+                    <div class="pt-2 pb-3 px-3 d-flex flex-justify-start flex-row-reverse">
+                      <button name="do" value="custom" data-target="notifications-list-subscription-form.customSubmit" type="submit" disabled="disabled" data-view-component="true" class="btn-primary btn-sm btn ml-2">Apply</button>
+                      <button data-action="click:notifications-list-subscription-form#resetForm" data-close-dialog="" type="button" data-view-component="true" class="btn-sm btn">Cancel</button>
+                    </div>
+                  </form>
+                </div>
+              </details-dialog>
+
+              <div class="notifications-component-dialog-overlay"></div>
+            </details>
+          </notifications-list-subscription-form>
+        </li>
+
+        <li>
+          <div data-view-component="true" class="BtnGroup d-flex">
+            <a
+              icon="repo-forked"
+              id="fork-button"
+              href="/ruby/debug/fork"
+              data-hydro-click='{"event_type":"repository.click","payload":{"target":"FORK_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+              data-hydro-click-hmac="d4cea6700e020df7d59869a3a3f21b8386d4271fbc3e536109b730814de83428"
+              data-ga-click="Repository, show fork modal, action:files#disambiguate; text:Fork"
+              data-view-component="true"
+              class="btn-sm btn BtnGroup-item"
+              aria-describedby="tooltip-06a5b160-48cf-4ce2-b0c0-114fd7cd30e5"
+            >
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo-forked mr-2">
+                <path
+                  d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"
+                ></path>
+              </svg>
+              Fork
+              <span id="repo-network-counter" data-pjax-replace="true" data-turbo-replace="true" title="123" data-view-component="true" class="Counter">123</span>
+              <tool-tip id="tooltip-06a5b160-48cf-4ce2-b0c0-114fd7cd30e5" for="fork-button" popover="manual" data-direction="s" data-type="description" data-view-component="true" class="sr-only position-absolute" role="tooltip">
+                Fork your own copy of ruby/debug
+              </tool-tip>
+            </a>
+            <details group_item="true" id="my-forks-menu-209731662" data-view-component="true" class="details-reset details-overlay BtnGroup-parent d-inline-block position-relative">
+              <summary aria-label="See your forks of this repository" data-view-component="true" class="btn-sm btn BtnGroup-item px-2 float-none" aria-haspopup="menu" role="button">
+                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-triangle-down">
+                  <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
+                </svg>
+              </summary>
+              <details-menu class="SelectMenu right-0" src="/ruby/debug/my_forks_menu_content?can_fork=true" role="menu" data-focus-trap="suspended">
+                <span class="sentinel" tabindex="0" aria-hidden="true"></span>
+                <div class="SelectMenu-modal">
+                  <button class="SelectMenu-closeButton position-absolute right-0 m-2" type="button" aria-label="Close menu" data-toggle-for="my-forks-menu-209731662">
+                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+                      <path
+                        d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                      ></path>
+                    </svg>
+                  </button>
+                  <div id="filter-menu-4577a9" class="d-flex flex-column flex-1 overflow-hidden">
+                    <div class="SelectMenu-list">
+                      <include-fragment class="SelectMenu-loading" aria-label="Loading">
+                        <svg role="menuitem" style="box-sizing: content-box; color: var(--color-icon-primary);" width="32" height="32" viewBox="0 0 16 16" fill="none" data-view-component="true" class="anim-rotate">
+                          <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-opacity="0.25" stroke-width="2" vector-effect="non-scaling-stroke" fill="none"></circle>
+                          <path d="M15 8a7.002 7.002 0 00-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+                        </svg>
+                      </include-fragment>
+                    </div>
+                  </div>
+                </div>
+                <span class="sentinel" tabindex="0" aria-hidden="true"></span>
+              </details-menu>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <template class="js-unstar-confirmation-dialog-template">
+            <div class="Box-header">
+              <h2 class="Box-title">Unstar this repository?</h2>
+            </div>
+            <div class="Box-body">
+              <p class="mb-3">
+                This will remove {{ repoNameWithOwner }} from the {{ listsWithCount }} that it's been added to.
+              </p>
+              <div class="form-actions">
+                <!-- '"` --><!-- </textarea></xmp> -->
+                <form class="js-social-confirmation-form" data-turbo="false" action="{{ confirmUrl }}" accept-charset="UTF-8" method="post">
+                  <input type="hidden" name="authenticity_token" value="{{ confirmCsrfToken }}" />
+                  <input type="hidden" name="confirm" value="true" />
+                  <button data-close-dialog="true" type="submit" data-view-component="true" class="btn-danger btn width-full">Unstar</button>
+                </form>
+              </div>
+            </div>
+          </template>
+
+          <div data-view-component="true" class="js-toggler-container js-social-container starring-container d-flex">
+            <div data-view-component="true" class="starred BtnGroup flex-1 ml-0">
+              <!-- '"` --><!-- </textarea></xmp> -->
+              <form class="js-social-form BtnGroup-parent flex-auto js-deferred-toggler-target" data-turbo="false" action="/ruby/debug/unstar" accept-charset="UTF-8" method="post">
+                <input type="hidden" name="authenticity_token" value="-4LadKRKkrZ6mlXLzaCGeMbQvmfh7rD1EleaCkmldDWppWdKsViFQMqWsGjiT5JE1XgWqs_bRhd2prjvXTs7UA" autocomplete="off" />
+                <input type="hidden" value="aYk8WxSda-zYZKEK4vQsPO8OXYohqhIn3oiAlSAm7UY7roFlAY98GmhoRKnNGzgA_Kb1Rw-f5MW6eaJwNLiiIw" data-csrf="true" class="js-confirm-csrf-token" />
+                <input type="hidden" name="context" value="repository" />
+                <button
+                  data-hydro-click='{"event_type":"repository.click","payload":{"target":"UNSTAR_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                  data-hydro-click-hmac="23469658be22a62091a5bdfda4a11171aa5f525b765477f604f359f31a9fa4c3"
+                  data-ga-click="Repository, click unstar button, action:files#disambiguate; text:Unstar"
+                  aria-label="Unstar this repository (1082)"
+                  type="submit"
+                  data-view-component="true"
+                  class="rounded-left-2 btn-sm btn BtnGroup-item"
+                >
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star-fill starred-button-icon d-inline-block mr-2">
+                    <path
+                      d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"
+                    ></path>
+                  </svg>
+                  <span data-view-component="true" class="d-inline">
+                    Starred
+                  </span>
+                  <span
+                    id="repo-stars-counter-unstar"
+                    aria-label="1082 users starred this repository"
+                    data-singular-suffix="user starred this repository"
+                    data-plural-suffix="users starred this repository"
+                    data-turbo-replace="true"
+                    title="1,082"
+                    data-view-component="true"
+                    class="Counter js-social-count"
+                  >
+                    1.1k
+                  </span>
+                </button>
+              </form>
+              <details id="details-user-list-209731662-starred" data-view-component="true" class="details-reset details-overlay BtnGroup-parent js-user-list-menu d-inline-block position-relative">
+                <summary aria-label="Add this repository to a list" data-view-component="true" class="btn-sm btn BtnGroup-item px-2 float-none" aria-haspopup="menu" role="button">
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-triangle-down">
+                    <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
+                  </svg>
+                </summary>
+                <details-menu class="SelectMenu right-0" src="/ruby/debug/lists" role="menu" data-focus-trap="suspended">
+                  <span class="sentinel" tabindex="0" aria-hidden="true"></span>
+                  <div class="SelectMenu-modal">
+                    <header class="SelectMenu-header">
+                      <h4 class="SelectMenu-title f5" id="user-lists-menu">Lists</h4>
+
+                      <button class="SelectMenu-closeButton" type="button" aria-label="Close menu" data-toggle-for="details-user-list-209731662-starred">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+                          <path
+                            d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                          ></path>
+                        </svg>
+                      </button>
+                    </header>
+                    <div id="filter-menu-93f4fb" class="d-flex flex-column flex-1 overflow-hidden">
+                      <div class="SelectMenu-list">
+                        <include-fragment class="SelectMenu-loading" aria-label="Loading">
+                          <svg role="menuitem" style="box-sizing: content-box; color: var(--color-icon-primary);" width="32" height="32" viewBox="0 0 16 16" fill="none" data-view-component="true" class="anim-rotate">
+                            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-opacity="0.25" stroke-width="2" vector-effect="non-scaling-stroke" fill="none"></circle>
+                            <path d="M15 8a7.002 7.002 0 00-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+                          </svg>
+                        </include-fragment>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="sentinel" tabindex="0" aria-hidden="true"></span>
+                </details-menu>
+              </details>
+            </div>
+            <div data-view-component="true" class="unstarred BtnGroup ml-0 flex-1">
+              <!-- '"` --><!-- </textarea></xmp> -->
+              <form class="js-social-form BtnGroup-parent flex-auto" data-turbo="false" action="/ruby/debug/star" accept-charset="UTF-8" method="post">
+                <input type="hidden" name="authenticity_token" value="9J9n9awBpLJK8qAKhJfq3ErnaLtiztJFaU7-WoKP8QpTrz7IzuWhZWPLmXHkODEyqnaxVKAuI8A030SIgw4uKA" autocomplete="off" />
+                <input type="hidden" name="context" value="repository" />
+                <button
+                  data-hydro-click='{"event_type":"repository.click","payload":{"target":"STAR_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                  data-hydro-click-hmac="ef386ffadcc75eeb5336b847bdd49d460a99e5dfa3b517794c7731430a6ae1e1"
+                  data-ga-click="Repository, click star button, action:files#disambiguate; text:Star"
+                  aria-label="Star this repository (1082)"
+                  type="submit"
+                  data-view-component="true"
+                  class="js-toggler-target rounded-left-2 btn-sm btn BtnGroup-item"
+                >
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star d-inline-block mr-2">
+                    <path
+                      d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"
+                    ></path>
+                  </svg>
+                  <span data-view-component="true" class="d-inline">
+                    Star
+                  </span>
+                  <span
+                    id="repo-stars-counter-star"
+                    aria-label="1082 users starred this repository"
+                    data-singular-suffix="user starred this repository"
+                    data-plural-suffix="users starred this repository"
+                    data-turbo-replace="true"
+                    title="1,082"
+                    data-view-component="true"
+                    class="Counter js-social-count"
+                  >
+                    1.1k
+                  </span>
+                </button>
+              </form>
+              <details id="details-user-list-209731662-unstarred" data-view-component="true" class="details-reset details-overlay BtnGroup-parent js-user-list-menu d-inline-block position-relative">
+                <summary aria-label="Add this repository to a list" data-view-component="true" class="btn-sm btn BtnGroup-item px-2 float-none" aria-haspopup="menu" role="button">
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-triangle-down">
+                    <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
+                  </svg>
+                </summary>
+                <details-menu class="SelectMenu right-0" src="/ruby/debug/lists" role="menu" data-focus-trap="suspended">
+                  <span class="sentinel" tabindex="0" aria-hidden="true"></span>
+                  <div class="SelectMenu-modal">
+                    <header class="SelectMenu-header">
+                      <h4 class="SelectMenu-title f5" id="user-lists-menu">Lists</h4>
+
+                      <button class="SelectMenu-closeButton" type="button" aria-label="Close menu" data-toggle-for="details-user-list-209731662-unstarred">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+                          <path
+                            d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                          ></path>
+                        </svg>
+                      </button>
+                    </header>
+                    <div id="filter-menu-6f80ee" class="d-flex flex-column flex-1 overflow-hidden">
+                      <div class="SelectMenu-list">
+                        <include-fragment class="SelectMenu-loading" aria-label="Loading">
+                          <svg role="menuitem" style="box-sizing: content-box; color: var(--color-icon-primary);" width="32" height="32" viewBox="0 0 16 16" fill="none" data-view-component="true" class="anim-rotate">
+                            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-opacity="0.25" stroke-width="2" vector-effect="non-scaling-stroke" fill="none"></circle>
+                            <path d="M15 8a7.002 7.002 0 00-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+                          </svg>
+                        </include-fragment>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="sentinel" tabindex="0" aria-hidden="true"></span>
+                </details-menu>
+              </details>
+            </div>
+          </div>
+        </li>
+
+        <li></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container-xl">
+    <div id="responsive-meta-container" data-turbo-replace="">
+      <div class="d-block d-md-none mb-2 px-3 px-md-4 px-lg-5">
+        <div class="d-flex gap-2 mt-n3 mb-3 flex-wrap">
+          <div class="d-flex flex-row gap-2">
+            <notifications-list-subscription-form data-action="notifications-dialog-label-toggled:notifications-list-subscription-form#handleDialogLabelToggle" data-catalyst="">
+              <details class="details-reset details-overlay details-overlay-dark" data-target="notifications-list-subscription-form.details" data-action="toggle:notifications-list-subscription-form#detailsToggled">
+                <summary
+                  id="notifications-button"
+                  aria-label="Notifications"
+                  data-hydro-click='{"event_type":"repository.click","payload":{"target":"WATCH_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                  data-hydro-click-hmac="1848ee4aebb88320b603a51410479dadad3810a4d85c2123d01879774aed71e6"
+                  data-ga-click="Repository, click Watch settings, action:files#disambiguate"
+                  data-view-component="true"
+                  class="Button--iconOnly Button--secondary Button--medium Button p-0"
+                  role="button"
+                  aria-describedby="tooltip-56593adc-c9da-453e-9b24-62874b78a028"
+                >
+                  <span class="Button-content">
+                    <span class="Button-label">
+                      <span data-menu-button="">
+                        <span hidden="" data-target="notifications-list-subscription-form.unwatchButtonCopy">
+                          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-eye">
+                            <path
+                              d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"
+                            ></path>
+                          </svg>
+                        </span>
+                        <span hidden="" data-target="notifications-list-subscription-form.stopIgnoringButtonCopy">
+                          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-bell-slash">
+                            <path
+                              d="m4.182 4.31.016.011 10.104 7.316.013.01 1.375.996a.75.75 0 1 1-.88 1.214L13.626 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947V5.305L.31 3.357a.75.75 0 1 1 .88-1.214Zm7.373 7.19L4.5 6.391v1.556c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01c0 .005.002.009.005.012l.006.004.007.001ZM8 1.5c-.997 0-1.895.416-2.534 1.086A.75.75 0 1 1 4.38 1.55 5 5 0 0 1 13 5v2.373a.75.75 0 0 1-1.5 0V5A3.5 3.5 0 0 0 8 1.5ZM8 16a2 2 0 0 1-1.985-1.75c-.017-.137.097-.25.235-.25h3.5c.138 0 .252.113.235.25A2 2 0 0 1 8 16Z"
+                            ></path>
+                          </svg>
+                        </span>
+                        <span data-target="notifications-list-subscription-form.watchButtonCopy">
+                          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-eye">
+                            <path
+                              d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"
+                            ></path>
+                          </svg>
+                        </span>
+                      </span>
+                    </span>
+                  </span>
+                </summary>
+
+                <details-dialog aria-label="Notification settings" class="anim-fade-in fast Box Box--overlay" role="dialog" aria-modal="true">
+                  <div data-target="notifications-list-subscription-form.menu">
+                    <div class="Box-header">
+                      <button class="Box-btn-octicon btn-octicon float-right" type="button" aria-label="Close dialog" data-close-dialog="" data-action="click:notifications-list-subscription-form#closeMenu">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+                          <path
+                            d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                          ></path>
+                        </svg>
+                      </button>
+                      <h3 class="Box-title">
+                        Notifications
+                      </h3>
+                    </div>
+
+                    <div class="SelectMenu-list mb-0" role="menu">
+                      <!-- '"` --><!-- </textarea></xmp> -->
+                      <form
+                        data-target="notifications-list-subscription-form.form"
+                        data-action="submit:notifications-list-subscription-form#submitForm"
+                        data-turbo="false"
+                        action="/notifications/subscribe"
+                        accept-charset="UTF-8"
+                        method="post"
+                      >
+                        <input type="hidden" name="authenticity_token" value="YXSkmDRv0D3DNaFdf9mATm2lBAkwe6jSBstWZPhy7_qGyBIuPx7Xs8oDmIYN9AZ_doiTkPY0IS4V_6LXP8glog" autocomplete="off" />
+
+                        <input type="hidden" name="repository_id" value="209731662" />
+
+                        <button type="submit" name="do" value="included" class="SelectMenu-item flex-items-start" role="menuitemradio" aria-checked="true" data-targets="notifications-list-subscription-form.subscriptionButtons">
+                          <span class="f5">
+                            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check SelectMenu-icon SelectMenu-icon--check">
+                              <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+                            </svg>
+                          </span>
+                          <div>
+                            <div class="f5 text-bold">
+                              Participating and @mentions
+                            </div>
+                            <div class="text-small color-fg-muted text-normal pb-1">
+                              Only receive notifications from this repository when participating or @mentioned.
+                            </div>
+                          </div>
+                        </button>
+
+                        <button type="submit" name="do" value="subscribed" class="SelectMenu-item flex-items-start" role="menuitemradio" aria-checked="false" data-targets="notifications-list-subscription-form.subscriptionButtons">
+                          <span class="f5">
+                            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check SelectMenu-icon SelectMenu-icon--check">
+                              <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+                            </svg>
+                          </span>
+                          <div>
+                            <div class="f5 text-bold">
+                              All Activity
+                            </div>
+                            <div class="text-small color-fg-muted text-normal pb-1">
+                              Notified of all notifications on this repository.
+                            </div>
+                          </div>
+                        </button>
+
+                        <button type="submit" name="do" value="ignore" class="SelectMenu-item flex-items-start" role="menuitemradio" aria-checked="false" data-targets="notifications-list-subscription-form.subscriptionButtons">
+                          <span class="f5">
+                            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check SelectMenu-icon SelectMenu-icon--check">
+                              <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+                            </svg>
+                          </span>
+                          <div>
+                            <div class="f5 text-bold">
+                              Ignore
+                            </div>
+                            <div class="text-small color-fg-muted text-normal pb-1">
+                              Never be notified.
+                            </div>
+                          </div>
+                        </button>
+                      </form>
+                      <button
+                        class="SelectMenu-item flex-items-start pr-3"
+                        type="button"
+                        role="menuitemradio"
+                        data-target="notifications-list-subscription-form.customButton"
+                        data-action="click:notifications-list-subscription-form#openCustomDialog"
+                        aria-haspopup="true"
+                        aria-checked="false"
+                      >
+                        <span class="f5">
+                          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check SelectMenu-icon SelectMenu-icon--check">
+                            <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+                          </svg>
+                        </span>
+                        <div>
+                          <div class="d-flex flex-items-start flex-justify-between">
+                            <div class="f5 text-bold">Custom</div>
+                            <div class="f5 pr-1">
+                              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-arrow-right">
+                                <path
+                                  d="M8.22 2.97a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l2.97-2.97H3.75a.75.75 0 0 1 0-1.5h7.44L8.22 4.03a.75.75 0 0 1 0-1.06Z"
+                                ></path>
+                              </svg>
+                            </div>
+                          </div>
+                          <div class="text-small color-fg-muted text-normal pb-1">
+                            Select events you want to be notified of in addition to participating and @mentions.
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div data-target="notifications-list-subscription-form.customDialog" hidden="">
+                    <header class="SelectMenu-header pb-0 border-bottom-0 px-2 px-sm-3">
+                      <h1 class="f3 SelectMenu-title d-inline-flex">
+                        <button class="color-bg-default border-0 px-2 py-0 m-0 Link--secondary f5" aria-label="Return to menu" type="button" data-action="click:notifications-list-subscription-form#closeCustomDialog">
+                          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-arrow-left">
+                            <path d="M7.78 12.53a.75.75 0 0 1-1.06 0L2.47 8.28a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L4.81 7h7.44a.75.75 0 0 1 0 1.5H4.81l2.97 2.97a.75.75 0 0 1 0 1.06Z"></path>
+                          </svg>
+                        </button>
+                        Custom
+                      </h1>
+                    </header>
+                    <div class="overflow-visible">
+                      <!-- '"` --><!-- </textarea></xmp> -->
+                      <form
+                        data-target="notifications-list-subscription-form.customform"
+                        data-action="submit:notifications-list-subscription-form#submitCustomForm"
+                        data-turbo="false"
+                        action="/notifications/subscribe"
+                        accept-charset="UTF-8"
+                        method="post"
+                      >
+                        <input type="hidden" name="authenticity_token" value="fTcHCn72UXj5cuVGTwDD89Zc779hHBvgsVAqXDAez6aai7G8dYdW9vBE3J09LUXCzXF4JqdTkhyiZN7v96QF_g" autocomplete="off" />
+
+                        <input type="hidden" name="repository_id" value="209731662" />
+
+                        <fieldset>
+                          <legend>
+                            <div class="text-small color-fg-muted pt-0 pr-3 pb-3 pl-6 pl-sm-5 border-bottom mb-3">
+                              Select events you want to be notified of in addition to participating and @mentions.
+                            </div>
+                          </legend>
+                          <div data-target="notifications-list-subscription-form.labelInputs"></div>
+                          <div class="form-checkbox mr-3 ml-6 ml-sm-5 mb-2 mt-0">
+                            <label class="f5 text-normal">
+                              <input
+                                type="checkbox"
+                                name="thread_types[]"
+                                value="Issue"
+                                data-targets="notifications-list-subscription-form.threadTypeCheckboxes"
+                                data-action="change:notifications-list-subscription-form#threadTypeCheckboxesUpdated"
+                              />
+                              Issues
+                            </label>
+                          </div>
+                          <div class="form-checkbox mr-3 ml-6 ml-sm-5 mb-2 mt-0">
+                            <label class="f5 text-normal">
+                              <input
+                                type="checkbox"
+                                name="thread_types[]"
+                                value="PullRequest"
+                                data-targets="notifications-list-subscription-form.threadTypeCheckboxes"
+                                data-action="change:notifications-list-subscription-form#threadTypeCheckboxesUpdated"
+                              />
+                              Pull requests
+                            </label>
+                          </div>
+                          <div class="form-checkbox mr-3 ml-6 ml-sm-5 mb-2 mt-0">
+                            <label class="f5 text-normal">
+                              <input
+                                type="checkbox"
+                                name="thread_types[]"
+                                value="Release"
+                                data-targets="notifications-list-subscription-form.threadTypeCheckboxes"
+                                data-action="change:notifications-list-subscription-form#threadTypeCheckboxesUpdated"
+                              />
+                              Releases
+                            </label>
+                          </div>
+                          <div class="form-checkbox mr-3 ml-6 ml-sm-5 mb-2 mt-0">
+                            <label class="f5 text-normal">
+                              <input
+                                type="checkbox"
+                                name="thread_types[]"
+                                value="Discussion"
+                                data-targets="notifications-list-subscription-form.threadTypeCheckboxes"
+                                data-action="change:notifications-list-subscription-form#threadTypeCheckboxesUpdated"
+                              />
+                              Discussions
+                            </label>
+                          </div>
+                          <div class="form-checkbox mr-3 ml-6 ml-sm-5 mb-2 mt-0">
+                            <label class="f5 text-normal">
+                              <input
+                                type="checkbox"
+                                name="thread_types[]"
+                                value="SecurityAlert"
+                                data-targets="notifications-list-subscription-form.threadTypeCheckboxes"
+                                data-action="change:notifications-list-subscription-form#threadTypeCheckboxesUpdated"
+                              />
+                              Security alerts
+                            </label>
+                          </div>
+                        </fieldset>
+                        <div class="pt-2 pb-3 px-3 d-flex flex-justify-start flex-row-reverse">
+                          <button name="do" value="custom" data-target="notifications-list-subscription-form.customSubmit" type="submit" disabled="disabled" data-view-component="true" class="Button--primary Button--medium Button ml-2">
+                            <span class="Button-content">
+                              <span class="Button-label">Apply</span>
+                            </span>
+                          </button>
+
+                          <button data-action="click:notifications-list-subscription-form#resetForm" data-close-dialog="" type="button" data-view-component="true" class="Button--secondary Button--medium Button">
+                            <span class="Button-content">
+                              <span class="Button-label">Cancel</span>
+                            </span>
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </details-dialog>
+              </details>
+              <tool-tip id="tooltip-56593adc-c9da-453e-9b24-62874b78a028" for="notifications-button" popover="manual" data-direction="s" data-type="description" data-view-component="true" class="sr-only position-absolute" role="tooltip">
+                Notification settings
+              </tool-tip>
+            </notifications-list-subscription-form>
+
+            <div data-view-component="true" class="BtnGroup d-flex">
+              <a
+                id="fork-icon-button"
+                variant="small"
+                group_item="true"
+                href="/ruby/debug/fork"
+                data-hydro-click='{"event_type":"repository.click","payload":{"target":"FORK_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                data-hydro-click-hmac="d4cea6700e020df7d59869a3a3f21b8386d4271fbc3e536109b730814de83428"
+                data-ga-click="Repository, show fork modal, action:files#disambiguate; text:Fork"
+                aria-labelledby="tooltip-57f46d9e-5b7a-44a3-9242-bb94eba401c8"
+                data-view-component="true"
+                class="Button Button--iconOnly Button--secondary Button--medium"
+              >
+                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo-forked Button-visual">
+                  <path
+                    d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"
+                  ></path>
+                </svg>
+              </a>
+              <tool-tip
+                id="tooltip-57f46d9e-5b7a-44a3-9242-bb94eba401c8"
+                for="fork-icon-button"
+                popover="manual"
+                data-direction="s"
+                data-type="label"
+                data-view-component="true"
+                class="sr-only position-absolute"
+                aria-hidden="true"
+                role="tooltip"
+              >
+                Fork your own copy of ruby/debug
+              </tool-tip>
+            </div>
+            <div data-view-component="true" class="js-toggler-container starring-container">
+              <!-- '"` --><!-- </textarea></xmp> -->
+              <form class="starred js-social-form" data-turbo="false" action="/ruby/debug/unstar" accept-charset="UTF-8" method="post">
+                <input type="hidden" name="authenticity_token" value="N7ZQry7Gz8RTao_3r45HCQvNC7EUB3IHUNDSgBklbxplke2RO9TYMuNmalSAYVM1GGWjfDoyhOU0IfBlDbsgfw" autocomplete="off" />
+                <input type="hidden" name="context" value="repository" />
+                <button
+                  data-hydro-click='{"event_type":"repository.click","payload":{"target":"UNSTAR_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                  data-hydro-click-hmac="23469658be22a62091a5bdfda4a11171aa5f525b765477f604f359f31a9fa4c3"
+                  data-ga-click="Repository, click unstar button, action:files#disambiguate; text:Unstar"
+                  id="icon-button-6f775058-cc75-42fb-9a45-f0951ea19900"
+                  aria-labelledby="tooltip-4950b3de-3201-460c-beb5-b1425aca5cb3"
+                  type="submit"
+                  data-view-component="true"
+                  class="Button Button--iconOnly Button--secondary Button--medium js-toggler-target starred-button-icon"
+                >
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star-fill Button-visual">
+                    <path
+                      d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"
+                    ></path>
+                  </svg>
+                </button>
+                <tool-tip
+                  id="tooltip-4950b3de-3201-460c-beb5-b1425aca5cb3"
+                  for="icon-button-6f775058-cc75-42fb-9a45-f0951ea19900"
+                  popover="manual"
+                  data-direction="s"
+                  data-type="label"
+                  data-view-component="true"
+                  class="sr-only position-absolute"
+                  aria-hidden="true"
+                  role="tooltip"
+                >
+                  Unstar this repository
+                </tool-tip>
+              </form>
+              <!-- '"` --><!-- </textarea></xmp> -->
+              <form class="unstarred js-social-form" data-turbo="false" action="/ruby/debug/star" accept-charset="UTF-8" method="post">
+                <input type="hidden" name="authenticity_token" value="mA8M7xXcZ_rAjIj-ul0yBOSoulhSegcsVcaoGz74l6E_P1XSdzhiLem1sYXa8unqBDljt5Ca9qkIVxLJP3lIgw" autocomplete="off" />
+                <input type="hidden" name="context" value="repository" />
+                <button
+                  data-hydro-click='{"event_type":"repository.click","payload":{"target":"STAR_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                  data-hydro-click-hmac="ef386ffadcc75eeb5336b847bdd49d460a99e5dfa3b517794c7731430a6ae1e1"
+                  data-ga-click="Repository, click star button, action:files#disambiguate; text:Star"
+                  id="icon-button-81596f36-e005-4f4a-9144-c530ec948af4"
+                  aria-labelledby="tooltip-810a3cb5-2c0e-45d8-8d30-deb6cf2e29b2"
+                  type="submit"
+                  data-view-component="true"
+                  class="Button Button--iconOnly Button--secondary Button--medium js-toggler-target"
+                >
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star Button-visual">
+                    <path
+                      d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"
+                    ></path>
+                  </svg>
+                </button>
+                <tool-tip
+                  id="tooltip-810a3cb5-2c0e-45d8-8d30-deb6cf2e29b2"
+                  for="icon-button-81596f36-e005-4f4a-9144-c530ec948af4"
+                  popover="manual"
+                  data-direction="s"
+                  data-type="label"
+                  data-view-component="true"
+                  class="sr-only position-absolute"
+                  aria-hidden="true"
+                  role="tooltip"
+                >
+                  Star this repository
+                </tool-tip>
+              </form>
+            </div>
+          </div>
+          <div class="d-flex flex-row gap-2"></div>
+        </div>
+        <p class="f4 mb-3 color-fg-muted">
+          Debugging functionality for Ruby
+        </p>
+
+        <h3 class="sr-only">License</h3>
+        <div class="mb-2">
+          <a href="/ruby/debug/blob/master/LICENSE.txt" class="Link--muted" data-analytics-event='{"category":"Repository Overview","action":"click","label":"location:sidebar;file:license"}'>
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-law mr-2">
+              <path
+                d="M8.75.75V2h.985c.304 0 .603.08.867.231l1.29.736c.038.022.08.033.124.033h2.234a.75.75 0 0 1 0 1.5h-.427l2.111 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.006.005-.01.01-.045.04c-.21.176-.441.327-.686.45C14.556 10.78 13.88 11 13 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L12.178 4.5h-.162c-.305 0-.604-.079-.868-.231l-1.29-.736a.245.245 0 0 0-.124-.033H8.75V13h2.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5h2.5V3.5h-.984a.245.245 0 0 0-.124.033l-1.289.737c-.265.15-.564.23-.869.23h-.162l2.112 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.016.015-.045.04c-.21.176-.441.327-.686.45C4.556 10.78 3.88 11 3 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L2.178 4.5H1.75a.75.75 0 0 1 0-1.5h2.234a.249.249 0 0 0 .125-.033l1.288-.737c.265-.15.564-.23.869-.23h.984V.75a.75.75 0 0 1 1.5 0Zm2.945 8.477c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L13 6.327Zm-10 0c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L3 6.327Z"
+              ></path>
+            </svg>
+            BSD-2-Clause license
+          </a>
+        </div>
+
+        <div class="mb-3">
+          <ul class="d-flex flex-wrap mb-2 gap-2" aria-label="Repository details">
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/stargazers">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star mr-1">
+                <path
+                  d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"
+                ></path>
+              </svg>
+              <span class="text-bold color-fg-default">1.1k</span>
+              stars
+            </a>
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/forks">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo-forked mr-1">
+                <path
+                  d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"
+                ></path>
+              </svg>
+              <span class="text-bold color-fg-default">123</span>
+              forks
+            </a>
+            <div class="color-fg-muted mr-2" role="listitem">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-eye mr-1">
+                <path
+                  d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"
+                ></path>
+              </svg>
+              <span class="text-bold color-fg-default">43</span>
+              watching
+            </div>
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/branches">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-git-branch mr-1">
+                <path
+                  d="M9.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.493 2.493 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25Zm-6 0a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Zm8.25-.75a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5ZM4.25 12a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Z"
+                ></path>
+              </svg>
+              <strong class="color-fg-default">4</strong>
+              <span class="color-fg-muted">Branches</span>
+            </a>
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/tags">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-tag mr-1">
+                <path
+                  d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.752 1.752 0 0 1 1 7.775Zm1.5 0c0 .066.026.13.073.177l6.25 6.25a.25.25 0 0 0 .354 0l5.025-5.025a.25.25 0 0 0 0-.354l-6.25-6.25a.25.25 0 0 0-.177-.073H2.75a.25.25 0 0 0-.25.25ZM6 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"
+                ></path>
+              </svg>
+              <strong class="color-fg-default">37</strong>
+              <span class="color-fg-muted">Tags</span>
+            </a>
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/activity">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-pulse mr-1">
+                <path
+                  d="M6 2c.306 0 .582.187.696.471L10 10.731l1.304-3.26A.751.751 0 0 1 12 7h3.25a.75.75 0 0 1 0 1.5h-2.742l-1.812 4.528a.751.751 0 0 1-1.392 0L6 4.77 4.696 8.03A.75.75 0 0 1 4 8.5H.75a.75.75 0 0 1 0-1.5h2.742l1.812-4.529A.751.751 0 0 1 6 2Z"
+                ></path>
+              </svg>
+              <span>Activity</span>
+            </a>
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/custom-properties">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note mr-1">
+                <path
+                  d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25Zm1.75-.25a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25ZM3.5 6.25a.75.75 0 0 1 .75-.75h7a.75.75 0 0 1 0 1.5h-7a.75.75 0 0 1-.75-.75Zm.75 2.25h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1 0-1.5Z"
+                ></path>
+              </svg>
+              <span>Custom properties</span>
+            </a>
+          </ul>
+
+          <div class="mb-2 d-flex color-fg-muted">
+            <div class="d-flex flex-items-center" style="height: 21px;">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-globe flex-shrink-0 mr-2">
+                <path
+                  d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM5.78 8.75a9.64 9.64 0 0 0 1.363 4.177c.255.426.542.832.857 1.215.245-.296.551-.705.857-1.215A9.64 9.64 0 0 0 10.22 8.75Zm4.44-1.5a9.64 9.64 0 0 0-1.363-4.177c-.307-.51-.612-.919-.857-1.215a9.927 9.927 0 0 0-.857 1.215A9.64 9.64 0 0 0 5.78 7.25Zm-5.944 1.5H1.543a6.507 6.507 0 0 0 4.666 5.5c-.123-.181-.24-.365-.352-.552-.715-1.192-1.437-2.874-1.581-4.948Zm-2.733-1.5h2.733c.144-2.074.866-3.756 1.58-4.948.12-.197.237-.381.353-.552a6.507 6.507 0 0 0-4.666 5.5Zm10.181 1.5c-.144 2.074-.866 3.756-1.58 4.948-.12.197-.237.381-.353.552a6.507 6.507 0 0 0 4.666-5.5Zm2.733-1.5a6.507 6.507 0 0 0-4.666-5.5c.123.181.24.365.353.552.714 1.192 1.436 2.874 1.58 4.948Z"
+                ></path>
+              </svg>
+            </div>
+            <span class="flex-auto min-width-0 width-fit">
+              Public repository
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-bottom mx-xl-5"></div>
+  </div>
+</div>
