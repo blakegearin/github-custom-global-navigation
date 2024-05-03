@@ -1353,6 +1353,15 @@
             padding-right: var(--base-size-32, 32px) !important;
             padding-left: var(--base-size-32, 32px) !important;
           }
+
+          .notification-shelf > div
+          {
+            padding-right: var(--base-size-32, 32px) !important;
+            padding-left: var(--base-size-32, 32px) !important;
+            max-width: 1280px;
+            margin-right: auto;
+            margin-left: auto;
+          }
         }
       `;
     }
@@ -1531,7 +1540,8 @@
 
     if (elementConfig.backgroundColor !== '') {
       HEADER_STYLE.textContent += `
-        .${REPOSITORY_HEADER_CLASS}
+        .${REPOSITORY_HEADER_CLASS},
+        .notification-shelf
         {
           background-color: ${elementConfig.backgroundColor} !important;
         }
