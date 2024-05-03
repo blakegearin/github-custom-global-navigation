@@ -676,7 +676,7 @@
 
     if (firstElement.nextElementSibling === null) {
       firstElement.parentNode.appendChild(secondElementClone);
-    } else{
+    } else {
       firstElement.parentNode.insertBefore(secondElementClone, firstElement.nextElementSibling);
     }
 
@@ -1258,22 +1258,12 @@
   function flipCreateInbox() {
     log(DEBUG, 'flipCreateInbox()');
 
-    const response = cloneAndFlipElements(
+    cloneAndFlipElements(
       createId(SELECTORS.create.id),
       createId(SELECTORS.notifications.id),
       `${SELECTORS.create.id}-flip`,
       `${SELECTORS.notifications.id}-flip`,
     );
-
-    if (response.length === 0) return;
-
-    // The dynamic positioning logic of the overlay only seems to work on the original IDs,
-    // so must rename the originals elements to avoid a conflict.
-    const originalButtonId = `${SELECTORS.create.button}-old`.replace('#', '');
-    HEADER.querySelector(SELECTORS.create.button).setAttribute('id', originalButtonId);
-
-    const originalOverlayId = `${SELECTORS.create.overlay}-old`.replace('#', '');
-    HEADER.querySelector(SELECTORS.create.overlay).setAttribute('id', originalOverlayId);
   }
 
   function updateGlobalBar() {
@@ -3291,11 +3281,11 @@
     },
     create: {
       id: 'create-div',
-      topDiv: 'action-menu',
-      button: '#global-create-menu-button',
+      topDiv: 'react-partial-anchor',
+      button: '#global-create-menu-anchor',
       overlay: '#global-create-menu-overlay',
-      plusIcon: '#global-create-menu-button .Button-visual.Button-leadingVisual',
-      dropdownIcon: '#global-create-menu-button .Button-label',
+      plusIcon: '#global-create-menu-anchor .Button-visual.Button-leadingVisual',
+      dropdownIcon: '#global-create-menu-anchor .Button-label',
       textContent: 'create-text-content-span',
     },
     issues: {
