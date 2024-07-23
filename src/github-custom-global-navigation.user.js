@@ -1167,12 +1167,12 @@
     log(DEBUG, 'updateAvatarButton()');
 
     const elementSelector = SELECTORS.sidebars.right;
-    const topDivSelector = elementSelector.topDiv;
+    const backdropSelector = elementSelector.backdrop;
 
-    const topDiv = HEADER.querySelector(topDivSelector);
+    const backdrop = HEADER.querySelector(backdropSelector);
 
-    if (!topDiv) {
-      log(DEBUG, `Selector ${topDivSelector} not found`);
+    if (!backdrop) {
+      log(DEBUG, `Selector ${backdropSelector} not found`);
       return;
     }
 
@@ -1183,7 +1183,7 @@
       return;
     }
 
-    if (topDiv.classList.contains('Overlay--hidden')) {
+    if (backdrop.classList.contains('Overlay--hidden')) {
       if (avatarButton.hasAttribute('data-close-dialog-id')) {
         const dialogId = avatarButton.getAttribute('data-close-dialog-id');
         avatarButton.setAttribute('data-show-dialog-id', dialogId);
@@ -1996,28 +1996,25 @@
 
     if (HEADER.querySelector(createId(liElementId))) return;
 
-    const featurePreviewSearch = HEADER.querySelectorAll('[data-analytics-event*="FEATURE_PREVIEW"]');
+    const featurePreviewSearch = Array.from(
+      document.querySelectorAll('[data-position-regular="right"] span'),
+    )?.find(element => element.textContent === 'Feature preview') || null;
 
-    if (featurePreviewSearch.length === 1) {
-      const featurePreviewButton = featurePreviewSearch[0];
-      const featurePreviewLi = featurePreviewButton.parentNode;
+    if (featurePreviewSearch) {
+      const featurePreviewSpan = featurePreviewSearch;
+      const featurePreviewLabelDiv = featurePreviewSpan.parentNode;
+      const featurePreviewLi = featurePreviewLabelDiv.parentNode;
 
       const newLiElement = featurePreviewLi.cloneNode(true);
       newLiElement.setAttribute('id', liElementId);
-      newLiElement.removeAttribute('data-targets');
 
-      const newButton = newLiElement.querySelector('button');
-      newButton.removeAttribute('id');
-      newButton.removeAttribute('data-analytics-event');
-      newButton.removeAttribute('data-show-dialog-id');
-      newButton.removeAttribute('data-view-component');
-      newButton.onclick = () => {
+      newLiElement.onclick = () => {
         GMC.open();
 
         if (GMC.get('on_open') === 'close sidebar') HEADER.querySelector(SELECTORS.sidebars.right.closeButton)?.click();
       };
 
-      const textElement = newLiElement.querySelector('.ActionListItem-label');
+      const textElement = newLiElement.querySelector('[data-component="ActionList.Item--DividerContainer"]');
       textElement.textContent = GMC.get('menu_item_title');
 
       const oldSvg = newLiElement.querySelector('svg');
@@ -2056,7 +2053,7 @@
       }
 
       const parentUl = featurePreviewLi.parentNode;
-      const settingsLi = HEADER.querySelector('a[href="/settings/profile"]').parentNode;
+      const settingsLi = document.querySelector('[data-position-regular="right"] a[href="/settings/profile"]').parentNode;
 
       parentUl.insertBefore(newLiElement, settingsLi.nextSibling);
 
@@ -3111,6 +3108,8 @@
       'Old School': 'oldSchool',
       'Custom': 'custom',
     }[GMC.get('type')];
+
+    log(DEBUG, 'CONFIG_NAME', CONFIG_NAME);
 
     if (CONFIG_NAME === 'off') return 'break';
 
