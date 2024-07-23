@@ -1376,6 +1376,50 @@
     }
   }
 
+  function preloadLeftSidebar(elementSelector) {
+    log(DEBUG, 'preloadLeftSidebar()');
+
+    if (!LEFT_SIDEBAR_PRELOADED) return;
+
+    const leftModalDialog = HEADER.querySelector(elementSelector.left.modalDialog).remove();
+
+    if (!leftModalDialog) {
+      logError(`Selector '${elementSelector.left.modalDialog}' not found`);
+      preloadLeftSidebar(elementSelector);
+      return;
+    }
+
+    window.addEventListener('load', () => {
+      HEADER.querySelector(`${SELECTORS.hamburgerButton} button`).click();
+      log(INFO, 'Left sidebar preloaded');
+    });
+
+    LEFT_SIDEBAR_PRELOADED = true;
+  }
+
+  function preloadRightSidebar(elementSelector) {
+    log(DEBUG, 'preloadRightSidebar()');
+
+    if (!RIGHT_SIDEBAR_PRELOADED) return;
+
+    const rightModalDialog = HEADER.querySelector(elementSelector.right.modalDialog);
+
+    if (!rightModalDialog) {
+      logError(`Selector '${elementSelector.right.modalDialog}' not found`);
+      preloadRightSidebar(elementSelector);
+      return;
+    }
+
+    rightModalDialog.remove();
+
+    window.addEventListener('load', () => {
+      HEADER.querySelector(SELECTORS.avatar.button).click();
+      log(INFO, 'Right sidebar preloaded');
+    });
+
+    RIGHT_SIDEBAR_PRELOADED = true;
+  }
+
   function updateSidebars() {
     log(DEBUG, 'updateSidebars()');
 
@@ -1393,16 +1437,7 @@
       `;
     }
 
-    if (elementConfig.left.preload && !LEFT_SIDEBAR_PRELOADED) {
-      HEADER.querySelector(elementSelector.left.modalDialog).remove();
-
-      window.addEventListener('load', () => {
-        HEADER.querySelector(`${SELECTORS.hamburgerButton} button`).click();
-        log(INFO, 'Left sidebar preloaded');
-      });
-
-      LEFT_SIDEBAR_PRELOADED = true;
-    }
+    if (elementConfig.left.preload) preloadLeftSidebar(elementSelector);
 
     if (elementConfig.right.floatUnderneath) {
       HEADER_STYLE.textContent += `
@@ -1427,16 +1462,7 @@
       `;
     }
 
-    if (elementConfig.right.preload && !RIGHT_SIDEBAR_PRELOADED) {
-      HEADER.querySelector(elementSelector.right.modalDialog).remove();
-
-      window.addEventListener('load', () => {
-        HEADER.querySelector(SELECTORS.avatar.button).click();
-        log(INFO, 'Right sidebar preloaded');
-      });
-
-      RIGHT_SIDEBAR_PRELOADED = true;
-    }
+    if (elementConfig.right.preload) preloadRightSidebar(elementSelector);
 
     if (elementConfig.right.maxHeight) {
       HEADER_STYLE.textContent += `
