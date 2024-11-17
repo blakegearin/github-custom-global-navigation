@@ -528,7 +528,7 @@
       const spanId = `${configKey}-text-content-span`;
       spanElement.setAttribute('id', spanId);
 
-      const padding = '9px';
+      const padding = '0.5rem';
 
       HEADER_STYLE.textContent += `
         ${elementSelector.button}
@@ -658,7 +658,7 @@
       linkSelector = createId(cloneId);
     }
 
-    const padding = '7px';
+    const padding = '0.5rem';
     link.style.setProperty('padding-left', padding, 'important');
     link.style.setProperty('padding-right', padding, 'important');
 
@@ -1189,7 +1189,7 @@
     });
 
     if (elementConfig.text.content !== '') {
-      const padding = '9px';
+      const padding = '0.5rem';
 
       HEADER_STYLE.textContent += `
         ${createId(elementSelector.id)} a
