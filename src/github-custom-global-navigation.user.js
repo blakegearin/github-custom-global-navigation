@@ -62,6 +62,7 @@
 
     updatePageTitle();
     updateSearch();
+    updateCopilot();
 
     if (CONFIG.divider.remove) removeDivider();
 
@@ -464,6 +465,134 @@
 
       placeholderDiv.appendChild(slashImg);
     }
+
+    log(DEBUG, `Updates applied to ${configKey}`);
+  }
+
+  function updateCopilot() {
+    log(DEBUG, 'updateCopilot()');
+
+    const configKey = 'copilot';
+
+    const elementConfig = CONFIG[configKey];
+    const elementSelector = SELECTORS[configKey];
+
+    let topDivSelector = elementSelector.id;
+    const topDiv = HEADER.querySelector(createId(elementSelector.id)) ||
+      HEADER.querySelector(elementSelector.topDiv);
+
+    if (!topDiv) {
+      logError(`Selectors '${createId(elementSelector.id)}' and '${elementSelector.topDiv}' not found`);
+      return;
+    }
+
+    topDiv.setAttribute('id', elementSelector.id);
+
+    if (elementConfig.remove) {
+      HEADER_STYLE.textContent += cssHideElement(createId(elementSelector.id));
+      return;
+    }
+
+    if (!elementConfig.tooltip && SELECTORS.toolTips[configKey]?.id) {
+      HEADER_STYLE.textContent += cssHideElement(createId(SELECTORS.toolTips[configKey].id));
+    }
+
+    const button = HEADER.querySelector(elementSelector.button);
+
+    let textContent = elementConfig.text.content;
+
+    if (elementConfig.icon.remove) {
+      const svgId = `${configKey}-svg`;
+      const svg = button.querySelector('svg');
+
+      if (!svg) {
+        logError(`Selector '${configKey} svg' not found`);
+
+        return;
+      }
+
+      svg.setAttribute('id', svgId);
+
+      HEADER_STYLE.textContent += cssHideElement(createId(svgId));
+    } else {
+      button.querySelector('svg').style.setProperty('fill', elementConfig.icon.color);
+      textContent = UNICODE_NON_BREAKING_SPACE + textContent;
+    }
+
+    modifyThenObserve(() => {
+      HEADER.querySelector(createId(elementSelector.textContent))?.remove();
+    });
+
+    if (elementConfig.text.content !== '') {
+      const spanElement = document.createElement('span');
+      const spanId = `${configKey}-text-content-span`;
+      spanElement.setAttribute('id', spanId);
+
+      const padding = '9px';
+
+      HEADER_STYLE.textContent += `
+        ${elementSelector.button}
+        {
+          padding-left: ${padding} !important;
+          padding-right: ${padding} !important;
+          width: auto !important;
+          text-decoration: none !important;
+          display: flex !important;
+        }
+      `;
+
+      if (elementConfig.text.color) {
+        HEADER_STYLE.textContent += `
+          ${createId(spanId)}
+          {
+            color: ${elementConfig.text.color} !important;
+          }
+        `;
+      }
+
+      const textNode = document.createTextNode(textContent);
+      spanElement.appendChild(textNode);
+
+      button.appendChild(spanElement);
+    }
+
+    if (!elementConfig.border) {
+      HEADER_STYLE.textContent += `
+        ${createId(topDivSelector)}
+        {
+          border: none !important;
+        }
+      `;
+    }
+
+    if (elementConfig.boxShadow !== '') {
+      HEADER_STYLE.textContent += `
+        ${createId(topDivSelector)}
+        {
+          box-shadow: ${elementConfig.boxShadow} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.hover.backgroundColor !== '') {
+      HEADER_STYLE.textContent += `
+        ${createId(topDivSelector)}:hover
+        {
+          background-color: ${elementConfig.hover.backgroundColor} !important;
+        }
+      `;
+    }
+
+    if (elementConfig.hover.color !== '') {
+      HEADER_STYLE.textContent += `
+        ${createId(topDivSelector)} span:hover
+        {
+          color: ${elementConfig.hover.color} !important;
+        }
+      `;
+    }
+
+    log(DEBUG, `Updates applied to ${configKey}`);
   }
 
   function removeDivider() {
@@ -503,7 +632,6 @@
 
     let linkSelector = elementSelector.id;
     link.setAttribute('id', linkSelector);
-
 
     if (elementConfig.remove) {
       HEADER_STYLE.textContent += cssHideElement(createId(configKey));
@@ -679,6 +807,8 @@
     } else {
       firstElement.parentNode.insertBefore(secondElementClone, firstElement.nextElementSibling);
     }
+
+    // debugger;
 
     if (firstElementSelector.includes('clone')) {
       firstElement.remove();
@@ -1257,6 +1387,8 @@
 
   function flipCreateInbox() {
     log(DEBUG, 'flipCreateInbox()');
+
+    // debugger;
 
     cloneAndFlipElements(
       createId(SELECTORS.create.id),
@@ -1972,6 +2104,9 @@
 
     const toolTips = Array.from(HEADER.querySelectorAll('tool-tip'));
     SELECTORS.toolTips = {
+      copilot: toolTips.find(
+        tooltip => tooltip.getAttribute('for') === 'copilot-chat-header-button',
+      ),
       create: toolTips.find(
         tooltip => tooltip.textContent.includes('Create new'),
       ),
@@ -3304,9 +3439,15 @@
       placeholderDiv: '.AppHeader-search-control .overflow-hidden',
       modal: '[data-target="qbsearch-input.queryBuilderContainer"]',
     },
+    copilot: {
+      id: 'copilot-div',
+      topDiv: '.AppHeader-CopilotChat',
+      button: '#copilot-chat-header-button',
+      textContent: 'copilot-text-content-span',
+    },
     create: {
       id: 'create-div',
-      topDiv: 'react-partial-anchor',
+      topDiv: '.AppHeader-actions react-partial-anchor',
       button: '#global-create-menu-anchor',
       overlay: '#global-create-menu-overlay',
       plusIcon: '#global-create-menu-anchor .Button-visual.Button-leadingVisual',
@@ -3415,6 +3556,25 @@
           rightButton: 'command palette',
           modal: {
             width: '',
+          },
+        },
+        copilot: {
+          remove: false,
+          border: true,
+          tooltip: false,
+          alignLeft: false,
+          boxShadow: '',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Copilot',
+            color: '',
+          },
+          hover: {
+            backgroundColor: '',
+            color: '',
           },
         },
         divider: {
@@ -3643,6 +3803,25 @@
           rightButton: 'command palette',
           modal: {
             width: '',
+          },
+        },
+        copilot: {
+          remove: false,
+          border: true,
+          tooltip: false,
+          alignLeft: false,
+          boxShadow: '',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Copilot',
+            color: '',
+          },
+          hover: {
+            backgroundColor: '',
+            color: '',
           },
         },
         divider: {
@@ -3875,6 +4054,25 @@
             width: '450px',
           },
         },
+        copilot: {
+          remove: true,
+          border: false,
+          tooltip: false,
+          alignLeft: true,
+          boxShadow: 'none',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Copilot',
+            color: oldSchoolColor,
+          },
+          hover: {
+            backgroundColor: oldSchoolHoverBackgroundColor,
+            color: oldSchoolHoverColor,
+          },
+        },
         divider: {
           remove: true,
         },
@@ -4103,6 +4301,25 @@
           rightButton: 'slash key',
           modal: {
             width: '450px',
+          },
+        },
+        copilot: {
+          remove: true,
+          border: false,
+          tooltip: false,
+          alignLeft: true,
+          boxShadow: 'none',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Copilot',
+            color: oldSchoolColor,
+          },
+          hover: {
+            backgroundColor: oldSchoolHoverBackgroundColor,
+            color: oldSchoolHoverColor,
           },
         },
         divider: {
