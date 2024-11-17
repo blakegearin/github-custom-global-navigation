@@ -1784,12 +1784,9 @@
         min-width: 0 !important;
       }
 
-      @media (min-width: 768px)
+      .AppHeader-context .AppHeader-context-compact
       {
-        .AppHeader-context .AppHeader-context-compact
-        {
-          display: none !important;
-        }
+        display: none !important;
       }
 
       .AppHeader-context .AppHeader-context-full
