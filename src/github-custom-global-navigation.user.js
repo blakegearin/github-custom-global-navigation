@@ -4,7 +4,7 @@
 // @version      1.6.0
 // @description  Customize GitHub's new global navigation
 // @author       Blake Gearin
-// @match        *://github.com/*
+// @match        https://github.com/*
 // @require      https://openuserjs.org/src/libs/sizzle/GM_config.js
 // @grant        GM.getValue
 // @grant        GM.setValue
