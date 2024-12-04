@@ -1,19 +1,21 @@
 // ==UserScript==
 // @name         GitHub Custom Global Navigation
 // @namespace    https://github.com/blakegearin/github-custom-global-navigation
-// @version      1.6.0
+// @version      1.6.1
 // @description  Customize GitHub's new global navigation
-// @author       Blake Gearin
+// @author       Blake Gearin <hello@blakeg.me> (https://blakegearin.com)
 // @match        https://github.com/*
 // @require      https://openuserjs.org/src/libs/sizzle/GM_config.js
 // @grant        GM.getValue
 // @grant        GM.setValue
-// @license      MIT
 // @icon         https://raw.githubusercontent.com/blakegearin/github-custom-global-navigation/main/img/white_logo.svg
 // @supportURL   https://github.com/blakegearin/github-custom-global-navigation/issues
+// @license      MIT
+// @copyright    2023–2024, Blake Gearin (https://blakegearin.com)
 // ==/UserScript==
 
-/*global GM_config*/
+/* jshint esversion: 6 */
+/* global GM_config */
 
 (function () {
   'use strict';
@@ -2361,11 +2363,12 @@
 
   function updateLogLevel() {
     CURRENT_LOG_LEVEL = {
-      'silent': SILENT,
-      'quiet': QUIET,
-      'debug': DEBUG,
-      'verbose': VERBOSE,
-      'trace': TRACE,
+      silent: SILENT,
+      quiet: QUIET,
+      info: INFO,
+      debug: DEBUG,
+      verbose: VERBOSE,
+      trace: TRACE,
     }[GMC.get('log_level')];
   }
 
