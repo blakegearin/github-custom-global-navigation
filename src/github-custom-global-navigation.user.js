@@ -810,8 +810,6 @@
       firstElement.parentNode.insertBefore(secondElementClone, firstElement.nextElementSibling);
     }
 
-    // debugger;
-
     if (firstElementSelector.includes('clone')) {
       firstElement.remove();
     }
@@ -1389,8 +1387,6 @@
 
   function flipCreateInbox() {
     log(DEBUG, 'flipCreateInbox()');
-
-    // debugger;
 
     cloneAndFlipElements(
       createId(SELECTORS.create.id),
@@ -2110,10 +2106,10 @@
         tooltip => tooltip.textContent.includes('Create new'),
       ),
       pullRequests: toolTips.find(
-        tooltip => tooltip.textContent.includes('Pull requests'),
+        tooltip => tooltip.textContent.includes('Your pull requests'),
       ),
       issues: toolTips.find(
-        tooltip => tooltip.textContent.includes('Issues'),
+        tooltip => tooltip.textContent.includes('Your issues'),
       ),
       notifications: toolTips.find(
         tooltip => tooltip.getAttribute('data-target') === 'notification-indicator.tooltip',
