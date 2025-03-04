@@ -1439,7 +1439,7 @@
         ${SELECTORS.header.localBar.topDiv}
         {
           background-color: ${elementConfig.backgroundColor} !important;
-          box-shadow: inset 0 calc(var(--borderWidth-thin, 1px)*-1) var(--color-border-default) !important;
+          box-shadow: inset 0 calc(var(--borderWidth-thin, 1px)*-1) var(--borderColor-muted) !important;
         }
       `;
     }
