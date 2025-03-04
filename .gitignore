@@ -1,5 +1,5 @@
 node_modules/
-*.afdesign
+*.afdesign*
 /*.css
 /*.svg
 *.xcf

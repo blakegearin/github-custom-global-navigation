@@ -1637,10 +1637,10 @@
     }
 
     if (repositoryHeader.hidden) {
-      log(VERBOSE, `Selector '${SELECTORS[configKey].id}' is hidden`);
+      log(DEBUG, `Selector '${SELECTORS[configKey].id}' is hidden`);
 
       if (!HEADER.querySelector(SELECTORS.pageTitle.separator)) {
-        log(INFO, `Selector '${SELECTORS.pageTitle.separator}' not found, not creating a repository header`);
+        log(DEBUG, `Selector '${SELECTORS.pageTitle.separator}' not found, not creating a repository header`);
 
         return;
       }
@@ -1663,7 +1663,7 @@
       topRepositoryHeaderElement.appendChild(repositoryHeaderElement);
       insertNewGlobalBar(topRepositoryHeaderElement);
     } else if (HEADER.querySelector(createId(TEMP_REPOSITORY_HEADER_FLAG))) {
-      log(VERBOSE, `Selector '${createId(TEMP_REPOSITORY_HEADER_FLAG)}' found`);
+      log(DEBUG, `Selector '${createId(TEMP_REPOSITORY_HEADER_FLAG)}' found`);
 
       // The Code tab is being loaded from another tab which has a temporary header
       const tempRepositoryHeader = HEADER.querySelector(createId(TEMP_REPOSITORY_HEADER_FLAG));
@@ -1674,8 +1674,8 @@
       insertPermanentRepositoryHeader(topRepositoryHeaderElement, repositoryHeader);
     } else {
       log(
-        VERBOSE,
-        `${SELECTORS[configKey].id} is hidden and selector '${createId(TEMP_REPOSITORY_HEADER_FLAG)}' not found`,
+        DEBUG,
+        `'${SELECTORS[configKey].id}' is hidden and selector '${createId(TEMP_REPOSITORY_HEADER_FLAG)}' not found`,
       );
 
       // The Code tab being loaded for the first time
@@ -1912,7 +1912,7 @@
       }
     `;
 
-    clonedPageTitle.querySelectorAll('svg').forEach(svg => svg.remove());
+    clonedPageTitle.querySelectorAll('svg.octicon-lock').forEach(svg => svg.remove());
     clonedPageTitle.querySelectorAll('a[href$="/stargazers"]').forEach(link => link.remove());
 
     ownerImg.parentNode.insertBefore(clonedPageTitle, ownerImg.nextSibling);
@@ -1978,7 +1978,7 @@
   }
 
   function insertNewGlobalBar(element) {
-    log(DEBUG, 'insertNewGlobalBar()');
+    log(SILENT, 'insertNewGlobalBar()');
 
     const elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
 
