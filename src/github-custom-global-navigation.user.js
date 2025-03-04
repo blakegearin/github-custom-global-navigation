@@ -1527,27 +1527,43 @@
     LEFT_SIDEBAR_PRELOADED = true;
   }
 
-  function preloadRightSidebar(elementSelector) {
+  function preloadRightSidebar() {
     log(DEBUG, 'preloadRightSidebar()');
 
-    if (!RIGHT_SIDEBAR_PRELOADED) return;
+    if (RIGHT_SIDEBAR_PRELOADED) return;
 
-    const rightModalDialog = HEADER.querySelector(elementSelector.right.modalDialog);
+    const temporaryStyleId = 'temporaryStyle';
 
-    if (!rightModalDialog) {
-      logError(`Selector '${elementSelector.right.modalDialog}' not found`);
-      preloadRightSidebar(elementSelector);
-      return;
+    const avatarButton = HEADER.querySelector(SELECTORS.avatar.button);
+    if (!avatarButton) {
+      setTimeout(preloadRightSidebar, 100);
+    } else {
+      avatarButton.click();
+      const closeButton = document.querySelector(SELECTORS.sidebars.right.closeButton);
+
+      if (!document.querySelector(createId(temporaryStyleId))) {
+        // Hide the sidebar
+        let temporaryStyle = document.createElement('style');
+        temporaryStyle.setAttribute('id', temporaryStyleId);
+        temporaryStyle.textContent += `
+          #__primerPortalRoot__
+          {
+            display: none;
+          }
+        `;
+        document.body.appendChild(temporaryStyle);
+      }
+
+      if (!closeButton) {
+        setTimeout(preloadRightSidebar, 100);
+      } else {
+        closeButton.click();
+
+        log(INFO, 'Right sidebar preloaded');
+        document.querySelector(createId(temporaryStyleId)).remove();
+        RIGHT_SIDEBAR_PRELOADED = true;
+      }
     }
-
-    rightModalDialog.remove();
-
-    window.addEventListener('load', () => {
-      HEADER.querySelector(SELECTORS.avatar.button).click();
-      log(INFO, 'Right sidebar preloaded');
-    });
-
-    RIGHT_SIDEBAR_PRELOADED = true;
   }
 
   function updateSidebars() {
@@ -1579,20 +1595,10 @@
           margin-top: 55px;
           margin-right: 20px;
         }
-
-        ${elementSelector.right.navParentDiv}
-        {
-          margin-bottom: 0px !important;
-        }
-
-        ${elementSelector.right.nav}
-        {
-          padding-bottom: 0px !important;
-        }
       `;
     }
 
-    if (elementConfig.right.preload) preloadRightSidebar(elementSelector);
+    if (elementConfig.right.preload) preloadRightSidebar();
 
     if (elementConfig.right.maxHeight) {
       HEADER_STYLE.textContent += `
@@ -3499,11 +3505,10 @@
         modalDialog: '.Overlay--placement-left',
       },
       right: {
-        modalDialog: '.AppHeader-user .Overlay--placement-right',
-        backdrop: '.AppHeader-user .Overlay--placement-right ::backdrop',
-        closeButton: '.AppHeader-user .Overlay--placement-right .Overlay-closeButton.close-button',
-        navParentDiv: '.AppHeader-user .Overlay--placement-right div.Overlay-body > div',
-        nav: '.AppHeader-user .Overlay--placement-right nav',
+        topDiv: '#__primerPortalRoot__',
+        wrapper: '#__primerPortalRoot__ > div',
+        backdrop: '#__primerPortalRoot__ > div > [data-position-regular="right"]',
+        closeButton: '#__primerPortalRoot__ button[aria-label="Close"]',
         divider: 'li[data-component="ActionList.Divider"]',
       },
     },
