@@ -1448,7 +1448,7 @@
       HEADER_STYLE.textContent += `
         ${SELECTORS.header.localBar.underlineNavActions}
         {
-          display: initial !important;
+          display: contents !important;
           padding-right: 0px !important;
         }
 
