@@ -1978,7 +1978,7 @@
   }
 
   function insertNewGlobalBar(element) {
-    log(SILENT, 'insertNewGlobalBar()');
+    log(DEBUG, 'insertNewGlobalBar()');
 
     const elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
 
@@ -2187,7 +2187,11 @@
 
       parentUl.insertBefore(newLiElement, settingsLi.nextSibling);
 
-      const divider = featurePreviewLi.parentNode.querySelector('.ActionList-sectionDivider');
+      const divider = featurePreviewLi.parentNode.querySelector(SELECTORS.sidebars.right.divider);
+      if (!divider) {
+        logError(`Selector '${SELECTORS.sidebars.right.divider}' not found`);
+        return;
+      }
       const newDivider = divider.cloneNode(true);
 
       parentUl.insertBefore(newDivider, settingsLi.nextSibling);
@@ -3500,6 +3504,7 @@
         closeButton: '.AppHeader-user .Overlay--placement-right .Overlay-closeButton.close-button',
         navParentDiv: '.AppHeader-user .Overlay--placement-right div.Overlay-body > div',
         nav: '.AppHeader-user .Overlay--placement-right nav',
+        divider: 'li[data-component="ActionList.Divider"]',
       },
     },
   };
