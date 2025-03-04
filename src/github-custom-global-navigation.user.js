@@ -1978,7 +1978,7 @@
   }
 
   function insertNewGlobalBar(element) {
-    log(SILENT, 'insertNewGlobalBar()');
+    log(DEBUG, 'insertNewGlobalBar()');
 
     const elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
 
@@ -2187,7 +2187,12 @@
 
       parentUl.insertBefore(newLiElement, settingsLi.nextSibling);
 
-      const divider = featurePreviewLi.parentNode.querySelector('.ActionList-sectionDivider');
+      const divider = featurePreviewLi.parentNode.querySelector(SELECTORS.sidebars.right.divider);
+      if (!divider) {
+        logError(`Selector '${SELECTORS.sidebars.right.divider}' not found`);
+        return;
+      }
+
       const newDivider = divider.cloneNode(true);
 
       parentUl.insertBefore(newDivider, settingsLi.nextSibling);
@@ -2301,7 +2306,70 @@
 
   function gmcOpened() {
     log(DEBUG, 'gmcOpened()');
+    log(INFO, 'GM_config opened - setting up modal');
 
+    const gmcEl = document.querySelector('#gmc');
+    const gmcFrameEl = document.querySelector('#gmc-frame');
+
+    if (gmcEl && gmcFrameEl) {
+      // Create a click barrier that doesn't interfere with the modal
+      gmcEl.addEventListener('click', (e) => {
+        if (e.target === gmcEl) {
+          log(INFO, 'Backdrop clicked - ignoring');
+        }
+      });
+
+      // Focus the modal immediately
+      setTimeout(() => {
+        log(INFO, 'Focusing modal content');
+        gmcFrameEl.focus();
+
+        // Focus first form input for better keyboard navigation
+        const firstInput = gmcFrameEl.querySelector('input, select, button');
+        if (firstInput) {
+          log(INFO, 'Focusing first input', firstInput);
+          firstInput.focus();
+          firstInput.click();
+        }
+
+        // Make all form controls interactive
+        const allControls = gmcFrameEl.querySelectorAll('input, select, textarea, button, .saveclose_buttons');
+        allControls.forEach(control => {
+          // Ensure these elements have the highest z-index
+          control.style.zIndex = '10000000';
+          control.style.position = 'relative';
+
+          // Make sure they receive click events
+          control.addEventListener('click', (e) => {
+            log(INFO, 'Control clicked', control);
+            e.stopPropagation();
+
+            // Ensure the click is registered by the control
+            if (control.type === 'radio' || control.type === 'checkbox') {
+              log(INFO, 'Toggling input state');
+            }
+          });
+
+          // Ensure the default action happens
+          control.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+          });
+        });
+
+        // Special handler for close button
+        const closeButton = gmcFrameEl.querySelector('#gmc-frame_closeBtn');
+        if (closeButton) {
+          log(INFO, 'Adding special handler for close button');
+          closeButton.addEventListener('click', (e) => {
+            log(INFO, 'Close button clicked');
+            e.stopPropagation();
+            GMC.close();
+          });
+        }
+      }, 100);
+    }
+
+    // Make sure all checkboxes have the proper CSS class
     function updateCheckboxes() {
       log(DEBUG, 'updateCheckboxes()');
 
@@ -2332,7 +2400,7 @@
     });
 
     modifyThenObserve(() => {
-      document.querySelector('#gmc-frame .reset_holder').remove();
+      document.querySelector('#gmc-frame .reset_holder')?.remove();
 
       const buttonHolderSelector = '#gmc-frame_buttons_holder';
       const parentDiv = document.querySelector(buttonHolderSelector);
@@ -2344,6 +2412,20 @@
 
       gmcAddSavedSpan(parentDiv);
       gmcAddNewIssueButton(parentDiv);
+
+      // Ensure all buttons in the button holder work
+      const buttons = parentDiv.querySelectorAll('button, .saveclose_buttons');
+      buttons.forEach(button => {
+        button.style.zIndex = '10000001';
+        button.style.position = 'relative';
+        button.style.pointerEvents = 'auto';
+
+        // Add click handlers to ensure they work
+        button.addEventListener('click', (e) => {
+          log(INFO, 'Button clicked', button);
+          // Don't stop propagation for these to let GM_config handle them
+        });
+      });
     });
 
     document.querySelector('#gmc').classList.remove('hidden');
@@ -2402,6 +2484,9 @@
 
   function gmcClosed() {
     log(DEBUG, 'gmcClosed()');
+    log(INFO, 'GM_config closed');
+
+    // GM_config's built-in close functionality will handle most of the cleanup
 
     switch (GMC.get('on_close')) {
       case 'refresh tab':
@@ -2511,10 +2596,10 @@
         left: 0 !important;
         width: 100vw !important;
         height: 100vh !important;
-        z-index: 9999;
-        background: none !important;
-
-        pointer-events: none;
+        z-index: 9999999 !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        pointer-events: all !important;
+        backdrop-filter: blur(2px);
       }
 
       #gmc.hidden
@@ -2532,8 +2617,8 @@
         max-height: initial !important;
         max-width: initial !important;
         opacity: 1 !important;
-        position: static !important;
-        z-index: initial !important;
+        position: relative !important;
+        z-index: 9999999 !important;
 
         width: 85% !important;
         height: 75% !important;
@@ -2542,13 +2627,29 @@
         border: none !important;
         border-radius: 0.375rem !important;
 
-        pointer-events: auto;
+        pointer-events: all !important;
       }
 
       #gmc-frame_wrapper
       {
         display: flow-root !important;
         padding: 2rem !important;
+        pointer-events: auto !important;
+      }
+
+      /* Make all form controls in the modal prioritized */
+      #gmc-frame input,
+      #gmc-frame select,
+      #gmc-frame textarea,
+      #gmc-frame button,
+      #gmc-frame .field_label,
+      #gmc-frame .radio_label,
+      #gmc-frame label,
+      #gmc-frame .saveclose_buttons,
+      #gmc-frame [type=button]
+      {
+        z-index: 10000000 !important;
+        pointer-events: auto !important;
       }
 
       /* Sections */
@@ -3198,15 +3299,19 @@
     log(DEBUG, 'gmcBuildFrame()');
 
     const body = document.querySelector('body');
-    const gmcDiv = document.createElement('div');
 
+    // Create main modal container
+    const gmcDiv = document.createElement('div');
     gmcDiv.setAttribute('id', 'gmc');
     gmcDiv.classList.add('hidden');
 
+    // Add modal to document
     body.appendChild(gmcDiv);
 
+    // Create frame
     const gmcFrameDiv = document.createElement('div');
     gmcFrameDiv.setAttribute('id', 'gmc-frame');
+    gmcFrameDiv.setAttribute('tabindex', '0');
 
     gmcDiv.appendChild(gmcFrameDiv);
 
@@ -3500,6 +3605,7 @@
         closeButton: '.AppHeader-user .Overlay--placement-right .Overlay-closeButton.close-button',
         navParentDiv: '.AppHeader-user .Overlay--placement-right div.Overlay-body > div',
         nav: '.AppHeader-user .Overlay--placement-right nav',
+        divider: 'li[data-component="ActionList.Divider"]',
       },
     },
   };
