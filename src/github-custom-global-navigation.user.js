@@ -2145,9 +2145,14 @@
       newLiElement.setAttribute('id', liElementId);
 
       newLiElement.onclick = () => {
-        GMC.open();
+        const closeButton = document.querySelector(SELECTORS.sidebars.right.closeButton);
+        if (!closeButton) {
+          logError(`Selector '${SELECTORS.sidebars.right.closeButton}' not found`);
+        } else {
+          closeButton.click();
+        }
 
-        if (GMC.get('on_open') === 'close sidebar') HEADER.querySelector(SELECTORS.sidebars.right.closeButton)?.click();
+        GMC.open();
       };
 
       const textElement = newLiElement.querySelector('[data-component="ActionList.Item--DividerContainer"]');
@@ -5835,15 +5840,6 @@
           'run script',
         ],
         default: 'do nothing',
-      },
-      on_open: {
-        label: 'On open',
-        type: 'select',
-        options: [
-          'do nothing',
-          'close sidebar',
-        ],
-        default: 'close sidebar',
       },
       menu_item_title: {
         label: 'Menu item title',
