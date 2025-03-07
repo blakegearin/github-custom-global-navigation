@@ -8,7 +8,7 @@
 // @require      https://openuserjs.org/src/libs/sizzle/GM_config.js
 // @grant        GM.getValue
 // @grant        GM.setValue
-// @icon         https://raw.githubusercontent.com/blakegearin/github-custom-global-navigation/main/img/white_logo.svg
+// @icon         https://raw.githubusercontent.com/blakegearin/github-custom-global-navigation/main/img/white_logo.png
 // @supportURL   https://github.com/blakegearin/github-custom-global-navigation/issues
 // @license      MIT
 // @copyright    2023–2024, Blake Gearin (https://blakegearin.com)
