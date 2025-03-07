@@ -1709,7 +1709,13 @@
           margin-left: auto;
         }
 
-        .${REPOSITORY_HEADER_CLASS} div
+        .${REPOSITORY_HEADER_CLASS} .rgh-ci-link
+        {
+          padding-left: 0px !important;
+          padding-right: 0px !important;
+        }
+
+        .${REPOSITORY_HEADER_CLASS} .commit-build-statuses
         {
           padding-left: 0px !important;
           padding-right: 0px !important;
