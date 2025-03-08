@@ -17,6 +17,8 @@
 
 # GitHub Custom Global Navigation
 
+![Greasy Fork Version](https://img.shields.io/greasyfork/v/478687-github-custom-global-navigation?color=%23670000)
+
 This is a [userscript](https://openuserjs.org/about/Userscript-Beginners-HOWTO) to customize the global navigation of GitHub.
 
 ## Usage
