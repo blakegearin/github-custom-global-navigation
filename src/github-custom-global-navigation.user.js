@@ -1711,14 +1711,13 @@
 
         .${REPOSITORY_HEADER_CLASS} .rgh-ci-link
         {
-          padding-left: 0px !important;
-          padding-right: 0px !important;
+          align-items: center;
+          display: flex;
         }
 
         .${REPOSITORY_HEADER_CLASS} .commit-build-statuses
         {
-          padding-left: 0px !important;
-          padding-right: 0px !important;
+          position: absolute;
         }
 
         @media (min-width: 768px) {
@@ -2161,7 +2160,7 @@
         GMC.open();
       };
 
-      const textElement = newLiElement.querySelector('[data-component="ActionList.Item--DividerContainer"]');
+      const textElement = newLiElement.querySelector('button > span > span');
       textElement.textContent = GMC.get('menu_item_title');
 
       const oldSvg = newLiElement.querySelector('svg');
@@ -3299,6 +3298,12 @@
             {
               display: none !important;
             }
+          }
+
+          .AppHeader .AppHeader-globalBar .AppHeader-search input[type=search],
+          .AppHeader .AppHeader-globalBar .AppHeader-search .AppHeader-searchButton
+          {
+            padding-inline: 4px !important;
           }
         `;
       }
