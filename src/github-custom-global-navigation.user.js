@@ -1713,6 +1713,12 @@
         {
           align-items: center;
           display: flex;
+          margin-right: var(--base-size-24, 24px);
+        }
+
+        .${REPOSITORY_HEADER_CLASS} .rgh-ci-link summary
+        {
+          display: flex;
         }
 
         .${REPOSITORY_HEADER_CLASS} .commit-build-statuses
