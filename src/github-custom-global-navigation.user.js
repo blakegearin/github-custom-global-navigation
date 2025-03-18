@@ -11,7 +11,7 @@
 // @icon         https://raw.githubusercontent.com/blakegearin/github-custom-global-navigation/main/img/light_logo.png
 // @supportURL   https://github.com/blakegearin/github-custom-global-navigation/issues
 // @license      MIT
-// @copyright    2023–2024, Blake Gearin (https://blakegearin.com)
+// @copyright    2023–2025, Blake Gearin (https://blakegearin.com)
 // ==/UserScript==
 
 /* jshint esversion: 6 */
