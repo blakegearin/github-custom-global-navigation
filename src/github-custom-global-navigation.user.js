@@ -3309,7 +3309,7 @@
           .AppHeader .AppHeader-globalBar .AppHeader-search input[type=search],
           .AppHeader .AppHeader-globalBar .AppHeader-search .AppHeader-searchButton
           {
-            padding-inline: 4px !important;
+            padding-right: 4px;
           }
         `;
       }
