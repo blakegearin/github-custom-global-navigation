@@ -1532,15 +1532,27 @@
 
     if (elementConfig.right.floatUnderneath) {
       HEADER_STYLE.textContent += `
+        body:has(${elementSelector.right.modalDialog})
+        {
+          overflow: scroll !important;
+        }
+
         ${elementSelector.right.backdrop}
         {
-          bottom: initial !important;
-          margin-top: 55px;
-          margin-right: 20px;
+          position: relative;
+          align-items: baseline;
+          width: 100vw;
+          height: 100vh;
+          top: 0;
+          left: 0;
         }
 
         ${elementSelector.right.modalDialog}
         {
+          pointer-events: all;
+          margin-top: 55px;
+          margin-right: 20px;
+          animation: .2s cubic-bezier(.33,1,.68,1) !important;
           border-top-right-radius: 0.75rem !important;
           border-bottom-right-radius: 0.75rem !important;
         }
