@@ -20,6 +20,8 @@
 (function () {
   'use strict';
 
+  const VERSION = '1.6.8';
+
   const SILENT = 0;
   const QUIET = 1;
   const INFO = 2;
@@ -29,13 +31,31 @@
 
   let CURRENT_LOG_LEVEL = QUIET;
 
+  // Change to SILENT, QUIET, INFO, DEBUG, VERBOSE, or TRACE
+  const LOG_LEVEL_OVERRIDE = DEBUG;
+
   const USERSCRIPT_NAME = 'GitHub Custom Global Navigation';
 
-  function log(level, message, variable = -1) {
+  function log (level, message, variable = undefined) {
     if (CURRENT_LOG_LEVEL < level) return;
 
-    console.log(`${USERSCRIPT_NAME}: ${message}`);
-    if (variable !== -1) console.log(variable);
+    const levelName = {
+      0: 'silent',
+      1: 'quiet',
+      2: 'info',
+      3: 'debug',
+      4: 'verbose',
+      5: 'trace',
+    }[level];
+
+    const log = `[${VERSION}] [${levelName}] ${USERSCRIPT_NAME}: ${message}`;
+
+    console.groupCollapsed(log);
+
+    if (variable !== undefined) console.dir(variable, { depth: null });
+
+    console.trace();
+    console.groupEnd();
   }
 
   function logError(message, variable = null) {
@@ -1293,43 +1313,6 @@
     button.appendChild(divElement);
   }
 
-  function updateAvatarButton() {
-    log(DEBUG, 'updateAvatarButton()');
-
-    const elementSelector = SELECTORS.sidebars.right;
-    const backdropSelector = elementSelector.backdrop;
-
-    const backdrop = HEADER.querySelector(backdropSelector);
-
-    if (!backdrop) {
-      log(DEBUG, `Selector ${backdropSelector} not found`);
-      return;
-    }
-
-    const avatarButton = HEADER.querySelector(SELECTORS.avatar.button);
-
-    if (!avatarButton) {
-      log(DEBUG, `Selector ${SELECTORS.avatar.button} not found`);
-      return;
-    }
-
-    if (backdrop.classList.contains('Overlay--hidden')) {
-      if (avatarButton.hasAttribute('data-close-dialog-id')) {
-        const dialogId = avatarButton.getAttribute('data-close-dialog-id');
-        avatarButton.setAttribute('data-show-dialog-id', dialogId);
-
-        avatarButton.removeAttribute('data-close-dialog-id');
-      }
-    } else {
-      if (avatarButton.hasAttribute('data-show-dialog-id')) {
-        const dialogId = avatarButton.getAttribute('data-show-dialog-id');
-        avatarButton.setAttribute('data-close-dialog-id', dialogId);
-
-        avatarButton.removeAttribute('data-show-dialog-id');
-      }
-    }
-  }
-
   function updateAvatar() {
     log(DEBUG, 'updateAvatar()');
 
@@ -1527,45 +1510,6 @@
     LEFT_SIDEBAR_PRELOADED = true;
   }
 
-  function preloadRightSidebar() {
-    log(DEBUG, 'preloadRightSidebar()');
-
-    if (RIGHT_SIDEBAR_PRELOADED) return;
-
-    const temporaryStyleId = 'temporaryStyle';
-
-    const avatarButton = HEADER.querySelector(SELECTORS.avatar.button);
-    if (!avatarButton) {
-      setTimeout(preloadRightSidebar, 100);
-    } else {
-      avatarButton.click();
-      const closeButton = document.querySelector(SELECTORS.sidebars.right.closeButton);
-
-      if (!document.querySelector(createId(temporaryStyleId))) {
-        // Hide the sidebar
-        let temporaryStyle = document.createElement('style');
-        temporaryStyle.setAttribute('id', temporaryStyleId);
-        temporaryStyle.textContent += `
-          #__primerPortalRoot__
-          {
-            display: none;
-          }
-        `;
-        document.body.appendChild(temporaryStyle);
-      }
-
-      if (!closeButton) {
-        setTimeout(preloadRightSidebar, 100);
-      } else {
-        closeButton.click();
-
-        log(INFO, 'Right sidebar preloaded');
-        document.querySelector(createId(temporaryStyleId)).remove();
-        RIGHT_SIDEBAR_PRELOADED = true;
-      }
-    }
-  }
-
   function updateSidebars() {
     log(DEBUG, 'updateSidebars()');
 
@@ -1576,7 +1520,8 @@
 
     if (elementConfig.backdrop.color !== '') {
       HEADER_STYLE.textContent += `
-        ${elementSelector.backdrop}
+        ${elementSelector.left.backdrop},
+        ${elementSelector.right.backdrop}
         {
           background: ${CONFIG.sidebars.backdrop.color} !important;
         }
@@ -1587,18 +1532,20 @@
 
     if (elementConfig.right.floatUnderneath) {
       HEADER_STYLE.textContent += `
-        ${elementSelector.right.modalDialog}
+        ${elementSelector.right.backdrop}
         {
-          border-top-right-radius: 0.75rem !important;
-          border-bottom-right-radius: 0.75rem !important;
           bottom: initial !important;
           margin-top: 55px;
           margin-right: 20px;
         }
+
+        ${elementSelector.right.modalDialog}
+        {
+          border-top-right-radius: 0.75rem !important;
+          border-bottom-right-radius: 0.75rem !important;
+        }
       `;
     }
-
-    if (elementConfig.right.preload) preloadRightSidebar();
 
     if (elementConfig.right.maxHeight) {
       HEADER_STYLE.textContent += `
@@ -2392,6 +2339,8 @@
       verbose: VERBOSE,
       trace: TRACE,
     }[GMC.get('log_level')];
+
+    if (LOG_LEVEL_OVERRIDE) CURRENT_LOG_LEVEL = LOG_LEVEL_OVERRIDE;
   }
 
   function gmcSaved() {
@@ -3327,7 +3276,6 @@
       return 'break';
     } else {
       if (CONFIG.avatar.dropdownIcon) insertAvatarDropdown();
-      if (CONFIG.avatar.canCloseSidebar) updateAvatarButton();
 
       if (CONFIG.repositoryHeader.import) {
         // When starting in a repository tab like Issues, the proper repository header
@@ -3522,14 +3470,15 @@
       bottomBorder: `.${REPOSITORY_HEADER_CLASS} .border-bottom.mx-xl-5`,
     },
     sidebars: {
-      backdrop: 'dialog.Overlay.SidePanel::backdrop',
       left: {
+        backdrop: 'dialog[data-target="deferred-side-panel.panel"]::backdrop',
         modalDialog: '.Overlay--placement-left',
       },
       right: {
         topDiv: '#__primerPortalRoot__',
         wrapper: '#__primerPortalRoot__ > div',
         backdrop: '#__primerPortalRoot__ > div > [data-position-regular="right"]',
+        modalDialog: '#__primerPortalRoot__ > div > [data-position-regular="right"] > div',
         closeButton: '#__primerPortalRoot__ button[aria-label="Close"]',
         divider: 'li[data-component="ActionList.Divider"]',
       },
@@ -3738,7 +3687,6 @@
           remove: false,
           size: '',
           dropdownIcon: false,
-          canCloseSidebar: true,
         },
         globalBar: {
           boxShadowColor: '',
@@ -3985,7 +3933,6 @@
           remove: false,
           size: '',
           dropdownIcon: false,
-          canCloseSidebar: true,
         },
         globalBar: {
           boxShadowColor: '',
@@ -4236,7 +4183,6 @@
           remove: false,
           size: '24px',
           dropdownIcon: true,
-          canCloseSidebar: true,
         },
         globalBar: {
           boxShadowColor: '#21262D',
@@ -4268,7 +4214,7 @@
             preload: true,
             floatUnderneath: true,
             width: '',
-            maxHeight: '50vh',
+            maxHeight: '60vh',
           },
         },
         repositoryHeader: {
@@ -4483,7 +4429,6 @@
           remove: false,
           size: '24px',
           dropdownIcon: true,
-          canCloseSidebar: true,
         },
         globalBar: {
           boxShadowColor: '#21262D',
@@ -4515,7 +4460,7 @@
             preload: true,
             floatUnderneath: true,
             width: '',
-            maxHeight: '50vh',
+            maxHeight: '60vh',
           },
         },
         repositoryHeader: {
@@ -5089,11 +5034,6 @@
       },
       light_avatar_dropdownIcon: {
         label: 'Dropdown icon',
-        type: 'checkbox',
-        default: false,
-      },
-      light_avatar_canCloseSidebar: {
-        label: 'Can close sidebar',
         type: 'checkbox',
         default: false,
       },
@@ -5712,11 +5652,6 @@
       },
       dark_avatar_dropdownIcon: {
         label: 'Dropdown icon',
-        type: 'checkbox',
-        default: false,
-      },
-      dark_avatar_canCloseSidebar: {
-        label: 'Can close sidebar',
         type: 'checkbox',
         default: false,
       },
