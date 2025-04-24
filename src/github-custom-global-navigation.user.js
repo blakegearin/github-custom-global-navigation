@@ -1830,27 +1830,33 @@
         overflow: hidden !important;
       }
 
-      .AppHeader-context .AppHeader-context-full ul {
+      .AppHeader-context .AppHeader-context-full ul
+      {
         display: flex;
         flex-direction: row;
       }
 
-      .AppHeader-context .AppHeader-context-full li:first-child {
+      .AppHeader-context .AppHeader-context-full li:first-child
+      {
         flex: 0 100 max-content;
       }
 
-      .AppHeader-context .AppHeader-context-full li {
+      .AppHeader-context .AppHeader-context-full li
+      {
         display: inline-grid;
         grid-auto-flow: column;
         align-items: center;
         flex: 0 99999 auto;
       }
 
-      .AppHeader-context .AppHeader-context-full ul, .AppHeader .AppHeader-globalBar .AppHeader-context .AppHeader-context-full li {
+      .AppHeader-context .AppHeader-context-full ul,
+      .AppHeader .AppHeader-globalBar .AppHeader-context .AppHeader-context-full li
+      {
         list-style: none;
       }
 
-      .AppHeader-context .AppHeader-context-item {
+      .AppHeader-context .AppHeader-context-item
+      {
         display: flex;
         align-items: center;
         min-width: 3ch;
@@ -1861,14 +1867,21 @@
         padding-block: var(--control-medium-paddingBlock, 6px);
       }
 
-      .AppHeader-context .AppHeader-context-full li:last-child .AppHeader-context-item {
+      .AppHeader-context .AppHeader-context-full li:last-child .AppHeader-context-item
+      {
         font-weight: var(--base-text-weight-semibold, 600);
       }
 
-      .AppHeader-context .AppHeader-context-item-separator {
+      .AppHeader-context .AppHeader-context-item-separator
+      {
         color: var(--fgColor-muted, var(--color-fg-muted));
         white-space: nowrap;
         height: 16px;
+        display: block;
+      }
+
+      .AppHeader-context .AppHeader-context-item-separator svg
+      {
         display: block;
       }
 
