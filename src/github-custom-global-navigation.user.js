@@ -21,6 +21,7 @@
   'use strict';
 
   const VERSION = '1.6.10';
+  const USERSCRIPT_NAME = 'GitHub Custom Global Navigation';
 
   const SILENT = 0;
   const QUIET = 1;
@@ -29,24 +30,39 @@
   const VERBOSE = 4;
   const TRACE = 5;
 
-  let CURRENT_LOG_LEVEL = QUIET;
-
   // Change to SILENT, QUIET, INFO, DEBUG, VERBOSE, or TRACE
   const LOG_LEVEL_OVERRIDE = DEBUG;
 
-  const USERSCRIPT_NAME = 'GitHub Custom Global Navigation';
+  const LOG_LEVELS = {
+    default: QUIET,
+    getName: (level) => {
+      return {
+        0: 'silent',
+        1: 'quiet',
+        2: 'info',
+        3: 'debug',
+        4: 'verbose',
+        5: 'trace',
+      }[level];
+    },
+    getValue: (name) => {
+      return {
+        silent: SILENT,
+        quiet: QUIET,
+        info: INFO,
+        debug: DEBUG,
+        verbose: VERBOSE,
+        trace: TRACE,
+      }[name];
+    },
+  };
+
+  let CURRENT_LOG_LEVEL = LOG_LEVELS.default;
 
   function log (level, message, variable = undefined) {
     if (CURRENT_LOG_LEVEL < level) return;
 
-    const levelName = {
-      0: 'silent',
-      1: 'quiet',
-      2: 'info',
-      3: 'debug',
-      4: 'verbose',
-      5: 'trace',
-    }[level];
+    const levelName = LOG_LEVELS.getName(level);
 
     const log = `[${VERSION}] [${levelName}] ${USERSCRIPT_NAME}: ${message}`;
 
@@ -58,9 +74,15 @@
     console.groupEnd();
   }
 
-  function logError(message, variable = null) {
-    console.error(`${USERSCRIPT_NAME}: ${message}`);
-    if (variable) console.log(variable);
+  function logError (message, error = undefined) {
+    const log = `[${VERSION}] [error] ${USERSCRIPT_NAME}: ${message}`;
+
+    console.groupCollapsed(log);
+
+    if (error !== undefined) console.error(error);
+
+    console.trace();
+    console.groupEnd();
   }
 
   log(TRACE, 'Starting');
@@ -1886,6 +1908,22 @@
       {
         display: initial !important;
       }
+
+      ${SELECTORS.repositoryHeader.nav} context-region
+      {
+        display: flex !important;
+      }
+
+      ${SELECTORS.repositoryHeader.nav} context-region context-region-crumb
+      {
+        display: flex !important;
+        align-items: center !important;
+      }
+
+      ${SELECTORS.repositoryHeader.nav} context-region-crumb:last-child context-region-divider
+      {
+        display: none !important;
+      }
     `;
 
     clonedPageTitle.querySelectorAll('svg.octicon-lock').forEach(svg => svg.remove());
@@ -2126,11 +2164,11 @@
       };
 
       const textElement = newLiElement.querySelector('button > span > span');
-      textElement.textContent = GMC.get('menu_item_title');
+      textElement.textContent = gmcGet('menu_item_title');
 
       const oldSvg = newLiElement.querySelector('svg');
 
-      const menuItemIcon = GMC.get('menu_item_icon');
+      const menuItemIcon = gmcGet('menu_item_icon');
       if (menuItemIcon === 'logo') {
         const newSvg = document.createElement('img');
         newSvg.setAttribute('height', '16px');
@@ -2199,7 +2237,7 @@
           const gmcKey = `${themePrefix}_${currentKey.replace(/\./g, '_')}`;
 
           if (gmcKey in GMC.fields) {
-            customObj[key] = GMC.get(gmcKey);
+            customObj[key] = gmcGet(gmcKey);
           } else {
             logError(`GMC field not found for key: ${gmcKey}`);
             return;
@@ -2342,15 +2380,38 @@
     applyCustomizations(true);
   }
 
+  function gmcGet(key) {
+    log(DEBUG, 'gmcGet()');
+
+    try {
+      return GMC.get(key);
+    } catch (error) {
+      logError(`Error setting GMC, key=${key}`, error);
+    }
+  }
+
+  function gmcSet(key, value) {
+    log(DEBUG, 'gmcSet()');
+
+    try {
+      return GMC.set(key, value);
+    } catch (error) {
+      logError(`Error setting GMC, key=${key}, value=${value}`, error);
+    }
+  }
+
+  function gmcSave() {
+    log(DEBUG, 'gmcSave()');
+
+    try {
+      return gmcSave();
+    } catch (error) {
+      logError('Error saving GMC', error);
+    }
+  }
+
   function updateLogLevel() {
-    CURRENT_LOG_LEVEL = {
-      silent: SILENT,
-      quiet: QUIET,
-      info: INFO,
-      debug: DEBUG,
-      verbose: VERBOSE,
-      trace: TRACE,
-    }[GMC.get('log_level')];
+    CURRENT_LOG_LEVEL = LOG_LEVELS.getValue(gmcGet('log_level'));
 
     if (LOG_LEVEL_OVERRIDE) CURRENT_LOG_LEVEL = LOG_LEVEL_OVERRIDE;
   }
@@ -2369,7 +2430,7 @@
 
     updateLogLevel();
 
-    switch (GMC.get('on_save')) {
+    switch (gmcGet('on_save')) {
       case 'refresh tab':
         gmcRefreshTab();
         break;
@@ -2390,7 +2451,7 @@
   function gmcClosed() {
     log(DEBUG, 'gmcClosed()');
 
-    switch (GMC.get('on_close')) {
+    switch (gmcGet('on_close')) {
       case 'refresh tab':
         gmcRefreshTab();
         break;
@@ -2408,12 +2469,12 @@
     const confirmed = confirm('Are you sure you want to clear your custom configuration? This is irreversible.');
 
     if (confirmed) {
-      const currentType = GMC.get('type');
+      const currentType = gmcGet('type');
       GMC.reset();
-      GMC.save();
+      gmcSave();
 
-      GMC.set('type', currentType);
-      GMC.save();
+      gmcSet('type', currentType);
+      gmcSave();
     }
   }
 
@@ -2428,7 +2489,7 @@
         const fieldValue = config[key];
 
         log(VERBOSE, 'fieldName', fieldName);
-        GMC.set(fieldName, fieldValue);
+        gmcSet(fieldName, fieldValue);
       }
     }
   }
@@ -2440,7 +2501,7 @@
 
     if (confirmed) {
       configsToGMC(configs.happyMedium);
-      GMC.save();
+      gmcSave();
     }
   }
 
@@ -2451,7 +2512,7 @@
 
     if (confirmed) {
       configsToGMC(configs.oldSchool);
-      GMC.save();
+      gmcSave();
     }
   }
 
@@ -3225,7 +3286,7 @@
       'Happy Medium': 'happyMedium',
       'Old School': 'oldSchool',
       'Custom': 'custom',
-    }[GMC.get('type')];
+    }[gmcGet('type')];
 
     log(DEBUG, 'CONFIG_NAME', CONFIG_NAME);
 
@@ -3389,7 +3450,6 @@
   let THEME = 'light';
   let NEW_ELEMENTS = [];
   let LEFT_SIDEBAR_PRELOADED = false;
-  let RIGHT_SIDEBAR_PRELOADED = false;
   let IDLE_MUTATION_COUNT = 0;
   let HEADER_UPDATES_COUNT = 0;
   let SELECTORS = {
@@ -3477,6 +3537,7 @@
       id: '#repository-container-header',
       ownerImg: `.${REPOSITORY_HEADER_CLASS} img`,
       name: `.${REPOSITORY_HEADER_CLASS} strong`,
+      nav: `.${REPOSITORY_HEADER_CLASS} nav[role="navigation"]`,
       links: `.${REPOSITORY_HEADER_CLASS} nav[role="navigation"] a`,
       details: '#repository-details-container',
       bottomBorder: `.${REPOSITORY_HEADER_CLASS} .border-bottom.mx-xl-5`,
