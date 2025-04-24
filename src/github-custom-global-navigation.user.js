@@ -3365,8 +3365,8 @@
             }
           }
 
-          ${SELECTORS.header.globalBar} .AppHeader-search input[type=search],
-          ${SELECTORS.header.globalBar} .AppHeader-search .AppHeader-searchButton
+          .AppHeader ${SELECTORS.header.globalBar} .AppHeader-search input[type=search],
+          .AppHeader ${SELECTORS.header.globalBar} .AppHeader-search .AppHeader-searchButton
           {
             padding-right: 4px;
           }
