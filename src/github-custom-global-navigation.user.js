@@ -1632,6 +1632,16 @@
         log(DEBUG, `Selector '${createId(TEMP_REPOSITORY_HEADER_FLAG)}' found; skipping header creation`);
         return;
       }
+      const contextRegionCrumbs = document.querySelectorAll('context-region context-region-crumb');
+
+      if (contextRegionCrumbs.length === 1) {
+        log(INFO, 'Detected non-repository page; skipping header creation');
+        return;
+      }
+
+      // Perhaps check these in the future...
+      // const userCardPresent = HEADER.querySelector('[data-hovercard-type="user"]');
+      // const organizationCardPresent = HEADER.querySelector('[data-hovercard-type="organization"]');
 
       log(DEBUG, `Selector '${SELECTORS[configKey].id}' is not present or hidden`);
 
@@ -1858,6 +1868,8 @@
       .AppHeader-context .AppHeader-context-item-separator {
         color: var(--fgColor-muted, var(--color-fg-muted));
         white-space: nowrap;
+        height: 16px;
+        display: block;
       }
 
       ${SELECTORS.header.globalBar}
