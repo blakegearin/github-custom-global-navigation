@@ -3384,11 +3384,9 @@
           ${SELECTORS.header.localBar.repositoryNav} ul li:has(.UnderlineNav-item.selected)
           {
             border: 1px solid var(--borderColor-muted);
-            border-radius: var(--borderRadius-medium);
-            border-bottom-left-radius: 0px;
-            border-bottom-right-radius: 0px;
-            padding-bottom: 2px;
-            border-bottom: 3px solid var(--bgColor-default, var(--color-canvas-default)) !important;
+            border-top-right-radius: 6px;
+            border-top-left-radius: 6px;
+            border-bottom: 0;
             background-color: var(--bgColor-default, var(--color-canvas-default)) !important;
           }
 
