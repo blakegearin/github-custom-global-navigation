@@ -3394,17 +3394,37 @@
 
           ${SELECTORS.header.localBar.repositoryNav} ul li a
           {
-            padding: 3px 10px;
+            color: var(--fgColor-muted) !important;
+            font-size: var(--text-body-size-medium)
+            line-height: 23px !important;
+            padding: var(--base-size-8) var(--control-medium-paddingInline-spacious);
+            text-decoration: none;
+            background-color: transparent;
           }
 
-          ${SELECTORS.header.localBar.repositoryNav} ul li:has(.UnderlineNav-item.selected) a:hover
+          ${SELECTORS.header.localBar.repositoryNav} ul li a *
           {
-            background: none;
+            color: var(--fgColor-muted) !important;
+          }
+
+          ${SELECTORS.header.localBar.repositoryNav} ul li:has(.UnderlineNav-item.selected) a *
+          {
+            fill: var(--fgColor-default) !important;
+            color: var(--fgColor-default) !important;
+          }
+
+          ${SELECTORS.header.localBar.repositoryNav} ul li a:hover *
+          {
+            fill: var(--fgColor-default) !important;
+            color: var(--fgColor-default) !important;
+            -webkit-text-decoration: none;
+            text-decoration: none;
+            transition-duration: .1s;
           }
 
           ${SELECTORS.header.localBar.repositoryNav} :is(.UnderlineNav-item.selected):after
           {
-            bottom: calc(28% + var(--base-size-24)) !important;
+            bottom: calc(43% + var(--base-size-24)) !important;
           }
         `;
 
