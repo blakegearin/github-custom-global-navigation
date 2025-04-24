@@ -1,0 +1,853 @@
+<div id="repository-container-header" class="pt-3 hide-full-screen permCustomizedRepositoryHeader customizedRepositoryHeader">
+  <div class="d-flex flex-nowrap flex-justify-end mb-3 px-3" style="gap: 1rem;">
+    <div class="flex-auto min-width-0 width-fit">
+      <div id="repo-title-component" class="d-flex flex-nowrap flex-items-center wb-break-word f3 text-normal">
+        <img class="avatar mr-2 d-none d-md-block" alt="Owner avatar" src="https://avatars.githubusercontent.com/u/210414?s=48&amp;v=4" width="24" height="24" />
+        <context-region-observer class="AppHeader-context" id="customizedRepositoryHeader_pageTitle" data-catalyst="">
+          <div class="AppHeader-context-compact" data-target="context-region-observer.compactContainer">
+            <button
+              aria-expanded="false"
+              aria-haspopup="dialog"
+              aria-label="Page context: ruby / debug"
+              id="dialog-show-context-region-dialog"
+              data-show-dialog-id="context-region-dialog"
+              type="button"
+              data-view-component="true"
+              class="AppHeader-context-compact-trigger Truncate Button--secondary Button--medium Button box-shadow-none"
+            >
+              <span class="Button-content">
+                <span class="Button-label">
+                  <span class="AppHeader-context-compact-lead">
+                    <span class="AppHeader-context-compact-parentItem">ruby</span>
+
+                    <span class="no-wrap">&nbsp;/</span>
+                  </span>
+
+                  <strong class="AppHeader-context-compact-mainItem d-flex flex-items-center Truncate">
+                    <span class="Truncate-text">debug</span>
+                  </strong>
+                </span>
+              </span>
+            </button>
+
+            <dialog-helper>
+              <dialog
+                id="context-region-dialog"
+                aria-modal="true"
+                aria-labelledby="context-region-dialog-title"
+                aria-describedby="context-region-dialog-description"
+                data-view-component="true"
+                class="Overlay Overlay-whenNarrow Overlay--size-medium Overlay--motion-scaleFade Overlay--disableScroll"
+              >
+                <div data-view-component="true" class="Overlay-header">
+                  <div class="Overlay-headerContentWrap">
+                    <div class="Overlay-titleWrap">
+                      <h1 class="Overlay-title" id="context-region-dialog-title">
+                        Navigate back to
+                      </h1>
+                    </div>
+                    <div class="Overlay-actionWrap">
+                      <button data-close-dialog-id="context-region-dialog" aria-label="Close" type="button" data-view-component="true" class="close-button Overlay-closeButton">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+                          <path
+                            d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                          ></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <scrollable-region data-labelled-by="context-region-dialog-title" data-catalyst="" style="overflow: auto;">
+                  <div data-view-component="true" class="Overlay-body">
+                    <ul role="list" class="list-style-none">
+                      <li>
+                        <a
+                          data-analytics-event='{"category":"SiteHeaderComponent","action":"context_region_crumb","label":"ruby","screen_size":"compact"}'
+                          href="/ruby"
+                          data-view-component="true"
+                          class="Link--primary Truncate d-flex flex-items-center py-1"
+                        >
+                          <span class="AppHeader-context-item-label Truncate-text">
+                            <svg aria-hidden="true" height="12" viewBox="0 0 16 16" version="1.1" width="12" data-view-component="true" class="octicon octicon-organization mr-1">
+                              <path
+                                d="M1.75 16A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0h8.5C11.216 0 12 .784 12 1.75v12.5c0 .085-.006.168-.018.25h2.268a.25.25 0 0 0 .25-.25V8.285a.25.25 0 0 0-.111-.208l-1.055-.703a.749.749 0 1 1 .832-1.248l1.055.703c.487.325.779.871.779 1.456v5.965A1.75 1.75 0 0 1 14.25 16h-3.5a.766.766 0 0 1-.197-.026c-.099.017-.2.026-.303.026h-3a.75.75 0 0 1-.75-.75V14h-1v1.25a.75.75 0 0 1-.75.75Zm-.25-1.75c0 .138.112.25.25.25H4v-1.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 .75.75v1.25h2.25a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25ZM3.75 6h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5ZM3 3.75A.75.75 0 0 1 3.75 3h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 3.75Zm4 3A.75.75 0 0 1 7.75 6h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 7 6.75ZM7.75 3h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5ZM3 9.75A.75.75 0 0 1 3.75 9h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 9.75ZM7.75 9h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5Z"
+                              ></path>
+                            </svg>
+
+                            ruby
+                          </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          data-analytics-event='{"category":"SiteHeaderComponent","action":"context_region_crumb","label":"debug","screen_size":"compact"}'
+                          href="/ruby/debug"
+                          aria-current="page"
+                          data-view-component="true"
+                          class="Link--primary Truncate d-flex flex-items-center py-1"
+                        >
+                          <span class="AppHeader-context-item-label Truncate-text">
+                            <svg aria-hidden="true" height="12" viewBox="0 0 16 16" version="1.1" width="12" data-view-component="true" class="octicon octicon-repo mr-1">
+                              <path
+                                d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"
+                              ></path>
+                            </svg>
+
+                            debug
+                          </span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </scrollable-region>
+              </dialog>
+            </dialog-helper>
+          </div>
+
+          <div class="AppHeader-context-full">
+            <nav role="navigation" aria-label="Page context">
+              <context-region role="list" data-action="context-region-changed:context-region-observer#crumbsChanged" data-catalyst="">
+                <context-region-crumb data-targets="context-region.crumbs" data-label="ruby" data-href="/ruby" data-pre-rendered="" role="listitem" data-catalyst="">
+                  <a
+                    data-analytics-event='{"category":"SiteHeaderComponent","action":"context_region_crumb","label":"ruby","screen_size":"full"}'
+                    data-hovercard-type="organization"
+                    data-hovercard-url="/orgs/ruby/hovercard"
+                    data-octo-click="hovercard-link-click"
+                    data-octo-dimensions="link_type:self"
+                    data-target="context-region-crumb.link"
+                    href="/ruby"
+                    data-view-component="true"
+                    class="AppHeader-context-item"
+                  >
+                    <span data-target="context-region-crumb.labelElement" class="AppHeader-context-item-label">ruby</span>
+                  </a>
+                  <context-region-divider data-target="context-region-crumb.dividerElement" data-pre-rendered="" data-catalyst="">
+                    <span class="AppHeader-context-item-separator">
+                      <span class="sr-only">/</span>
+                      <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M10.956 1.27994L6.06418 14.7201L5 14.7201L9.89181 1.27994L10.956 1.27994Z" fill="currentcolor"></path>
+                      </svg>
+                    </span>
+                  </context-region-divider>
+                </context-region-crumb>
+                <context-region-crumb data-targets="context-region.crumbs" data-label="debug" data-href="/ruby/debug" data-pre-rendered="" role="listitem" data-catalyst="">
+                  <a
+                    data-analytics-event='{"category":"SiteHeaderComponent","action":"context_region_crumb","label":"debug","screen_size":"full"}'
+                    data-target="context-region-crumb.link"
+                    href="/ruby/debug"
+                    aria-current="page"
+                    data-view-component="true"
+                    class="AppHeader-context-item"
+                  >
+                    <span data-target="context-region-crumb.labelElement" class="AppHeader-context-item-label">debug</span>
+                  </a>
+                  <context-region-divider data-target="context-region-crumb.dividerElement" data-pre-rendered="" data-catalyst="">
+                    <span class="AppHeader-context-item-separator">
+                      <span class="sr-only">/</span>
+                      <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M10.956 1.27994L6.06418 14.7201L5 14.7201L9.89181 1.27994L10.956 1.27994Z" fill="currentcolor"></path>
+                      </svg>
+                    </span>
+                  </context-region-divider>
+                </context-region-crumb>
+              </context-region>
+            </nav>
+          </div>
+        </context-region-observer>
+
+        <strong itemprop="name" class="mr-2 flex-self-stretch d-none d-md-block no-wrap overflow-x-hidden" style="display: none !important;">
+          <a data-pjax="#repo-content-pjax-container" data-turbo-frame="repo-content-turbo-frame" class="d-block overflow-x-hidden color-fg-default" style="text-overflow: ellipsis;" href="/ruby/debug">debug</a>
+        </strong>
+
+        <span></span><span class="Label Label--secondary v-align-middle mr-1 d-none d-md-block">Public</span>
+      </div>
+
+      <div class="d-none d-md-block"></div>
+    </div>
+
+    <div id="repository-details-container" class="flex-shrink-0" data-turbo-replace="" style="max-width: 70%;">
+      <ul class="pagehead-actions flex-shrink-0 d-none d-md-inline" style="padding: 2px 0;">
+        <li>
+          <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/primer-react-f8e8de308a95.js"></script>
+          <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/react-core-48ea1d0bdc08.js"></script>
+          <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/react-lib-80430c87778a.js"></script>
+          <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/octicons-react-cf2f2ab8dab4.js"></script>
+          <script
+            crossorigin="anonymous"
+            defer="defer"
+            type="application/javascript"
+            src="https://github.githubassets.com/assets/vendors-node_modules_emotion_is-prop-valid_dist_emotion-is-prop-valid_esm_js-node_modules_emo-b1c483-23083d170518.js"
+          ></script>
+          <script
+            crossorigin="anonymous"
+            defer="defer"
+            type="application/javascript"
+            src="https://github.githubassets.com/assets/vendors-node_modules_github_catalyst_lib_index_js-node_modules_tanstack_react-query_build_mod-3b1f5d-85b60118c668.js"
+          ></script>
+          <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/notifications-subscriptions-menu-93526bcfbc07.js"></script>
+          <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-react.17628c3bc58aa48401cd.module.css" />
+          <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/notifications-subscriptions-menu.1bcff9205c241e99cff2.module.css" />
+
+          <react-partial partial-name="notifications-subscriptions-menu" data-ssr="false" data-attempted-ssr="false" data-catalyst="" class="loaded">
+            <script type="application/json" data-target="react-partial.embeddedData">
+              {
+                "props": {
+                  "subscriptionType": "none",
+                  "repositoryId": 209731662,
+                  "repositoryName": "ruby/debug",
+                  "watchersCount": 47,
+                  "subscribableThreadTypes": [
+                    { "name": "Issue", "enabled": true, "subscribed": false },
+                    { "name": "PullRequest", "enabled": true, "subscribed": false },
+                    { "name": "Release", "enabled": true, "subscribed": false },
+                    { "name": "Discussion", "enabled": true, "subscribed": false },
+                    { "name": "SecurityAlert", "enabled": true, "subscribed": false }
+                  ],
+                  "repositoryLabels": [],
+                  "showLabelSubscriptions": false
+                }
+              }
+            </script>
+            <div data-target="react-partial.reactRoot">
+              <div class="d-md-none">
+                <button
+                  type="button"
+                  data-testid="notifications-subscriptions-menu-button-desktop"
+                  aria-label="Watch: Participating in ruby/debug"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  tabindex="0"
+                  class="prc-Button-ButtonBase-c50BI NotificationsSubscriptionsMenu-module__watchButton--ifxlS"
+                  data-loading="false"
+                  data-size="medium"
+                  data-variant="default"
+                  aria-describedby=":r10:-loading-announcement"
+                  id=":r10:"
+                >
+                  <span data-component="buttonContent" data-align="center" class="prc-Button-ButtonContent-HKbr-">
+                    <span data-component="leadingVisual" class="prc-Button-Visual-2epfX prc-Button-VisualWrap-Db-eB">
+                      <svg aria-hidden="true" focusable="false" class="octicon octicon-eye" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;">
+                        <path
+                          d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"
+                        ></path>
+                      </svg>
+                    </span>
+                    <span data-component="text" class="prc-Button-Label-pTQ3x"></span>
+                  </span>
+                </button>
+              </div>
+              <div class="d-none d-md-block">
+                <button
+                  type="button"
+                  data-testid="notifications-subscriptions-menu-button-mobile"
+                  aria-label="Watch: Participating in ruby/debug"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  tabindex="0"
+                  class="Box-sc-g0xbh4-0 exSala prc-Button-ButtonBase-c50BI"
+                  data-loading="false"
+                  data-size="small"
+                  data-variant="default"
+                  aria-describedby=":r13:-loading-announcement"
+                  id=":r13:"
+                >
+                  <span data-component="buttonContent" class="Box-sc-g0xbh4-0 gUkoLg prc-Button-ButtonContent-HKbr-">
+                    <span data-component="leadingVisual" class="prc-Button-Visual-2epfX prc-Button-VisualWrap-Db-eB">
+                      <svg aria-hidden="true" focusable="false" class="octicon octicon-eye" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;">
+                        <path
+                          d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"
+                        ></path>
+                      </svg>
+                    </span>
+                    <span data-component="text" class="prc-Button-Label-pTQ3x">Watch<span class="ml-2 Counter rounded-3 NotificationsSubscriptionsMenu-module__watchCounter--nAbhU">47</span></span>
+                  </span>
+                  <span data-component="trailingAction" class="prc-Button-Visual-2epfX prc-Button-VisualWrap-Db-eB">
+                    <svg
+                      aria-hidden="true"
+                      focusable="false"
+                      class="octicon octicon-triangle-down"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      display="inline-block"
+                      overflow="visible"
+                      style="vertical-align: text-bottom;"
+                    >
+                      <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+              <script type="application/json" id="__PRIMER_DATA_:rv:__">
+                { "resolvedServerColorMode": "night" }
+              </script>
+            </div>
+          </react-partial>
+        </li>
+
+        <li>
+          <div data-view-component="true" class="BtnGroup d-flex">
+            <a
+              icon="repo-forked"
+              id="fork-button"
+              href="/ruby/debug/fork"
+              data-hydro-click='{"event_type":"repository.click","payload":{"target":"FORK_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+              data-hydro-click-hmac="d4cea6700e020df7d59869a3a3f21b8386d4271fbc3e536109b730814de83428"
+              data-ga-click="Repository, show fork modal, action:files#disambiguate; text:Fork"
+              data-view-component="true"
+              class="btn-sm btn BtnGroup-item"
+              aria-describedby="tooltip-c4309454-e23b-486f-8a8d-7aa622011a21"
+            >
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo-forked mr-2">
+                <path
+                  d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"
+                ></path>
+              </svg>
+              Fork
+              <span id="repo-network-counter" data-pjax-replace="true" data-turbo-replace="true" title="134" data-view-component="true" class="Counter">134</span>
+              <tool-tip id="tooltip-c4309454-e23b-486f-8a8d-7aa622011a21" for="fork-button" popover="manual" data-direction="s" data-type="description" data-view-component="true" class="sr-only position-absolute" role="tooltip">
+                Fork your own copy of ruby/debug
+              </tool-tip>
+            </a>
+            <details group_item="true" id="my-forks-menu-209731662" data-view-component="true" class="details-reset details-overlay BtnGroup-parent d-inline-block position-relative">
+              <summary aria-label="See your forks of this repository" data-view-component="true" class="btn-sm btn BtnGroup-item px-2 float-none" aria-haspopup="menu" role="button">
+                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-triangle-down">
+                  <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
+                </svg>
+              </summary>
+              <details-menu class="SelectMenu right-0" src="/ruby/debug/my_forks_menu_content?can_fork=true" role="menu">
+                <div class="SelectMenu-modal">
+                  <button class="SelectMenu-closeButton position-absolute right-0 m-2" type="button" aria-label="Close menu" data-toggle-for="my-forks-menu-209731662">
+                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+                      <path
+                        d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                      ></path>
+                    </svg>
+                  </button>
+                  <div id="filter-menu-66b39c" class="d-flex flex-column flex-1 overflow-hidden">
+                    <div class="SelectMenu-list">
+                      <include-fragment aria-label="Loading" loading="eager" data-view-component="true" class="SelectMenu-loading is-error">
+                        <p data-show-on-error="" hidden="">
+                          Forks could not be loaded
+                        </p>
+                        <span data-hide-on-error="">
+                          <span data-view-component="true">
+                            <svg role="menuitem" style="box-sizing: content-box; color: var(--color-icon-primary);" width="32" height="32" viewBox="0 0 16 16" fill="none" aria-hidden="true" data-view-component="true" class="anim-rotate">
+                              <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-opacity="0.25" stroke-width="2" vector-effect="non-scaling-stroke" fill="none"></circle>
+                              <path d="M15 8a7.002 7.002 0 00-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+                            </svg>
+                            <span class="sr-only">Loading</span>
+                          </span>
+                        </span>
+                      </include-fragment>
+                    </div>
+                  </div>
+                </div>
+              </details-menu>
+            </details>
+          </div>
+        </li>
+
+        <li>
+          <template class="js-unstar-confirmation-dialog-template">
+            <div class="Box-header">
+              <h2 class="Box-title">Unstar this repository?</h2>
+            </div>
+            <div class="Box-body">
+              <p class="mb-3">
+                This will remove {{ repoNameWithOwner }} from the {{ listsWithCount }} that it's been added to.
+              </p>
+              <div class="form-actions">
+                <!-- '"` --><!-- </textarea></xmp> -->
+                <form class="js-social-confirmation-form" data-turbo="false" action="{{ confirmUrl }}" accept-charset="UTF-8" method="post">
+                  <input type="hidden" name="authenticity_token" value="{{ confirmCsrfToken }}" />
+                  <input type="hidden" name="confirm" value="true" />
+                  <button data-close-dialog="true" type="submit" data-view-component="true" class="btn-danger btn width-full">Unstar</button>
+                </form>
+              </div>
+            </div>
+          </template>
+
+          <div data-view-component="true" class="js-toggler-container js-social-container starring-container d-flex">
+            <div data-view-component="true" class="starred BtnGroup flex-1 ml-0">
+              <!-- '"` --><!-- </textarea></xmp> -->
+              <form class="js-social-form BtnGroup-parent flex-auto js-deferred-toggler-target" data-turbo="false" action="/ruby/debug/unstar" accept-charset="UTF-8" method="post">
+                <input type="hidden" name="authenticity_token" value="MDqq_ZodrMZBM8e7KqARbFGpdGZ532nh5r2b8r632uAsqghRoguPcoaf9CXWPZy1cuNSo7K06-egNFAZ8cqynA" autocomplete="off" />
+                <input type="hidden" value="a1DLHPZ9Kdpw19CU5isvbV3ScValnxnZDs8WzQhv-ql3wGmwzmsKbrd74woatqK0fphXk270m99IRt0mRxKS1Q" data-csrf="true" class="js-confirm-csrf-token" />
+                <input type="hidden" name="context" value="repository" />
+                <button
+                  data-hydro-click='{"event_type":"repository.click","payload":{"target":"UNSTAR_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                  data-hydro-click-hmac="23469658be22a62091a5bdfda4a11171aa5f525b765477f604f359f31a9fa4c3"
+                  data-ga-click="Repository, click unstar button, action:files#disambiguate; text:Unstar"
+                  data-aria-prefix="Unstar this repository"
+                  aria-label="Unstar this repository (1196)"
+                  type="submit"
+                  data-view-component="true"
+                  class="rounded-left-2 btn-with-aria-count btn-sm btn BtnGroup-item"
+                >
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star-fill starred-button-icon d-inline-block mr-2">
+                    <path
+                      d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"
+                    ></path>
+                  </svg>
+                  <span data-view-component="true" class="d-inline">
+                    Starred
+                  </span>
+                  <span
+                    id="repo-stars-counter-unstar"
+                    aria-label="1196 users starred this repository"
+                    data-singular-suffix="user starred this repository"
+                    data-plural-suffix="users starred this repository"
+                    data-turbo-replace="true"
+                    title="1,196"
+                    data-view-component="true"
+                    class="Counter js-social-count"
+                  >
+                    1.2k
+                  </span>
+                </button>
+              </form>
+              <details id="details-user-list-209731662-starred" data-view-component="true" class="details-reset details-overlay BtnGroup-parent js-user-list-menu d-inline-block position-relative">
+                <summary aria-label="Add this repository to a list" data-view-component="true" class="btn-sm btn BtnGroup-item px-2 float-none" aria-haspopup="menu" role="button">
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-triangle-down">
+                    <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
+                  </svg>
+                </summary>
+                <details-menu class="SelectMenu right-0" src="/ruby/debug/lists" role="menu">
+                  <div class="SelectMenu-modal">
+                    <header class="SelectMenu-header">
+                      <h4 class="SelectMenu-title f5" id="user-lists-menu">Lists</h4>
+
+                      <button class="SelectMenu-closeButton" type="button" aria-label="Close menu" data-toggle-for="details-user-list-209731662-starred">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+                          <path
+                            d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                          ></path>
+                        </svg>
+                      </button>
+                    </header>
+                    <div id="filter-menu-0d1fa2" class="d-flex flex-column flex-1 overflow-hidden">
+                      <div class="SelectMenu-list">
+                        <include-fragment aria-label="Loading" loading="eager" data-view-component="true" class="SelectMenu-loading is-error">
+                          <span data-view-component="true">
+                            <svg role="menuitem" style="box-sizing: content-box; color: var(--color-icon-primary);" width="32" height="32" viewBox="0 0 16 16" fill="none" aria-hidden="true" data-view-component="true" class="anim-rotate">
+                              <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-opacity="0.25" stroke-width="2" vector-effect="non-scaling-stroke" fill="none"></circle>
+                              <path d="M15 8a7.002 7.002 0 00-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+                            </svg>
+                            <span class="sr-only">Loading</span>
+                          </span>
+                        </include-fragment>
+                      </div>
+                    </div>
+                  </div>
+                </details-menu>
+              </details>
+            </div>
+            <div data-view-component="true" class="unstarred BtnGroup ml-0 flex-1">
+              <!-- '"` --><!-- </textarea></xmp> -->
+              <form class="js-social-form BtnGroup-parent flex-auto" data-turbo="false" action="/ruby/debug/star" accept-charset="UTF-8" method="post">
+                <input type="hidden" name="authenticity_token" value="4wibCcNl4KpU8zdsKQreMNdYTxbxtvTYri9VJBhe6U127BwTw9rqxwkDcJH_qqG7OwCEKR4zusosXllBRn1VHw" autocomplete="off" />
+                <input type="hidden" name="context" value="repository" />
+                <button
+                  data-hydro-click='{"event_type":"repository.click","payload":{"target":"STAR_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                  data-hydro-click-hmac="ef386ffadcc75eeb5336b847bdd49d460a99e5dfa3b517794c7731430a6ae1e1"
+                  data-ga-click="Repository, click star button, action:files#disambiguate; text:Star"
+                  data-aria-prefix="Star this repository"
+                  aria-label="Star this repository (1196)"
+                  type="submit"
+                  data-view-component="true"
+                  class="js-toggler-target rounded-left-2 btn-with-aria-count btn-sm btn BtnGroup-item"
+                >
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star d-inline-block mr-2">
+                    <path
+                      d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"
+                    ></path>
+                  </svg>
+                  <span data-view-component="true" class="d-inline">
+                    Star
+                  </span>
+                  <span
+                    id="repo-stars-counter-star"
+                    aria-label="1196 users starred this repository"
+                    data-singular-suffix="user starred this repository"
+                    data-plural-suffix="users starred this repository"
+                    data-turbo-replace="true"
+                    title="1,196"
+                    data-view-component="true"
+                    class="Counter js-social-count"
+                  >
+                    1.2k
+                  </span>
+                </button>
+              </form>
+              <details id="details-user-list-209731662-unstarred" data-view-component="true" class="details-reset details-overlay BtnGroup-parent js-user-list-menu d-inline-block position-relative">
+                <summary aria-label="Add this repository to a list" data-view-component="true" class="btn-sm btn BtnGroup-item px-2 float-none" aria-haspopup="menu" role="button">
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-triangle-down">
+                    <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
+                  </svg>
+                </summary>
+                <details-menu class="SelectMenu right-0" src="/ruby/debug/lists" role="menu">
+                  <div class="SelectMenu-modal">
+                    <header class="SelectMenu-header">
+                      <h4 class="SelectMenu-title f5" id="user-lists-menu">Lists</h4>
+
+                      <button class="SelectMenu-closeButton" type="button" aria-label="Close menu" data-toggle-for="details-user-list-209731662-unstarred">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+                          <path
+                            d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"
+                          ></path>
+                        </svg>
+                      </button>
+                    </header>
+                    <div id="filter-menu-e3c466" class="d-flex flex-column flex-1 overflow-hidden">
+                      <div class="SelectMenu-list">
+                        <include-fragment aria-label="Loading" loading="eager" data-view-component="true" class="SelectMenu-loading is-error">
+                          <span data-view-component="true">
+                            <svg role="menuitem" style="box-sizing: content-box; color: var(--color-icon-primary);" width="32" height="32" viewBox="0 0 16 16" fill="none" aria-hidden="true" data-view-component="true" class="anim-rotate">
+                              <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-opacity="0.25" stroke-width="2" vector-effect="non-scaling-stroke" fill="none"></circle>
+                              <path d="M15 8a7.002 7.002 0 00-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+                            </svg>
+                            <span class="sr-only">Loading</span>
+                          </span>
+                        </include-fragment>
+                      </div>
+                    </div>
+                  </div>
+                </details-menu>
+              </details>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container-xl">
+    <div id="responsive-meta-container" data-turbo-replace="">
+      <div class="d-block d-md-none mb-2 px-3 px-md-4 px-lg-5">
+        <div class="d-flex gap-2 mt-n3 mb-3 flex-wrap">
+          <div class="d-flex flex-row gap-2">
+            <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/primer-react-f8e8de308a95.js"></script>
+            <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/react-core-48ea1d0bdc08.js"></script>
+            <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/react-lib-80430c87778a.js"></script>
+            <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/octicons-react-cf2f2ab8dab4.js"></script>
+            <script
+              crossorigin="anonymous"
+              defer="defer"
+              type="application/javascript"
+              src="https://github.githubassets.com/assets/vendors-node_modules_emotion_is-prop-valid_dist_emotion-is-prop-valid_esm_js-node_modules_emo-b1c483-23083d170518.js"
+            ></script>
+            <script
+              crossorigin="anonymous"
+              defer="defer"
+              type="application/javascript"
+              src="https://github.githubassets.com/assets/vendors-node_modules_github_catalyst_lib_index_js-node_modules_tanstack_react-query_build_mod-3b1f5d-85b60118c668.js"
+            ></script>
+            <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/notifications-subscriptions-menu-93526bcfbc07.js"></script>
+            <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-react.17628c3bc58aa48401cd.module.css" />
+            <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/notifications-subscriptions-menu.1bcff9205c241e99cff2.module.css" />
+
+            <react-partial partial-name="notifications-subscriptions-menu" data-ssr="false" data-attempted-ssr="false" data-catalyst="" class="loaded">
+              <script type="application/json" data-target="react-partial.embeddedData">
+                {
+                  "props": {
+                    "subscriptionType": "none",
+                    "repositoryId": 209731662,
+                    "repositoryName": "ruby/debug",
+                    "watchersCount": 47,
+                    "subscribableThreadTypes": [
+                      { "name": "Issue", "enabled": true, "subscribed": false },
+                      { "name": "PullRequest", "enabled": true, "subscribed": false },
+                      { "name": "Release", "enabled": true, "subscribed": false },
+                      { "name": "Discussion", "enabled": true, "subscribed": false },
+                      { "name": "SecurityAlert", "enabled": true, "subscribed": false }
+                    ],
+                    "repositoryLabels": [],
+                    "showLabelSubscriptions": false
+                  }
+                }
+              </script>
+              <div data-target="react-partial.reactRoot">
+                <div class="d-md-none">
+                  <button
+                    type="button"
+                    data-testid="notifications-subscriptions-menu-button-desktop"
+                    aria-label="Watch: Participating in ruby/debug"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    tabindex="0"
+                    class="prc-Button-ButtonBase-c50BI NotificationsSubscriptionsMenu-module__watchButton--ifxlS"
+                    data-loading="false"
+                    data-size="medium"
+                    data-variant="default"
+                    aria-describedby=":ra:-loading-announcement"
+                    id=":ra:"
+                  >
+                    <span data-component="buttonContent" data-align="center" class="prc-Button-ButtonContent-HKbr-">
+                      <span data-component="leadingVisual" class="prc-Button-Visual-2epfX prc-Button-VisualWrap-Db-eB">
+                        <svg aria-hidden="true" focusable="false" class="octicon octicon-eye" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;">
+                          <path
+                            d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"
+                          ></path>
+                        </svg>
+                      </span>
+                      <span data-component="text" class="prc-Button-Label-pTQ3x"></span>
+                    </span>
+                  </button>
+                </div>
+                <div class="d-none d-md-block">
+                  <button
+                    type="button"
+                    data-testid="notifications-subscriptions-menu-button-mobile"
+                    aria-label="Watch: Participating in ruby/debug"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    tabindex="0"
+                    class="Box-sc-g0xbh4-0 exSala prc-Button-ButtonBase-c50BI"
+                    data-loading="false"
+                    data-size="small"
+                    data-variant="default"
+                    aria-describedby=":rd:-loading-announcement"
+                    id=":rd:"
+                  >
+                    <span data-component="buttonContent" class="Box-sc-g0xbh4-0 gUkoLg prc-Button-ButtonContent-HKbr-">
+                      <span data-component="leadingVisual" class="prc-Button-Visual-2epfX prc-Button-VisualWrap-Db-eB">
+                        <svg aria-hidden="true" focusable="false" class="octicon octicon-eye" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align: text-bottom;">
+                          <path
+                            d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"
+                          ></path>
+                        </svg>
+                      </span>
+                      <span data-component="text" class="prc-Button-Label-pTQ3x">Watch<span class="ml-2 Counter rounded-3 NotificationsSubscriptionsMenu-module__watchCounter--nAbhU">47</span></span>
+                    </span>
+                    <span data-component="trailingAction" class="prc-Button-Visual-2epfX prc-Button-VisualWrap-Db-eB">
+                      <svg
+                        aria-hidden="true"
+                        focusable="false"
+                        class="octicon octicon-triangle-down"
+                        viewBox="0 0 16 16"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        display="inline-block"
+                        overflow="visible"
+                        style="vertical-align: text-bottom;"
+                      >
+                        <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+                <script type="application/json" id="__PRIMER_DATA_:r9:__">
+                  { "resolvedServerColorMode": "night" }
+                </script>
+              </div>
+            </react-partial>
+
+            <div data-view-component="true" class="BtnGroup d-flex">
+              <a
+                id="fork-icon-button"
+                variant="small"
+                group_item="true"
+                href="/ruby/debug/fork"
+                data-hydro-click='{"event_type":"repository.click","payload":{"target":"FORK_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                data-hydro-click-hmac="d4cea6700e020df7d59869a3a3f21b8386d4271fbc3e536109b730814de83428"
+                data-ga-click="Repository, show fork modal, action:files#disambiguate; text:Fork"
+                aria-labelledby="tooltip-040c8947-b1dc-41a0-b708-1ecc1f52b76c"
+                data-view-component="true"
+                class="Button Button--iconOnly Button--secondary Button--medium"
+              >
+                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo-forked Button-visual">
+                  <path
+                    d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"
+                  ></path>
+                </svg>
+              </a>
+              <tool-tip
+                id="tooltip-040c8947-b1dc-41a0-b708-1ecc1f52b76c"
+                for="fork-icon-button"
+                popover="manual"
+                data-direction="s"
+                data-type="label"
+                data-view-component="true"
+                class="sr-only position-absolute"
+                aria-hidden="true"
+                role="tooltip"
+              >
+                Fork your own copy of ruby/debug
+              </tool-tip>
+            </div>
+            <div data-view-component="true" class="js-toggler-container starring-container">
+              <!-- '"` --><!-- </textarea></xmp> -->
+              <form class="starred js-social-form" data-turbo="false" action="/ruby/debug/unstar" accept-charset="UTF-8" method="post">
+                <input type="hidden" name="authenticity_token" value="blPo5LFIObjpAzomxM-oW-FtSwmEYniXhnRKdDR4cexyw0pIiV4aDC6vCbg4UiWCwidtzE8J-pHA_YGfewUZkA" autocomplete="off" />
+                <input type="hidden" name="context" value="repository" />
+                <button
+                  data-hydro-click='{"event_type":"repository.click","payload":{"target":"UNSTAR_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                  data-hydro-click-hmac="23469658be22a62091a5bdfda4a11171aa5f525b765477f604f359f31a9fa4c3"
+                  data-ga-click="Repository, click unstar button, action:files#disambiguate; text:Unstar"
+                  id="icon-button-ffe26a56-cec2-4289-9b98-968fe090a836"
+                  aria-labelledby="tooltip-9ab7795b-6476-4b81-aa09-70b3a2c18efb"
+                  type="submit"
+                  data-view-component="true"
+                  class="Button Button--iconOnly Button--secondary Button--medium js-toggler-target starred-button-icon"
+                >
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star-fill Button-visual">
+                    <path
+                      d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"
+                    ></path>
+                  </svg>
+                </button>
+                <tool-tip
+                  id="tooltip-9ab7795b-6476-4b81-aa09-70b3a2c18efb"
+                  for="icon-button-ffe26a56-cec2-4289-9b98-968fe090a836"
+                  popover="manual"
+                  data-direction="s"
+                  data-type="label"
+                  data-view-component="true"
+                  class="sr-only position-absolute"
+                  aria-hidden="true"
+                  role="tooltip"
+                >
+                  Unstar this repository
+                </tool-tip>
+              </form>
+              <!-- '"` --><!-- </textarea></xmp> -->
+              <form class="unstarred js-social-form" data-turbo="false" action="/ruby/debug/star" accept-charset="UTF-8" method="post">
+                <input type="hidden" name="authenticity_token" value="gfRTKw-U1f1mHJ0n0_c_TEU-_kvshyo9r6_TJrVgY-EUENQxDyvfkDvs2toFV0DHqWY1dAMCZC8t3t9D60Pfsw" autocomplete="off" />
+                <input type="hidden" name="context" value="repository" />
+                <button
+                  data-hydro-click='{"event_type":"repository.click","payload":{"target":"STAR_BUTTON","repository_id":209731662,"originating_url":"https://github.com/ruby/debug","user_id":17950836}}'
+                  data-hydro-click-hmac="ef386ffadcc75eeb5336b847bdd49d460a99e5dfa3b517794c7731430a6ae1e1"
+                  data-ga-click="Repository, click star button, action:files#disambiguate; text:Star"
+                  id="icon-button-394232fe-e0ce-443f-91d6-3bd5b1c7dc37"
+                  aria-labelledby="tooltip-ab72053d-f364-498a-b934-09dacf946f1d"
+                  type="submit"
+                  data-view-component="true"
+                  class="Button Button--iconOnly Button--secondary Button--medium js-toggler-target"
+                >
+                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star Button-visual">
+                    <path
+                      d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"
+                    ></path>
+                  </svg>
+                </button>
+                <tool-tip
+                  id="tooltip-ab72053d-f364-498a-b934-09dacf946f1d"
+                  for="icon-button-394232fe-e0ce-443f-91d6-3bd5b1c7dc37"
+                  popover="manual"
+                  data-direction="s"
+                  data-type="label"
+                  data-view-component="true"
+                  class="sr-only position-absolute"
+                  aria-hidden="true"
+                  role="tooltip"
+                >
+                  Star this repository
+                </tool-tip>
+              </form>
+            </div>
+          </div>
+          <div class="d-flex flex-row gap-2"></div>
+        </div>
+        <p class="f4 mb-3 color-fg-muted">
+          Debugging functionality for Ruby
+        </p>
+
+        <h3 class="sr-only">License</h3>
+        <div class="mb-2">
+          <a href="/ruby/debug/blob/master/LICENSE.txt" class="Link--muted" data-analytics-event='{"category":"Repository Overview","action":"click","label":"location:sidebar;file:license"}'>
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-law mr-2">
+              <path
+                d="M8.75.75V2h.985c.304 0 .603.08.867.231l1.29.736c.038.022.08.033.124.033h2.234a.75.75 0 0 1 0 1.5h-.427l2.111 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.006.005-.01.01-.045.04c-.21.176-.441.327-.686.45C14.556 10.78 13.88 11 13 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L12.178 4.5h-.162c-.305 0-.604-.079-.868-.231l-1.29-.736a.245.245 0 0 0-.124-.033H8.75V13h2.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5h2.5V3.5h-.984a.245.245 0 0 0-.124.033l-1.289.737c-.265.15-.564.23-.869.23h-.162l2.112 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.016.015-.045.04c-.21.176-.441.327-.686.45C4.556 10.78 3.88 11 3 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L2.178 4.5H1.75a.75.75 0 0 1 0-1.5h2.234a.249.249 0 0 0 .125-.033l1.288-.737c.265-.15.564-.23.869-.23h.984V.75a.75.75 0 0 1 1.5 0Zm2.945 8.477c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L13 6.327Zm-10 0c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L3 6.327Z"
+              ></path>
+            </svg>
+            BSD-2-Clause license
+          </a>
+        </div>
+
+        <div class="mb-3">
+          <ul class="d-flex flex-wrap mb-2 gap-2" aria-label="Repository details">
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/stargazers">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star mr-1">
+                <path
+                  d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"
+                ></path>
+              </svg>
+              <span class="text-bold color-fg-default">1.2k</span>
+              stars
+            </a>
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/forks">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo-forked mr-1">
+                <path
+                  d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"
+                ></path>
+              </svg>
+              <span class="text-bold color-fg-default">134</span>
+              forks
+            </a>
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/watchers">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-eye mr-1">
+                <path
+                  d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"
+                ></path>
+              </svg>
+              <span class="text-bold color-fg-default">47</span>
+              watching
+            </a>
+            <include-fragment loading="lazy" src="/ruby/debug/branch-and-tag-count" data-view-component="true">
+              <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/branches">
+                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-git-branch mr-1">
+                  <path
+                    d="M9.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.493 2.493 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25Zm-6 0a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Zm8.25-.75a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5ZM4.25 12a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Z"
+                  ></path>
+                </svg>
+                <span class="color-fg-muted">Branches</span>
+              </a>
+              <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/tags">
+                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-tag mr-1">
+                  <path
+                    d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.752 1.752 0 0 1 1 7.775Zm1.5 0c0 .066.026.13.073.177l6.25 6.25a.25.25 0 0 0 .354 0l5.025-5.025a.25.25 0 0 0 0-.354l-6.25-6.25a.25.25 0 0 0-.177-.073H2.75a.25.25 0 0 0-.25.25ZM6 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"
+                  ></path>
+                </svg>
+                <span class="color-fg-muted">Tags</span>
+              </a>
+            </include-fragment>
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/activity">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-pulse mr-1">
+                <path
+                  d="M6 2c.306 0 .582.187.696.471L10 10.731l1.304-3.26A.751.751 0 0 1 12 7h3.25a.75.75 0 0 1 0 1.5h-2.742l-1.812 4.528a.751.751 0 0 1-1.392 0L6 4.77 4.696 8.03A.75.75 0 0 1 4 8.5H.75a.75.75 0 0 1 0-1.5h2.742l1.812-4.529A.751.751 0 0 1 6 2Z"
+                ></path>
+              </svg>
+              <span>Activity</span>
+            </a>
+            <a class="Link--secondary no-underline d-block mr-2" role="listitem" href="/ruby/debug/custom-properties">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note mr-1">
+                <path
+                  d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25Zm1.75-.25a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25ZM3.5 6.25a.75.75 0 0 1 .75-.75h7a.75.75 0 0 1 0 1.5h-7a.75.75 0 0 1-.75-.75Zm.75 2.25h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1 0-1.5Z"
+                ></path>
+              </svg>
+              <span>Custom properties</span>
+            </a>
+          </ul>
+
+          <div class="mb-2 d-flex color-fg-muted">
+            <div class="d-flex flex-items-center" style="height: 21px;">
+              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-globe flex-shrink-0 mr-2">
+                <path
+                  d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM5.78 8.75a9.64 9.64 0 0 0 1.363 4.177c.255.426.542.832.857 1.215.245-.296.551-.705.857-1.215A9.64 9.64 0 0 0 10.22 8.75Zm4.44-1.5a9.64 9.64 0 0 0-1.363-4.177c-.307-.51-.612-.919-.857-1.215a9.927 9.927 0 0 0-.857 1.215A9.64 9.64 0 0 0 5.78 7.25Zm-5.944 1.5H1.543a6.507 6.507 0 0 0 4.666 5.5c-.123-.181-.24-.365-.352-.552-.715-1.192-1.437-2.874-1.581-4.948Zm-2.733-1.5h2.733c.144-2.074.866-3.756 1.58-4.948.12-.197.237-.381.353-.552a6.507 6.507 0 0 0-4.666 5.5Zm10.181 1.5c-.144 2.074-.866 3.756-1.58 4.948-.12.197-.237.381-.353.552a6.507 6.507 0 0 0 4.666-5.5Zm2.733-1.5a6.507 6.507 0 0 0-4.666-5.5c.123.181.24.365.353.552.714 1.192 1.436 2.874 1.58 4.948Z"
+                ></path>
+              </svg>
+            </div>
+            <span class="flex-auto min-width-0 width-fit">
+              Public repository
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-bottom mx-xl-5"></div>
+  </div>
+</div>
