@@ -31,7 +31,7 @@
   const TRACE = 5;
 
   // Change to SILENT, QUIET, INFO, DEBUG, VERBOSE, or TRACE
-  const LOG_LEVEL_OVERRIDE = DEBUG;
+  const LOG_LEVEL_OVERRIDE = null;
 
   const LOG_LEVELS = {
     default: QUIET,
@@ -1606,10 +1606,10 @@
     const configKey = 'repositoryHeader';
     const repositoryHeader = document.querySelector(SELECTORS[configKey].id);
 
-    if (!repositoryHeader) {
-      // This is expected on pages that aren't repositories
-      log(DEBUG, `Selector '${SELECTORS[configKey].id}' not found`);
-      return;
+    if (repositoryHeader) {
+      log(INFO, `Selector '${SELECTORS[configKey].id}' found`);
+    } else {
+      log(INFO, `Selector '${SELECTORS[configKey].id}' not found; this is expected on the Issues tab or pages that aren't repositories`);
     }
 
     const topRepositoryHeaderElement = document.createElement('div');
@@ -1623,8 +1623,17 @@
       topRepositoryHeaderElement.style.setProperty('background-color', elementConfig.backgroundColor);
     }
 
-    if (repositoryHeader.hidden) {
-      log(DEBUG, `Selector '${SELECTORS[configKey].id}' is hidden`);
+    const tempHeaderPresent = HEADER.querySelector(createId(TEMP_REPOSITORY_HEADER_FLAG));
+
+    if (!repositoryHeader || repositoryHeader.hidden) {
+      log(INFO, 'A repo tab other than Code is being loaded for the first time');
+
+      if (tempHeaderPresent) {
+        log(DEBUG, `Selector '${createId(TEMP_REPOSITORY_HEADER_FLAG)}' found; skipping header creation`);
+        return;
+      }
+
+      log(DEBUG, `Selector '${SELECTORS[configKey].id}' is not present or hidden`);
 
       if (!HEADER.querySelector(SELECTORS.pageTitle.separator)) {
         log(DEBUG, `Selector '${SELECTORS.pageTitle.separator}' not found, not creating a repository header`);
@@ -1632,7 +1641,6 @@
         return;
       }
 
-      // A repo tab other than Code is being loaded for the first time
       const pageTitle = HEADER.querySelector(SELECTORS.pageTitle.topDiv);
 
       if (!pageTitle) {
@@ -1649,10 +1657,10 @@
 
       topRepositoryHeaderElement.appendChild(repositoryHeaderElement);
       insertNewGlobalBar(topRepositoryHeaderElement);
-    } else if (HEADER.querySelector(createId(TEMP_REPOSITORY_HEADER_FLAG))) {
+    } else if (tempHeaderPresent) {
       log(DEBUG, `Selector '${createId(TEMP_REPOSITORY_HEADER_FLAG)}' found`);
+      log(INFO, 'The Code tab is being loaded from another tab which has a temporary header');
 
-      // The Code tab is being loaded from another tab which has a temporary header
       const tempRepositoryHeader = HEADER.querySelector(createId(TEMP_REPOSITORY_HEADER_FLAG));
 
       NEW_ELEMENTS = NEW_ELEMENTS.filter(element => element !== tempRepositoryHeader);
@@ -1664,10 +1672,28 @@
         DEBUG,
         `'${SELECTORS[configKey].id}' is hidden and selector '${createId(TEMP_REPOSITORY_HEADER_FLAG)}' not found`,
       );
+      log(INFO, 'The Code tab being loaded for the first time');
 
-      // The Code tab being loaded for the first time
       insertPermanentRepositoryHeader(topRepositoryHeaderElement, repositoryHeader);
     }
+
+    HEADER_STYLE.textContent += `
+      ${SELECTORS.repositoryHeader.nav} context-region
+      {
+        display: flex !important;
+      }
+
+      ${SELECTORS.repositoryHeader.nav} context-region context-region-crumb
+      {
+        display: flex !important;
+        align-items: center !important;
+      }
+
+      ${SELECTORS.repositoryHeader.nav} context-region-crumb:last-child context-region-divider
+      {
+        display: none !important;
+      }
+    `;
 
     updateRepositoryHeaderName();
 
@@ -1908,22 +1934,6 @@
       {
         display: initial !important;
       }
-
-      ${SELECTORS.repositoryHeader.nav} context-region
-      {
-        display: flex !important;
-      }
-
-      ${SELECTORS.repositoryHeader.nav} context-region context-region-crumb
-      {
-        display: flex !important;
-        align-items: center !important;
-      }
-
-      ${SELECTORS.repositoryHeader.nav} context-region-crumb:last-child context-region-divider
-      {
-        display: none !important;
-      }
     `;
 
     clonedPageTitle.querySelectorAll('svg.octicon-lock').forEach(svg => svg.remove());
@@ -1994,9 +2004,10 @@
   function insertNewGlobalBar(element) {
     log(DEBUG, 'insertNewGlobalBar()');
 
-    const elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
-
-    elementToInsertAfter.parentNode.insertBefore(element, elementToInsertAfter.nextSibling);
+    modifyThenObserve(() => {
+      const elementToInsertAfter = HEADER.querySelector(SELECTORS.header.globalBar);
+      elementToInsertAfter.parentNode.insertBefore(element, elementToInsertAfter.nextSibling);
+    });
   }
 
   function createId(string) {
