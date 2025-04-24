@@ -3365,23 +3365,23 @@
             }
           }
 
-          .AppHeader .AppHeader-globalBar .AppHeader-search input[type=search],
-          .AppHeader .AppHeader-globalBar .AppHeader-search .AppHeader-searchButton
+          ${SELECTORS.header.globalBar} .AppHeader-search input[type=search],
+          ${SELECTORS.header.globalBar} .AppHeader-search .AppHeader-searchButton
           {
             padding-right: 4px;
           }
 
-          ${SELECTORS.header.localBar.topDiv} ul
+          ${SELECTORS.header.localBar.repositoryNav} ul
           {
             align-items: self-end;
           }
 
-          ${SELECTORS.header.localBar.topDiv} ul li
+          ${SELECTORS.header.localBar.repositoryNav} ul li
           {
             padding-bottom: 5px;
           }
 
-          ${SELECTORS.header.localBar.topDiv} ul li:has(.UnderlineNav-item.selected)
+          ${SELECTORS.header.localBar.repositoryNav} ul li:has(.UnderlineNav-item.selected)
           {
             border: 1px solid var(--borderColor-muted);
             border-radius: var(--borderRadius-medium);
@@ -3392,21 +3392,23 @@
             background-color: var(--bgColor-default, var(--color-canvas-default)) !important;
           }
 
-          ${SELECTORS.header.localBar.topDiv} ul li a
+          ${SELECTORS.header.localBar.repositoryNav} ul li a
           {
             padding: 3px 10px;
           }
 
-          ${SELECTORS.header.localBar.topDiv} ul li:has(.UnderlineNav-item.selected) a:hover
+          ${SELECTORS.header.localBar.repositoryNav} ul li:has(.UnderlineNav-item.selected) a:hover
           {
             background: none;
           }
 
-          :is(.UnderlineNav-item.selected):after
+          ${SELECTORS.header.localBar.repositoryNav} :is(.UnderlineNav-item.selected):after
           {
             bottom: calc(28% + var(--base-size-24)) !important;
           }
         `;
+
+        HEADER.querySelector(SELECTORS.header.globalBar)?.classList.remove('pb-2');
       }
 
       HEADER_UPDATES_COUNT++;
@@ -3533,6 +3535,7 @@
       localBar: {
         topDiv: '.AppHeader-localBar',
         underlineNavActions: '.UnderlineNav-actions',
+        repositoryNav: '.AppHeader-localBar [aria-label="Repository"]',
       },
       leftAligned: '.AppHeader-globalBar-start',
       rightAligned: '.AppHeader-globalBar-end',
