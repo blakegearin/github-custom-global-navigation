@@ -1913,7 +1913,8 @@
 
     insertNewGlobalBar(topRepositoryHeaderElement);
 
-    clonedRepositoryHeader.firstElementChild.classList.remove('container-xl', 'px-lg-5');
+    clonedRepositoryHeader.firstElementChild.classList.remove('container-xl', 'px-lg-5', 'px-3');
+    topRepositoryHeaderElement.style.setProperty('padding', '0 var(--base-size-16, var(--base-size-16))', 'important');
 
     NEW_ELEMENTS.push(clonedRepositoryHeader);
   }
