@@ -92,8 +92,10 @@ This userscript does not have first-class support for sub-themes, but can tell l
 
 Part of the challenge of maintaining the Old School configuration is finding enough archival resources to make it accurate. To help maintain this project and in the spirit of aiding future developers, the HTML of the main `header` tag and `repository-container-header` will be archived periodically. These elements will also be archived in a post-script state for each supported configuration.
 
-- [Home](https://github.com/)
-- [Repo](https://github.com/ruby/debug)
+The following pages are the archival targets:
+
+- [GitHub home](https://github.com/)
+- [Example repository](https://github.com/ruby/debug)
 
 ### Maintenance
 

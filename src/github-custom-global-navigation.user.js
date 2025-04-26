@@ -153,7 +153,7 @@
     }
 
     if (elementConfig.remove) {
-      HEADER_STYLE.textContent += cssHideElement(SELECTORS[configKey]);
+      HEADER_STYLE.textContent += cssHideElement(SELECTORS.sidebars.left.topDiv);
 
       return;
     }
@@ -3638,6 +3638,7 @@
     },
     sidebars: {
       left: {
+        topDiv: '.AppHeader-globalBar-start > :first-child',
         backdrop: 'dialog[data-target="deferred-side-panel.panel"]::backdrop',
         modalDialog: '.Overlay--placement-left',
       },
@@ -4375,7 +4376,7 @@
             color: oldSchoolHoverBackgroundColor,
           },
           left: {
-            preload: true,
+            preload: false,
           },
           right: {
             preload: true,
@@ -4621,7 +4622,7 @@
             color: oldSchoolHoverBackgroundColor,
           },
           left: {
-            preload: true,
+            preload: false,
           },
           right: {
             preload: true,
