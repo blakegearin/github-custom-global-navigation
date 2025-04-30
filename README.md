@@ -19,7 +19,7 @@
 
 ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgreasyfork.org%2Fscripts%2F478687-github-custom-global-navigation.json&query=total_installs&suffix=%20installs&label=greasy%20fork&color=%23670000&link=https%3A%2F%2Fgreasyfork.org%2Fen%2Fscripts%2F478687-github-custom-global-navigation)
 ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fopenuserjs.org%2Fmeta%2Fblakegearin%2FGitHub_Custom_Global_Navigation.meta.json&query=%24.OpenUserJS.installs%5B0%5D.value&suffix=%20installs&label=openuserjs&color=%23202d3b&link=https%3A%2F%2Fopenuserjs.org%2Fscripts%2Fblakegearin%2FGitHub_Custom_Global_Navigation)
-[![MIT License](https://img.shields.io/badge/license-MIT%20License-blue)](LICENSE)
+[![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 This is a [userscript](https://openuserjs.org/about/Userscript-Beginners-HOWTO) to customize the global navigation of GitHub.
 
@@ -37,7 +37,7 @@ This is a [userscript](https://openuserjs.org/about/Userscript-Beginners-HOWTO) 
     width="40%"
     src="img/menu_option.png"
     alt="menu option for 'Customize global navigation'"
-    title="GitHub Custom Global Navigation logo"
+    title="menu option for 'Customize global navigation'"
    />
 
 ## Documentation
@@ -136,4 +136,12 @@ In October 2023, GitHub initiated a [public rollout](https://github.blog/changel
 
   - Optimization: [SVGOMG](https://svgomg.net)
 
+## Disclaimer
+
 Not affiliated with Microsoft Corporation, GitHub, Inc., or any of their affiliations.
+
+## Related Projects
+
+Miss the old design of Slack too? Check out my userscript: [Old School Slack](https://github.com/blakegearin/old-school-slack#readme)
+
+Want to customize the favicon for different GitHub tabs? I'm working on a solution for that too: [Favicon Packs](https://github.com/blakegearin/favicon-packs#readme)
