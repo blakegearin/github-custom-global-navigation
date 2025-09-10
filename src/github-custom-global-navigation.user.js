@@ -1729,7 +1729,7 @@
         .${REPOSITORY_HEADER_CLASS} .rgh-ci-link
         {
           align-items: center;
-          display: flex;
+          display: flex !important;
           margin-right: var(--base-size-24, 24px);
         }
 
@@ -3374,11 +3374,6 @@
           ${SELECTORS.header.localBar.repositoryNav} ul
           {
             align-items: self-end;
-          }
-
-          ${SELECTORS.header.localBar.repositoryNav} ul li
-          {
-            padding-bottom: 5px;
           }
 
           ${SELECTORS.header.localBar.repositoryNav} ul li:has(.UnderlineNav-item.selected)
