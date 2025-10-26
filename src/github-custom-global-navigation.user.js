@@ -1711,6 +1711,7 @@
         display: none !important;
       }
 
+      #repo-title-component:has(> img[alt$="avatar"]) .AppHeader-context-item-label .avatar,
       #repo-title-component:has(> img[alt$="avatar"]) .AppHeader-context-item-label .avatar-user
       {
         display: none !important;
@@ -4678,11 +4679,14 @@
     title: `
       Custom Global Navigation
       <small>
+        v${VERSION}
+      </small>
+      <small>
         <a
           href="https://github.com/blakegearin/github-custom-global-navigation"
           target="_blank"
         >
-          source
+          (source)
         </a>
       </small>
     `,
