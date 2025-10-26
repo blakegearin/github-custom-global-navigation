@@ -144,4 +144,6 @@ Not affiliated with Microsoft Corporation, GitHub, Inc., or any of their affilia
 
 Miss the old design of Slack too? Check out my userscript: [Old School Slack](https://github.com/blakegearin/old-school-slack#readme)
 
+Miss the old design of YouTube's player too? Check out my userstyle: [Old School YouTube Player](https://github.com/blakegearin/old-school-youtube-player#readme)
+
 Want to customize the favicon for different GitHub tabs? I'm working on a solution for that too: [Favicon Packs](https://github.com/blakegearin/favicon-packs#readme)
