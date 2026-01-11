@@ -1519,25 +1519,64 @@
     }
   }
 
-  function preloadLeftSidebar(elementSelector) {
+  function preloadLeftSidebar(elementSelector, retryCount = 0) {
     log(DEBUG, 'preloadLeftSidebar()');
+    log(DEBUG, 'retryCount', retryCount);
 
-    if (!LEFT_SIDEBAR_PRELOADED) return;
-
-    const leftModalDialog = HEADER.querySelector(elementSelector.left.modalDialog).remove();
-
-    if (!leftModalDialog) {
-      logError(`Selector '${elementSelector.left.modalDialog}' not found`);
-      preloadLeftSidebar(elementSelector);
+    if (LEFT_SIDEBAR_PRELOADED) {
+      log(DEBUG, 'Left sidebar already preloaded');
       return;
     }
 
-    window.addEventListener('load', () => {
-      HEADER.querySelector(`${SELECTORS.hamburgerButton} button`).click();
-      log(INFO, 'Left sidebar preloaded');
-    });
+    const topDiv = document.querySelector(SELECTORS.sidebars.left.topDiv);
+    if (!topDiv) {
+      if (retryCount < 50) {
+        log(DEBUG, `Selector '${SELECTORS.sidebars.left.topDiv}' not found`);
+        setTimeout(() => preloadLeftSidebar(elementSelector, retryCount + 1), 100);
+      } else {
+        log(DEBUG, `Selector '${SELECTORS.sidebars.left.topDiv}' not found after 2 seconds, giving up`);
+      }
 
-    LEFT_SIDEBAR_PRELOADED = true;
+      return;
+    }
+    topDiv.style.setProperty('display', 'none');
+
+    const button = HEADER.querySelector(SELECTORS.hamburgerButton);
+    if (!button) {
+      if (retryCount < 50) {
+        log(DEBUG, `Selector '${SELECTORS.hamburgerButton}' not found`);
+        setTimeout(() => preloadLeftSidebar(elementSelector, retryCount + 1), 100);
+      } else {
+        log(DEBUG, `Selector '${SELECTORS.hamburgerButton}' not found after 2 seconds, giving up`);
+      }
+
+      return;
+    } else {
+      log(DEBUG, `Clicking selector '${SELECTORS.hamburgerButton}' to preload left sidebar`);
+      button.click();
+      // This click isn't reliably triggering the dialog, likely due to race conditions on page load
+    }
+
+    function waitForLeftModalDialog(waitCount = 0) {
+      const leftModalDialog = topDiv.querySelector(elementSelector.left.modalDialog);
+      if (!leftModalDialog) {
+        if (waitCount < 10) {
+          setTimeout(() => waitForLeftModalDialog(waitCount + 1), 100);
+        } else {
+          log(DEBUG, `Selector '${elementSelector.left.modalDialog}' not found after 2 seconds, giving up`);
+          setTimeout(() => preloadLeftSidebar(elementSelector, retryCount + 1), 100);
+        }
+        return;
+      }
+      leftModalDialog.remove();
+      log(INFO, 'Left sidebar preloaded');
+      LEFT_SIDEBAR_PRELOADED = true;
+
+      button.click();
+      topDiv.style.removeProperty('display');
+    }
+
+    waitForLeftModalDialog();
   }
 
   function updateSidebars() {
@@ -1558,7 +1597,12 @@
       `;
     }
 
-    if (elementConfig.left.preload) preloadLeftSidebar(elementSelector);
+    if (elementConfig.left.preload) {
+      window.addEventListener('load', () => {
+        log(DEBUG, 'Attempting to preload left sidebar');
+        preloadLeftSidebar(elementSelector);
+      });
+    }
 
     if (elementConfig.right.floatUnderneath) {
       HEADER_STYLE.textContent += `
@@ -3672,8 +3716,9 @@
     },
     sidebars: {
       left: {
+        topDiv: '#__primerPortalRoot__',
         backdrop: 'dialog[data-target="deferred-side-panel.panel"]::backdrop',
-        modalDialog: '.Overlay--placement-left',
+        modalDialog: 'div[data-position-regular="left"]',
       },
       right: {
         topDiv: '#__primerPortalRoot__',
