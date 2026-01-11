@@ -43,4 +43,8 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Create GitHub release
+gh release create "$NEW_VERSION" --generate-notes
+gh release upload "$NEW_VERSION" "src/github-custom-global-navigation.user.js"
+
 echo "Release $NEW_VERSION completed successfully."
