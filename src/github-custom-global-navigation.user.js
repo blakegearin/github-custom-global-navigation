@@ -115,6 +115,7 @@
 
     updateLink('issues');
     updateLink('pullRequests');
+    updateLink('repos');
 
     if (CONFIG.marketplace.add) updateLink('marketplace');
     if (CONFIG.explore.add) updateLink('explore');
@@ -651,7 +652,7 @@
   }
 
   function updateLink(configKey) {
-    log(DEBUG, 'updateLink()');
+    log(DEBUG, `updateLink() with ${configKey}`);
 
     const elementConfig = CONFIG[configKey];
     const elementSelector = SELECTORS[configKey];
@@ -661,16 +662,25 @@
 
     if (tooltipElement) {
       link = tooltipElement.previousElementSibling;
+      log(DEBUG, `Found link for ${configKey} using tooltipElement.previousElementSibling`);
     } else {
       log(DEBUG, `Tooltip for '${configKey}' not found`);
 
       const linkId = createId(SELECTORS[configKey].id);
+      log(DEBUG, `Trying HEADER.querySelector(${linkId}) for ${configKey}`);
       link = HEADER.querySelector(linkId);
 
       if (!link) {
-        logError(`Selector '${linkId}' not found`);
-
-        return;
+        log(DEBUG, `HEADER.querySelector(${linkId}) not found, trying SELECTORS[configKey].link: ${elementSelector.link}`);
+        link = HEADER.querySelector(elementSelector.link);
+        if (!link) {
+          logError(`Selector '${linkId}' and '${elementSelector.link}' not found for ${configKey}`);
+          return;
+        } else {
+          log(DEBUG, `Found link for ${configKey} using selector: ${elementSelector.link}`);
+        }
+      } else {
+        log(DEBUG, `Found link for ${configKey} using id selector: ${linkId}`);
       }
     }
 
@@ -679,7 +689,6 @@
 
     if (elementConfig.remove) {
       HEADER_STYLE.textContent += cssHideElement(createId(configKey));
-
       return;
     }
 
@@ -689,16 +698,10 @@
 
     if (elementConfig.alignLeft) {
       const response = cloneAndLeftAlignElement(createId(elementSelector.id), elementSelector.id);
-
       if (response.length === 0) return;
-
       const [cloneId, cloneElement] = response;
-
-      elementSelector[CONFIG_NAME] = {
-        leftAlignedId: cloneId,
-      };
+      elementSelector[CONFIG_NAME] = { leftAlignedId: cloneId };
       link = cloneElement;
-
       linkSelector = createId(cloneId);
     }
 
@@ -711,15 +714,12 @@
     if (elementConfig.icon.remove) {
       const svgId = `${configKey}-svg`;
       const svg = link.querySelector('svg');
-
       if (!svg) {
         logError(`Selector '${configKey} svg' not found`);
-
+        log(INFO, `Could not find svg for ${configKey} in link element`);
         return;
       }
-
       svg.setAttribute('id', svgId);
-
       HEADER_STYLE.textContent += cssHideElement(createId(svgId));
     } else {
       link.querySelector('svg').style.setProperty('fill', elementConfig.icon.color);
@@ -3578,7 +3578,7 @@
       topDiv: '.AppHeader-globalBar-start .AppHeader-logo',
       svg: '.AppHeader-logo svg',
     },
-    hamburgerButton: '.AppHeader-globalBar-start deferred-side-panel',
+    hamburgerButton: '.AppHeader-globalBar-start div:first-child react-partial-anchor button',
     pageTitle: {
       id: 'custom-page-title',
       topDiv: '.AppHeader-context',
@@ -3613,12 +3613,18 @@
     },
     issues: {
       id: 'issues',
+      link: '.AppHeader-globalBar-end .AppHeader-actions a[href="/issues"]',
       textContent: 'issues-text-content-span',
     },
     pullRequests: {
       id: 'pullRequests',
       link: '.AppHeader-globalBar-end .AppHeader-actions a[href="/pulls"]',
       textContent: 'pullRequests-text-content-span',
+    },
+    repos: {
+      id: 'repos',
+      link: '.AppHeader-globalBar-end .AppHeader-actions a[href="/repos"]',
+      textContent: 'repos-text-content-span',
     },
     marketplace: {
       id: 'marketplace',
@@ -3800,6 +3806,25 @@
           },
           text: {
             content: 'Pull requests',
+            color: '',
+          },
+          hover: {
+            backgroundColor: '',
+            color: '',
+          },
+        },
+        repos: {
+          remove: false,
+          border: true,
+          tooltip: false,
+          alignLeft: false,
+          boxShadow: '',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Repos',
             color: '',
           },
           hover: {
@@ -4046,6 +4071,25 @@
           },
           text: {
             content: 'Pull requests',
+            color: '',
+          },
+          hover: {
+            backgroundColor: '',
+            color: '',
+          },
+        },
+        repos: {
+          remove: false,
+          border: true,
+          tooltip: false,
+          alignLeft: false,
+          boxShadow: '',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Repos',
             color: '',
           },
           hover: {
@@ -4301,6 +4345,25 @@
             color: oldSchoolHoverColor,
           },
         },
+        repos: {
+          remove: true,
+          border: true,
+          tooltip: false,
+          alignLeft: false,
+          boxShadow: '',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Repos',
+            color: '',
+          },
+          hover: {
+            backgroundColor: '',
+            color: '',
+          },
+        },
         marketplace: {
           add: true,
           border: false,
@@ -4547,6 +4610,25 @@
           hover: {
             backgroundColor: oldSchoolHoverBackgroundColor,
             color: oldSchoolHoverColor,
+          },
+        },
+        repos: {
+          remove: true,
+          border: true,
+          tooltip: false,
+          alignLeft: false,
+          boxShadow: '',
+          icon: {
+            remove: false,
+            color: '',
+          },
+          text: {
+            content: 'Repos',
+            color: '',
+          },
+          hover: {
+            backgroundColor: '',
+            color: '',
           },
         },
         marketplace: {
