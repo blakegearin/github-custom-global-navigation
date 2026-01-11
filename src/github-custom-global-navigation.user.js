@@ -1579,8 +1579,6 @@
         ${elementSelector.right.modalDialog}
         {
           pointer-events: all;
-          margin-top: 55px;
-          margin-right: 20px;
           animation: .2s cubic-bezier(.33,1,.68,1) !important;
           border-top-right-radius: 0.75rem !important;
           border-bottom-right-radius: 0.75rem !important;
@@ -2181,23 +2179,37 @@
     };
   }
 
-  function addMenuItemToActionList() {
+  function addMenuItemToActionList(_event, retryCount = 0) {
     log(VERBOSE, 'addMenuItemToActionList()');
+    log(VERBOSE, 'retryCount', retryCount);
 
     const liElementId = 'custom-global-navigation-menu-item';
 
-    if (document.querySelector(createId(liElementId))) return;
+    if (document.querySelector(createId(liElementId))) {
+      log(DEBUG, 'Menu item already exists, skipping addition');
+      return;
+    }
 
     const actionList = document.querySelector(SELECTORS.sidebars.right.actionList);
     if (!actionList) {
-      log(DEBUG, 'Action list not found');
-      return setTimeout(addMenuItemToActionList, 100);
+      if (retryCount < 20) {
+        log(DEBUG, 'Action list not found, retrying...');
+        return setTimeout(() => addMenuItemToActionList(retryCount + 1), 100);
+      } else {
+        logError('Action list not found after 2 seconds, giving up');
+        return;
+      }
     }
 
     const signOutLink = actionList.querySelector(SELECTORS.sidebars.right.signOutLink);
     if (!signOutLink) {
-      log(DEBUG, 'Logout link not found');
-      return;
+      if (retryCount < 20) {
+        log(DEBUG, 'Logout link not found, retrying...');
+        return setTimeout(() => addMenuItemToActionList(retryCount + 1), 100);
+      } else {
+        logError('Logout link not found after 2 seconds, giving up');
+        return;
+      }
     }
 
     const signOutLi = signOutLink.parentNode;
@@ -3666,7 +3678,7 @@
         topDiv: '#__primerPortalRoot__',
         wrapper: '#__primerPortalRoot__ > div',
         backdrop: '#__primerPortalRoot__ > div > [data-position-regular="right"]',
-        modalDialog: '#__primerPortalRoot__ > div > [data-position-regular="right"] > div',
+        modalDialog: '#__primerPortalRoot__ div[role="dialog"]',
         closeButton: '#__primerPortalRoot__ button[aria-label="Close"]',
         divider: 'li[data-component="ActionList.Divider"]',
         actionList: '[class^="prc-ActionList-"]',
