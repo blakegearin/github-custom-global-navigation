@@ -708,6 +708,7 @@
     const padding = '0.5rem';
     link.style.setProperty('padding-left', padding, 'important');
     link.style.setProperty('padding-right', padding, 'important');
+    link.style.setProperty('display', 'flex');
 
     let textContent = elementConfig.text.content;
 
